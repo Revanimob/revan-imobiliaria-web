@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -25,12 +26,42 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					DEFAULT: '#8B1538', // Vermelho vinho
+					foreground: '#F5F5DC', // Bege gelo
+					50: '#FDF2F4',
+					100: '#FCE7EA',
+					200: '#F9D0D7',
+					300: '#F4A7B7',
+					400: '#ED7591',
+					500: '#E2426F',
+					600: '#CD2550',
+					700: '#B01B42',
+					800: '#8B1538', // Main wine red
+					900: '#7A1432'
 				},
 				secondary: {
-					DEFAULT: 'hsl(var(--secondary))',
-					foreground: 'hsl(var(--secondary-foreground))'
+					DEFAULT: '#F5F5DC', // Bege gelo
+					foreground: '#8B1538',
+					50: '#FEFEFE',
+					100: '#FDFDFD',
+					200: '#FAFAFA',
+					300: '#F7F7F7',
+					400: '#F5F5DC', // Main ice beige
+					500: '#F0F0D0',
+					600: '#E8E8C8',
+					700: '#E0E0C0',
+					800: '#D8D8B8',
+					900: '#D0D0B0'
+				},
+				wine: {
+					DEFAULT: '#8B1538',
+					dark: '#7A1432',
+					light: '#B01B42'
+				},
+				beige: {
+					DEFAULT: '#F5F5DC',
+					light: '#FEFEFE',
+					dark: '#E8E8C8'
 				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
@@ -84,11 +115,27 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(10px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'slide-in-right': {
+					'0%': { transform: 'translateX(100%)' },
+					'100%': { transform: 'translateX(0)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease-out',
+				'slide-in-right': 'slide-in-right 0.3s ease-out'
 			}
 		}
 	},
