@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Calendar, Home as HomeIcon, Image as ImageIcon } from 'lucide-react';
+import { MapPin, Calendar, Home as HomeIcon, Image as ImageIcon, Phone, Eye } from 'lucide-react';
 import { useProperty } from '@/contexts/PropertyContext';
 
 const FeaturedProperties = () => {
@@ -17,6 +17,24 @@ const FeaturedProperties = () => {
       case 'Novo': return 'outline';
       default: return 'default';
     }
+  };
+
+  const handleViewDetails = (propertyId: number) => {
+    console.log(`Viewing details for property ${propertyId}`);
+    // Future: Navigate to property details page
+    alert(`Ver detalhes do imóvel ${propertyId}. Em breve, você será redirecionado para a página de detalhes.`);
+  };
+
+  const handleContact = (propertyId: number) => {
+    console.log(`Contacting for property ${propertyId}`);
+    // Future: Open contact modal or redirect to contact form
+    alert(`Entrar em contato sobre o imóvel ${propertyId}. Em breve, abriremos o formulário de contato.`);
+  };
+
+  const handleImageGallery = (propertyId: number) => {
+    console.log(`Opening image gallery for property ${propertyId}`);
+    // Future: Open image gallery modal
+    alert(`Galeria de imagens do imóvel ${propertyId}. Em breve, você poderá ver todas as fotos.`);
   };
 
   return (
@@ -68,7 +86,12 @@ const FeaturedProperties = () => {
                     )}
                   </div>
                   <div className="absolute top-3 right-3">
-                    <Button size="icon" variant="ghost" className="bg-white bg-opacity-80 hover:bg-opacity-100">
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className="bg-white bg-opacity-80 hover:bg-opacity-100"
+                      onClick={() => handleImageGallery(property.id)}
+                    >
                       <ImageIcon className="w-4 h-4" />
                     </Button>
                   </div>
@@ -98,10 +121,19 @@ const FeaturedProperties = () => {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button className="flex-1 bg-wine hover:bg-wine-dark text-white">
+                    <Button 
+                      className="flex-1 bg-wine hover:bg-wine-dark text-white"
+                      onClick={() => handleViewDetails(property.id)}
+                    >
+                      <Eye className="w-4 h-4 mr-1" />
                       Ver Detalhes
                     </Button>
-                    <Button variant="outline" className="border-wine text-wine hover:bg-wine hover:text-white">
+                    <Button 
+                      variant="outline" 
+                      className="border-wine text-wine hover:bg-wine hover:text-white"
+                      onClick={() => handleContact(property.id)}
+                    >
+                      <Phone className="w-4 h-4 mr-1" />
                       Contato
                     </Button>
                   </div>
@@ -116,6 +148,10 @@ const FeaturedProperties = () => {
             size="lg" 
             variant="outline" 
             className="border-wine text-wine hover:bg-wine hover:text-white px-8"
+            onClick={() => {
+              console.log('View all properties clicked');
+              alert('Em breve, você será redirecionado para a página com todos os imóveis disponíveis.');
+            }}
           >
             Ver Todos os Imóveis
           </Button>

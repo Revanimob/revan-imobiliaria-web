@@ -13,6 +13,12 @@ const SearchBar = () => {
   const handleSearch = () => {
     console.log('Searching with:', searchFilters);
     searchProperties();
+    
+    // Scroll to results
+    const propertiesElement = document.getElementById('imoveis');
+    if (propertiesElement) {
+      propertiesElement.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleQuickFilter = (filter: string) => {
@@ -25,11 +31,25 @@ const SearchBar = () => {
     } else if (filter === 'Terreno') {
       updateFilters({ type: 'terreno' });
     }
-    searchProperties();
+    
+    // Automatically search after quick filter
+    setTimeout(() => {
+      searchProperties();
+      const propertiesElement = document.getElementById('imoveis');
+      if (propertiesElement) {
+        propertiesElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
   };
 
   return (
-    <div className="relative -mt-20 z-30 mx-4 mb-12">
+    <div id="search-bar" className="relative -mt-20 z-30 mx-4 mb-12">
       <Card className="bg-white shadow-2xl rounded-xl p-6 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4 items-end">
           {/* Localização */}
@@ -42,6 +62,7 @@ const SearchBar = () => {
               placeholder="Cidade, bairro..."
               value={searchFilters.location}
               onChange={(e) => updateFilters({ location: e.target.value })}
+              onKeyPress={handleKeyPress}
               className="border-gray-300 focus:border-wine"
             />
           </div>

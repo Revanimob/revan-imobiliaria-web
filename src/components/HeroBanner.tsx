@@ -43,6 +43,20 @@ const HeroBanner = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
+  const scrollToSearch = () => {
+    const searchElement = document.getElementById('search-bar');
+    if (searchElement) {
+      searchElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToProperties = () => {
+    const propertiesElement = document.getElementById('imoveis');
+    if (propertiesElement) {
+      propertiesElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="relative h-[70vh] overflow-hidden">
       {/* Slides */}
@@ -75,6 +89,7 @@ const HeroBanner = () => {
             <Button 
               size="lg" 
               className="bg-wine hover:bg-wine-dark text-white px-8 py-3 text-lg"
+              onClick={scrollToSearch}
             >
               <Search className="w-5 h-5 mr-2" />
               Buscar Imóveis
@@ -83,6 +98,7 @@ const HeroBanner = () => {
               size="lg" 
               variant="outline" 
               className="border-white text-white hover:bg-white hover:text-wine px-8 py-3 text-lg"
+              onClick={scrollToProperties}
             >
               Anunciar Gratuitamente
             </Button>
