@@ -141,6 +141,7 @@ const SearchBar = () => {
           <Button 
             onClick={handleSearch}
             className="bg-wine hover:bg-wine-dark text-white h-10 px-6"
+            type="button"
           >
             <Search className="w-4 h-4 mr-2" />
             Buscar
@@ -158,6 +159,7 @@ const SearchBar = () => {
                 size="sm"
                 onClick={() => handleQuickFilter(filter)}
                 className="text-xs border-wine text-wine hover:bg-wine hover:text-white"
+                type="button"
               >
                 {filter}
               </Button>
