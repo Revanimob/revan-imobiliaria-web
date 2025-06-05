@@ -1,25 +1,31 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search, MapPin, Home as HomeIcon, DollarSign } from 'lucide-react';
 import { Card } from '@/components/ui/card';
+import { useProperty } from '@/contexts/PropertyContext';
 
 const SearchBar = () => {
-  const [searchData, setSearchData] = useState({
-    location: '',
-    type: '',
-    operation: '',
-    minPrice: '',
-    maxPrice: '',
-    bedrooms: '',
-    bathrooms: ''
-  });
+  const { searchFilters, updateFilters, searchProperties } = useProperty();
 
   const handleSearch = () => {
-    console.log('Searching with:', searchData);
-    // Implementar lógica de busca
+    console.log('Searching with:', searchFilters);
+    searchProperties();
+  };
+
+  const handleQuickFilter = (filter: string) => {
+    if (filter === 'Apartamento 2 quartos') {
+      updateFilters({ type: 'apartamento', bedrooms: '2' });
+    } else if (filter === 'Casa 3 quartos') {
+      updateFilters({ type: 'casa', bedrooms: '3' });
+    } else if (filter === 'Cobertura') {
+      updateFilters({ type: 'apartamento', bedrooms: '4' });
+    } else if (filter === 'Terreno') {
+      updateFilters({ type: 'terreno' });
+    }
+    searchProperties();
   };
 
   return (
@@ -34,8 +40,8 @@ const SearchBar = () => {
             </label>
             <Input
               placeholder="Cidade, bairro..."
-              value={searchData.location}
-              onChange={(e) => setSearchData({...searchData, location: e.target.value})}
+              value={searchFilters.location}
+              onChange={(e) => updateFilters({ location: e.target.value })}
               className="border-gray-300 focus:border-wine"
             />
           </div>
@@ -46,7 +52,7 @@ const SearchBar = () => {
               <HomeIcon className="w-4 h-4 mr-1 text-wine" />
               Tipo
             </label>
-            <Select value={searchData.type} onValueChange={(value) => setSearchData({...searchData, type: value})}>
+            <Select value={searchFilters.type} onValueChange={(value) => updateFilters({ type: value })}>
               <SelectTrigger className="border-gray-300">
                 <SelectValue placeholder="Selecione" />
               </SelectTrigger>
@@ -63,7 +69,7 @@ const SearchBar = () => {
           {/* Operação */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">Operação</label>
-            <Select value={searchData.operation} onValueChange={(value) => setSearchData({...searchData, operation: value})}>
+            <Select value={searchFilters.operation} onValueChange={(value) => updateFilters({ operation: value })}>
               <SelectTrigger className="border-gray-300">
                 <SelectValue placeholder="Comprar/Alugar" />
               </SelectTrigger>
@@ -80,7 +86,7 @@ const SearchBar = () => {
               <DollarSign className="w-4 h-4 mr-1 text-wine" />
               Preço Mínimo
             </label>
-            <Select value={searchData.minPrice} onValueChange={(value) => setSearchData({...searchData, minPrice: value})}>
+            <Select value={searchFilters.minPrice} onValueChange={(value) => updateFilters({ minPrice: value })}>
               <SelectTrigger className="border-gray-300">
                 <SelectValue placeholder="Mín" />
               </SelectTrigger>
@@ -97,7 +103,7 @@ const SearchBar = () => {
           {/* Quartos */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">Quartos</label>
-            <Select value={searchData.bedrooms} onValueChange={(value) => setSearchData({...searchData, bedrooms: value})}>
+            <Select value={searchFilters.bedrooms} onValueChange={(value) => updateFilters({ bedrooms: value })}>
               <SelectTrigger className="border-gray-300">
                 <SelectValue placeholder="Qtd" />
               </SelectTrigger>
@@ -129,6 +135,7 @@ const SearchBar = () => {
                 key={filter}
                 variant="outline"
                 size="sm"
+                onClick={() => handleQuickFilter(filter)}
                 className="text-xs border-wine text-wine hover:bg-wine hover:text-white"
               >
                 {filter}
