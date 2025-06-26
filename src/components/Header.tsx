@@ -14,6 +14,9 @@ const Header = () => {
     { label: 'Imóveis', href: '#imoveis' },
     { label: 'Serviços', href: '#servicos' },
     { label: 'Quem Somos', href: '#sobre' },
+    { label: 'Nossa História', href: '/nossa-historia' },
+    { label: 'Certificações', href: '/certificacoes' },
+    { label: 'Equipe', href: '/equipe' },
     { label: 'Blog', href: '/blog' },
     { label: 'Contato', href: '#contato' },
   ];
@@ -73,10 +76,12 @@ const Header = () => {
 
           {/* Desktop CTA Buttons */}
           <div className="hidden md:flex items-center space-x-3">
-            <Button variant="outline" className="border-wine text-wine hover:bg-wine hover:text-white">
-              <User className="w-4 h-4 mr-2" />
-              Login
-            </Button>
+            <Link to="/login">
+              <Button variant="outline" className="border-wine text-wine hover:bg-wine hover:text-white">
+                <User className="w-4 h-4 mr-2" />
+                Login
+              </Button>
+            </Link>
             <Button className="bg-wine hover:bg-wine-dark text-white">
               Anunciar Imóvel
             </Button>
@@ -112,10 +117,12 @@ const Header = () => {
                     )
                   ))}
                   <div className="pt-4 space-y-3">
-                    <Button variant="outline" className="w-full border-wine text-wine">
-                      <User className="w-4 h-4 mr-2" />
-                      Login
-                    </Button>
+                    <Link to="/login">
+                      <Button variant="outline" className="w-full border-wine text-wine">
+                        <User className="w-4 h-4 mr-2" />
+                        Login
+                      </Button>
+                    </Link>
                     <Button className="w-full bg-wine hover:bg-wine-dark text-white">
                       Anunciar Imóvel
                     </Button>
