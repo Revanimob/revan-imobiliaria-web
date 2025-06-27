@@ -11,6 +11,11 @@ import OurHistory from "./pages/OurHistory";
 import Certifications from "./pages/Certifications";
 import TeamProfiles from "./pages/TeamProfiles";
 import NotFound from "./pages/NotFound";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminProperties from "./pages/admin/AdminProperties";
+import AdminReports from "./pages/admin/AdminReports";
+import AdminSettings from "./pages/admin/AdminSettings";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +32,12 @@ const App = () => (
           <Route path="/nossa-historia" element={<OurHistory />} />
           <Route path="/certificacoes" element={<Certifications />} />
           <Route path="/equipe" element={<TeamProfiles />} />
+          {/* Admin Routes */}
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
+          <Route path="/admin/properties" element={<AdminProperties />} />
+          <Route path="/admin/reports" element={<AdminReports />} />
+          <Route path="/admin/settings" element={<AdminSettings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

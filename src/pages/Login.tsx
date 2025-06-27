@@ -5,7 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Eye, EyeOff, Home } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,11 +14,31 @@ const Login = () => {
     email: '',
     password: ''
   });
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Login attempt:', formData);
-    alert('Funcionalidade de login em desenvolvimento. Em breve, você será autenticado.');
+    
+    // Simple validation - in a real app, this would be server-side
+    if (formData.email === 'admin@revan.com' && formData.password === '123456') {
+      localStorage.setItem('admin_logged_in', 'true');
+      localStorage.setItem('admin_user', JSON.stringify({
+        name: 'Super Admin',
+        email: formData.email,
+        role: 'super_admin'
+      }));
+      
+      toast({ title: "Login realizado com sucesso!" });
+      navigate('/admin/dashboard');
+    } else {
+      toast({ 
+        title: "Erro no login", 
+        description: "E-mail ou senha incorretos",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +78,7 @@ const Login = () => {
                   type="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  placeholder="seu@email.com"
+                  placeholder="admin@revan.com"
                   required
                   className="mt-1"
                 />
@@ -72,7 +93,7 @@ const Login = () => {
                     type={showPassword ? 'text' : 'password'}
                     value={formData.password}
                     onChange={handleInputChange}
-                    placeholder="Sua senha"
+                    placeholder="123456"
                     required
                   />
                   <Button
@@ -85,6 +106,12 @@ const Login = () => {
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </Button>
                 </div>
+              </div>
+
+              <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
+                <p><strong>Credenciais de teste:</strong></p>
+                <p>E-mail: admin@revan.com</p>
+                <p>Senha: 123456</p>
               </div>
 
               <div className="flex items-center justify-between text-sm">

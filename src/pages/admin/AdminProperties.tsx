@@ -1,0 +1,495 @@
+
+import React, { useState, useEffect } from 'react';
+import AdminLayout from '@/components/admin/AdminLayout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Plus, Edit2, Trash2, Eye, Home } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+
+interface Property {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  type: 'casa' | 'apartamento' | 'terreno' | 'comercial';
+  status: 'disponivel' | 'vendido' | 'alugado' | 'reservado';
+  address: string;
+  neighborhood: string;
+  city: string;
+  zipCode: string;
+  bedrooms: number;
+  bathrooms: number;
+  area: number;
+  garage: number;
+  images: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+const AdminProperties = () => {
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingProperty, setEditingProperty] = useState<Property | null>(null);
+  const [formData, setFormData] = useState<Partial<Property>>({
+    title: '',
+    description: '',
+    price: 0,
+    type: 'apartamento',
+    status: 'disponivel',
+    address: '',
+    neighborhood: '',
+    city: '',
+    zipCode: '',
+    bedrooms: 0,
+    bathrooms: 0,
+    area: 0,
+    garage: 0,
+    images: []
+  });
+  const { toast } = useToast();
+
+  // Load properties from localStorage on component mount
+  useEffect(() => {
+    const savedProperties = localStorage.getItem('admin_properties');
+    if (savedProperties) {
+      setProperties(JSON.parse(savedProperties));
+    }
+  }, []);
+
+  const saveProperties = (newProperties: Property[]) => {
+    setProperties(newProperties);
+    localStorage.setItem('admin_properties', JSON.stringify(newProperties));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (editingProperty) {
+      // Update existing property
+      const updatedProperties = properties.map(property => 
+        property.id === editingProperty.id 
+          ? { ...property, ...formData, updatedAt: new Date().toISOString() }
+          : property
+      );
+      saveProperties(updatedProperties);
+      toast({ title: "Imóvel atualizado com sucesso!" });
+    } else {
+      // Create new property
+      const newProperty: Property = {
+        id: Date.now().toString(),
+        ...formData as Property,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      saveProperties([...properties, newProperty]);
+      toast({ title: "Imóvel cadastrado com sucesso!" });
+    }
+    
+    resetForm();
+  };
+
+  const handleEdit = (property: Property) => {
+    setEditingProperty(property);
+    setFormData(property);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = (propertyId: string) => {
+    if (confirm('Tem certeza que deseja excluir este imóvel?')) {
+      const updatedProperties = properties.filter(property => property.id !== propertyId);
+      saveProperties(updatedProperties);
+      toast({ title: "Imóvel excluído com sucesso!" });
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      description: '',
+      price: 0,
+      type: 'apartamento',
+      status: 'disponivel',
+      address: '',
+      neighborhood: '',
+      city: '',
+      zipCode: '',
+      bedrooms: 0,
+      bathrooms: 0,
+      area: 0,
+      garage: 0,
+      images: []
+    });
+    setEditingProperty(null);
+    setIsModalOpen(false);
+  };
+
+  const getStatusBadgeColor = (status: Property['status']) => {
+    const colors = {
+      disponivel: 'bg-green-100 text-green-800',
+      vendido: 'bg-red-100 text-red-800',
+      alugado: 'bg-blue-100 text-blue-800',
+      reservado: 'bg-yellow-100 text-yellow-800'
+    };
+    return colors[status];
+  };
+
+  const getStatusLabel = (status: Property['status']) => {
+    const labels = {
+      disponivel: 'Disponível',
+      vendido: 'Vendido',
+      alugado: 'Alugado',
+      reservado: 'Reservado'
+    };
+    return labels[status];
+  };
+
+  const getTypeLabel = (type: Property['type']) => {
+    const labels = {
+      casa: 'Casa',
+      apartamento: 'Apartamento',
+      terreno: 'Terreno',
+      comercial: 'Comercial'
+    };
+    return labels[type];
+  };
+
+  return (
+    <AdminLayout>
+      <div className="space-y-6">
+        {/* Page Header */}
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Gestão de Imóveis</h1>
+            <p className="text-gray-600">Gerencie todos os imóveis cadastrados no sistema</p>
+          </div>
+          <Button 
+            onClick={() => setIsModalOpen(true)}
+            className="bg-wine hover:bg-wine-dark"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Novo Imóvel
+          </Button>
+        </div>
+
+        {/* Properties Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Total</p>
+                  <p className="text-2xl font-bold">{properties.length}</p>
+                </div>
+                <Home className="h-8 w-8 text-wine" />
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Disponíveis</p>
+                  <p className="text-2xl font-bold text-green-600">
+                    {properties.filter(p => p.status === 'disponivel').length}
+                  </p>
+                </div>
+                <Home className="h-8 w-8 text-green-600" />
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Vendidos</p>
+                  <p className="text-2xl font-bold text-red-600">
+                    {properties.filter(p => p.status === 'vendido').length}
+                  </p>
+                </div>
+                <Home className="h-8 w-8 text-red-600" />
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Alugados</p>
+                  <p className="text-2xl font-bold text-blue-600">
+                    {properties.filter(p => p.status === 'alugado').length}
+                  </p>
+                </div>
+                <Home className="h-8 w-8 text-blue-600" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Properties Table */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Lista de Imóveis ({properties.length})</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left p-4">Imóvel</th>
+                    <th className="text-left p-4">Tipo</th>
+                    <th className="text-left p-4">Preço</th>
+                    <th className="text-left p-4">Status</th>
+                    <th className="text-left p-4">Localização</th>
+                    <th className="text-left p-4">Área</th>
+                    <th className="text-left p-4">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {properties.map((property) => (
+                    <tr key={property.id} className="border-b hover:bg-gray-50">
+                      <td className="p-4">
+                        <div>
+                          <p className="font-medium">{property.title}</p>
+                          <p className="text-sm text-gray-600">
+                            {property.bedrooms} qtos • {property.bathrooms} bans
+                          </p>
+                        </div>
+                      </td>
+                      <td className="p-4">{getTypeLabel(property.type)}</td>
+                      <td className="p-4 font-medium">
+                        R$ {property.price.toLocaleString('pt-BR')}
+                      </td>
+                      <td className="p-4">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(property.status)}`}>
+                          {getStatusLabel(property.status)}
+                        </span>
+                      </td>
+                      <td className="p-4 text-gray-600">
+                        {property.neighborhood}, {property.city}
+                      </td>
+                      <td className="p-4">{property.area}m²</td>
+                      <td className="p-4">
+                        <div className="flex space-x-2">
+                          <Button variant="ghost" size="icon">
+                            <Eye className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleEdit(property)}
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDelete(property.id)}
+                          >
+                            <Trash2 className="w-4 h-4 text-red-600" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Add/Edit Property Modal */}
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>
+                {editingProperty ? 'Editar Imóvel' : 'Novo Imóvel'}
+              </DialogTitle>
+            </DialogHeader>
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="md:col-span-2">
+                  <Label htmlFor="title">Título do Imóvel</Label>
+                  <Input
+                    id="title"
+                    value={formData.title}
+                    onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    placeholder="Casa em condomínio fechado..."
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="type">Tipo</Label>
+                  <Select value={formData.type} onValueChange={(value: Property['type']) => 
+                    setFormData({...formData, type: value})}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="apartamento">Apartamento</SelectItem>
+                      <SelectItem value="casa">Casa</SelectItem>
+                      <SelectItem value="terreno">Terreno</SelectItem>
+                      <SelectItem value="comercial">Comercial</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="status">Status</Label>
+                  <Select value={formData.status} onValueChange={(value: Property['status']) => 
+                    setFormData({...formData, status: value})}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="disponivel">Disponível</SelectItem>
+                      <SelectItem value="vendido">Vendido</SelectItem>
+                      <SelectItem value="alugado">Alugado</SelectItem>
+                      <SelectItem value="reservado">Reservado</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="price">Preço (R$)</Label>
+                  <Input
+                    id="price"
+                    type="number"
+                    value={formData.price}
+                    onChange={(e) => setFormData({...formData, price: Number(e.target.value)})}
+                    placeholder="350000"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="area">Área (m²)</Label>
+                  <Input
+                    id="area"
+                    type="number"
+                    value={formData.area}
+                    onChange={(e) => setFormData({...formData, area: Number(e.target.value)})}
+                    placeholder="120"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="bedrooms">Quartos</Label>
+                  <Input
+                    id="bedrooms"
+                    type="number"
+                    value={formData.bedrooms}
+                    onChange={(e) => setFormData({...formData, bedrooms: Number(e.target.value)})}
+                    placeholder="3"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="bathrooms">Banheiros</Label>
+                  <Input
+                    id="bathrooms"
+                    type="number"
+                    value={formData.bathrooms}
+                    onChange={(e) => setFormData({...formData, bathrooms: Number(e.target.value)})}
+                    placeholder="2"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="garage">Garagem</Label>
+                  <Input
+                    id="garage"
+                    type="number"
+                    value={formData.garage}
+                    onChange={(e) => setFormData({...formData, garage: Number(e.target.value)})}
+                    placeholder="2"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="zipCode">CEP</Label>
+                  <Input
+                    id="zipCode"
+                    value={formData.zipCode}
+                    onChange={(e) => setFormData({...formData, zipCode: e.target.value})}
+                    placeholder="00000-000"
+                    required
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <Label htmlFor="address">Endereço</Label>
+                  <Input
+                    id="address"
+                    value={formData.address}
+                    onChange={(e) => setFormData({...formData, address: e.target.value})}
+                    placeholder="Rua das Flores, 123"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="neighborhood">Bairro</Label>
+                  <Input
+                    id="neighborhood"
+                    value={formData.neighborhood}
+                    onChange={(e) => setFormData({...formData, neighborhood: e.target.value})}
+                    placeholder="Centro"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="city">Cidade</Label>
+                  <Input
+                    id="city"
+                    value={formData.city}
+                    onChange={(e) => setFormData({...formData, city: e.target.value})}
+                    placeholder="São Paulo"
+                    required
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <Label htmlFor="description">Descrição</Label>
+                  <Textarea
+                    id="description"
+                    value={formData.description}
+                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    placeholder="Descrição detalhada do imóvel..."
+                    rows={4}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <Button type="button" variant="outline" onClick={resetForm} className="flex-1">
+                  Cancelar
+                </Button>
+                <Button type="submit" className="flex-1 bg-wine hover:bg-wine-dark">
+                  {editingProperty ? 'Atualizar' : 'Cadastrar'}
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </AdminLayout>
+  );
+};
+
+export default AdminProperties;
