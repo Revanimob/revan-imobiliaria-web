@@ -4,6 +4,7 @@ import AdminNavbar from './AdminNavbar';
 import AdminSidebar from './AdminSidebar';
 import AdminFooter from './AdminFooter';
 import { useResponsive } from '@/hooks/useResponsive';
+import { useAdminTheme } from '@/hooks/useAdminTheme';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -12,13 +13,18 @@ interface AdminLayoutProps {
 const AdminLayout = ({ children }: AdminLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { isMobile, isDesktop } = useResponsive();
+  const { adminTheme } = useAdminTheme();
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-900 transition-all duration-300">
+    <div className={`min-h-screen transition-all duration-300 ${
+      adminTheme === 'dark' 
+        ? 'bg-gradient-to-br from-gray-950 to-gray-900 text-white' 
+        : 'bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900'
+    }`}>
       <AdminNavbar onToggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
       
       <div className="flex">

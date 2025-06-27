@@ -12,6 +12,7 @@ import {
   Bell
 } from 'lucide-react';
 import { useResponsive } from '@/hooks/useResponsive';
+import { useAdminTheme } from '@/hooks/useAdminTheme';
 import {
   Drawer,
   DrawerContent,
@@ -33,6 +34,7 @@ interface AdminSidebarProps {
 const AdminSidebar = ({ isOpen, onClose }: AdminSidebarProps) => {
   const location = useLocation();
   const { isMobile, isDesktop } = useResponsive();
+  const { adminTheme } = useAdminTheme();
 
   const menuItems = [
     { 
@@ -87,13 +89,24 @@ const AdminSidebar = ({ isOpen, onClose }: AdminSidebarProps) => {
             className={`
               group flex items-center space-x-3 px-3 py-3 rounded-xl transition-all duration-200
               ${isActivePath(item.path) 
-                ? 'bg-wine/10 text-wine dark:bg-wine/20 dark:text-wine-light shadow-sm' 
-                : 'hover:bg-gray-100 dark:hover:bg-gray-800/50 text-gray-700 dark:text-gray-300'
+                ? `${adminTheme === 'dark' 
+                    ? 'bg-wine/20 text-wine-light' 
+                    : 'bg-wine/10 text-wine'
+                  } shadow-sm` 
+                : `${adminTheme === 'dark'
+                    ? 'hover:bg-gray-800/50 text-gray-300'
+                    : 'hover:bg-gray-100 text-gray-700'
+                  }`
               }
             `}
           >
             <item.icon className={`w-5 h-5 transition-colors ${
-              isActivePath(item.path) ? 'text-wine' : 'text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-200'
+              isActivePath(item.path) 
+                ? 'text-wine' 
+                : `${adminTheme === 'dark'
+                    ? 'text-gray-500 group-hover:text-gray-200'
+                    : 'text-gray-500 group-hover:text-gray-700'
+                  }`
             }`} />
             
             <span className={`font-medium transition-all duration-200 ${
@@ -112,10 +125,16 @@ const AdminSidebar = ({ isOpen, onClose }: AdminSidebarProps) => {
       </nav>
 
       {/* Logout */}
-      <div className="p-4 border-t border-gray-200/50 dark:border-gray-700/50">
+      <div className={`p-4 border-t ${
+        adminTheme === 'dark' ? 'border-gray-700/50' : 'border-gray-200/50'
+      }`}>
         <Link
           to="/"
-          className="group flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-all duration-200"
+          className={`group flex items-center space-x-3 px-3 py-3 rounded-xl transition-all duration-200 ${
+            adminTheme === 'dark'
+              ? 'hover:bg-red-900/20 text-gray-300 hover:text-red-400'
+              : 'hover:bg-red-50 text-gray-700 hover:text-red-600'
+          }`}
         >
           <LogOut className="w-5 h-5" />
           <span className={`font-medium transition-all duration-200 ${
@@ -132,9 +151,15 @@ const AdminSidebar = ({ isOpen, onClose }: AdminSidebarProps) => {
   if (isMobile) {
     return (
       <Sheet open={isOpen} onOpenChange={onClose}>
-        <SheetContent side="left" className="w-72 p-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md">
-          <SheetHeader className="p-4 border-b border-gray-200/50 dark:border-gray-700/50">
-            <SheetTitle className="text-wine dark:text-white">Menu</SheetTitle>
+        <SheetContent side="left" className={`w-72 p-0 backdrop-blur-md ${
+          adminTheme === 'dark' ? 'bg-gray-900/95' : 'bg-white/95'
+        }`}>
+          <SheetHeader className={`p-4 border-b ${
+            adminTheme === 'dark' ? 'border-gray-700/50' : 'border-gray-200/50'
+          }`}>
+            <SheetTitle className={adminTheme === 'dark' ? 'text-white' : 'text-wine'}>
+              Menu
+            </SheetTitle>
           </SheetHeader>
           <SidebarContent />
         </SheetContent>
@@ -146,9 +171,11 @@ const AdminSidebar = ({ isOpen, onClose }: AdminSidebarProps) => {
   return (
     <aside className={`
       fixed top-16 left-0 z-40 h-[calc(100vh-4rem)]
-      bg-white/95 dark:bg-gray-900/95 backdrop-blur-md
-      border-r border-gray-200/50 dark:border-gray-700/50
-      transition-all duration-300 ease-in-out
+      backdrop-blur-md border-r transition-all duration-300 ease-in-out
+      ${adminTheme === 'dark' 
+        ? 'bg-gray-900/95 border-gray-700/50' 
+        : 'bg-white/95 border-gray-200/50'
+      }
       ${isOpen ? 'w-72' : 'w-20'}
     `}>
       <SidebarContent />

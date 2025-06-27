@@ -3,7 +3,8 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Home, Menu, User, Bell, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import ThemeToggle from './ThemeToggle';
+import AdminThemeToggle from './AdminThemeToggle';
+import { useAdminTheme } from '@/hooks/useAdminTheme';
 
 interface AdminNavbarProps {
   onToggleSidebar: () => void;
@@ -11,8 +12,14 @@ interface AdminNavbarProps {
 }
 
 const AdminNavbar = ({ onToggleSidebar, sidebarOpen }: AdminNavbarProps) => {
+  const { adminTheme } = useAdminTheme();
+
   return (
-    <header className="fixed top-0 right-0 left-0 z-50 h-16 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50">
+    <header className={`fixed top-0 right-0 left-0 z-50 h-16 backdrop-blur-md border-b transition-colors duration-300 ${
+      adminTheme === 'dark'
+        ? 'bg-gray-900/80 border-gray-700/50 text-white'
+        : 'bg-white/80 border-gray-200/50 text-gray-900'
+    }`}>
       <div className="flex items-center justify-between h-full px-4">
         {/* Left Section */}
         <div className="flex items-center space-x-4">
@@ -20,7 +27,11 @@ const AdminNavbar = ({ onToggleSidebar, sidebarOpen }: AdminNavbarProps) => {
             variant="ghost"
             size="icon"
             onClick={onToggleSidebar}
-            className="hover:bg-gray-100 dark:hover:bg-gray-800"
+            className={`transition-colors ${
+              adminTheme === 'dark' 
+                ? 'hover:bg-gray-800 text-white' 
+                : 'hover:bg-gray-100 text-gray-900'
+            }`}
           >
             <Menu className="w-5 h-5" />
           </Button>
@@ -30,38 +41,56 @@ const AdminNavbar = ({ onToggleSidebar, sidebarOpen }: AdminNavbarProps) => {
               <Home className="w-5 h-5 text-white" />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-lg font-bold text-wine dark:text-white">REVAN</h1>
+              <h1 className={`text-lg font-bold ${
+                adminTheme === 'dark' ? 'text-white' : 'text-wine'
+              }`}>REVAN</h1>
             </div>
           </Link>
         </div>
 
         {/* Center - Breadcrumbs */}
-        <div className="hidden md:flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+        <div className={`hidden md:flex items-center space-x-2 text-sm ${
+          adminTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+        }`}>
           <span>Admin</span>
           <span>/</span>
-          <span className="text-wine dark:text-white font-medium">Dashboard</span>
+          <span className={`font-medium ${
+            adminTheme === 'dark' ? 'text-white' : 'text-wine'
+          }`}>Dashboard</span>
         </div>
 
         {/* Right Section */}
         <div className="flex items-center space-x-3">
-          <ThemeToggle />
+          <AdminThemeToggle />
           
-          <Button variant="ghost" size="icon" className="relative">
+          <Button variant="ghost" size="icon" className={`relative transition-colors ${
+            adminTheme === 'dark' 
+              ? 'hover:bg-gray-800 text-white' 
+              : 'hover:bg-gray-100 text-gray-900'
+          }`}>
             <Bell className="w-5 h-5" />
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-xs flex items-center justify-center text-white">
               3
             </span>
           </Button>
 
-          <div className="flex items-center space-x-2 pl-3 border-l border-gray-200 dark:border-gray-700">
+          <div className={`flex items-center space-x-2 pl-3 border-l ${
+            adminTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+          }`}>
             <div className="w-8 h-8 bg-wine rounded-full flex items-center justify-center">
               <User className="w-4 h-4 text-white" />
             </div>
             <div className="hidden sm:block text-right">
-              <p className="text-sm font-medium text-gray-900 dark:text-white">Admin User</p>
-              <p className="text-xs text-gray-500">Super Admin</p>
+              <p className={`text-sm font-medium ${
+                adminTheme === 'dark' ? 'text-white' : 'text-gray-900'
+              }`}>Admin User</p>
+              <p className={`text-xs ${
+                adminTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+              }`}>Super Admin</p>
             </div>
-            <ChevronDown className="w-4 h-4 text-gray-500" />
+            <ChevronDown className={`w-4 h-4 ${
+              adminTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+            }`} />
           </div>
         </div>
       </div>
