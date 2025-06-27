@@ -9,7 +9,8 @@ import {
   Settings, 
   LogOut, 
   Menu, 
-  X 
+  X,
+  User 
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
