@@ -82,6 +82,27 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  /* Admin-specific dark theme that doesn't affect the main site */
+  .admin-dark {
+    .admin-layout {
+      --admin-bg: rgb(17 24 39);
+      --admin-bg-secondary: rgb(31 41 55);
+      --admin-text: rgb(255 255 255);
+      --admin-text-secondary: rgb(156 163 175);
+      --admin-border: rgb(55 65 81);
+    }
+  }
+
+  .admin-light {
+    .admin-layout {
+      --admin-bg: rgb(249 250 251);
+      --admin-bg-secondary: rgb(255 255 255);
+      --admin-text: rgb(17 24 39);
+      --admin-text-secondary: rgb(75 85 99);
+      --admin-border: rgb(229 231 235);
+    }
+  }
 }
 
 @layer base {

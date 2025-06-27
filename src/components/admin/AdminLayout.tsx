@@ -20,7 +20,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   };
 
   return (
-    <div className={`min-h-screen transition-all duration-300 ${
+    <div className={`min-h-screen transition-all duration-300 admin-layout ${
       adminTheme === 'dark' 
         ? 'bg-gradient-to-br from-gray-950 to-gray-900 text-white' 
         : 'bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900'
