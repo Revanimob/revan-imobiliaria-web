@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import AdminNavbar from './AdminNavbar';
 import AdminSidebar from './AdminSidebar';
+import AdminFooter from './AdminFooter';
 import { useResponsive } from '@/hooks/useResponsive';
 
 interface AdminLayoutProps {
@@ -9,15 +10,15 @@ interface AdminLayoutProps {
 }
 
 const AdminLayout = ({ children }: AdminLayoutProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { isMobile } = useResponsive();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { isMobile, isDesktop } = useResponsive();
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-900 transition-all duration-300">
       <AdminNavbar onToggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
       
       <div className="flex">
@@ -25,13 +26,13 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         
         {/* Main Content */}
         <main className={`
-          flex-1 pt-16 transition-all duration-300
-          ${sidebarOpen && !isMobile ? 'lg:ml-72' : 'lg:ml-20'}
-          ${isMobile ? 'ml-0' : ''}
+          flex-1 pt-16 transition-all duration-300 min-h-screen flex flex-col
+          ${isDesktop && sidebarOpen ? 'lg:ml-72' : isDesktop ? 'lg:ml-20' : 'ml-0'}
         `}>
-          <div className="p-6 max-w-full overflow-hidden">
+          <div className="flex-1 p-4 lg:p-6 max-w-full overflow-hidden">
             {children}
           </div>
+          <AdminFooter />
         </main>
       </div>
     </div>
