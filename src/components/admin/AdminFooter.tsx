@@ -24,7 +24,7 @@ const AdminFooter = () => {
           }`}>
             <span>Feito com</span>
             <Heart className="w-4 h-4 text-red-500 fill-current" />
-            <span>pela equipe REVAN</span>
+            <span>por QuedSoft</span>
           </div>
         </div>
       </div>
