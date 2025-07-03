@@ -17,6 +17,9 @@ import AdminProperties from "./pages/admin/AdminProperties";
 import AdminReports from "./pages/admin/AdminReports";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminMessages from "./pages/admin/AdminMessages";
+import AddAdmin from "./pages/admin/AddAdmin";
+import AddProperty from "./pages/admin/AddProperty";
+import ReportsView from "./pages/admin/ReportsView";
 import { AuthProvider } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient();
@@ -38,8 +41,11 @@ const App = () => (
           {/* Admin Routes */}
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<AdminUsers />} />
+          <Route path="/admin/add-admin" element={<AddAdmin />} />
           <Route path="/admin/properties" element={<AdminProperties />} />
+          <Route path="/admin/add-property" element={<AddProperty />} />
           <Route path="/admin/reports" element={<AdminReports />} />
+          <Route path="/admin/reports-view" element={<ReportsView />} />
           <Route path="/admin/messages" element={<AdminMessages />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

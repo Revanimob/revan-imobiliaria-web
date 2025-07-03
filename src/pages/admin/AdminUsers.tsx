@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,6 +21,7 @@ interface AdminUser {
 }
 
 const AdminUsers = () => {
+  const navigate = useNavigate();
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
@@ -132,17 +134,17 @@ const AdminUsers = () => {
     <AdminLayout>
       <div className="space-y-6">
         {/* Page Header */}
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Usuários Administradores</h1>
-            <p className="text-gray-600">Gerencie os usuários com acesso administrativo</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Usuários Administradores</h1>
+            <p className="text-gray-600 dark:text-gray-400">Gerencie os usuários com acesso administrativo</p>
           </div>
           <Button 
-            onClick={() => setIsModalOpen(true)}
-            className="bg-wine hover:bg-wine-dark"
+            onClick={() => navigate('/admin/add-admin')}
+            className="bg-wine hover:bg-wine-dark shrink-0"
           >
             <Plus className="w-4 h-4 mr-2" />
-            Novo Admin
+            Novo ADM
           </Button>
         </div>
 
@@ -156,55 +158,57 @@ const AdminUsers = () => {
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left p-4">Usuário</th>
-                    <th className="text-left p-4">E-mail</th>
-                    <th className="text-left p-4">Função</th>
-                    <th className="text-left p-4">Status</th>
-                    <th className="text-left p-4">Criado em</th>
-                    <th className="text-left p-4">Ações</th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base">Usuário</th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden sm:table-cell">E-mail</th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base">Função</th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden md:table-cell">Status</th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden lg:table-cell">Criado em</th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
                   {users.map((user) => (
-                    <tr key={user.id} className="border-b hover:bg-gray-50">
-                      <td className="p-4">
+                    <tr key={user.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
+                      <td className="p-2 md:p-4">
                         <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-wine rounded-full flex items-center justify-center">
-                            <User className="w-4 h-4 text-white" />
+                          <div className="w-6 h-6 md:w-8 md:h-8 bg-wine rounded-full flex items-center justify-center">
+                            <User className="w-3 h-3 md:w-4 md:h-4 text-white" />
                           </div>
-                          <span className="font-medium">{user.name}</span>
+                          <span className="font-medium text-sm md:text-base">{user.name}</span>
                         </div>
                       </td>
-                      <td className="p-4 text-gray-600">{user.email}</td>
-                      <td className="p-4">
+                      <td className="p-2 md:p-4 text-gray-600 dark:text-gray-400 hidden sm:table-cell text-sm md:text-base">{user.email}</td>
+                      <td className="p-2 md:p-4">
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getRoleBadgeColor(user.role)}`}>
                           {getRoleLabel(user.role)}
                         </span>
                       </td>
-                      <td className="p-4">
-                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <td className="p-2 md:p-4 hidden md:table-cell">
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                           Ativo
                         </span>
                       </td>
-                      <td className="p-4 text-gray-600">
+                      <td className="p-2 md:p-4 text-gray-600 dark:text-gray-400 hidden lg:table-cell text-sm">
                         {new Date(user.createdAt).toLocaleDateString('pt-BR')}
                       </td>
-                      <td className="p-4">
-                        <div className="flex space-x-2">
+                      <td className="p-2 md:p-4">
+                        <div className="flex space-x-1 md:space-x-2">
                           <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => handleEdit(user)}
+                            className="h-8 w-8"
                           >
-                            <Edit2 className="w-4 h-4" />
+                            <Edit2 className="w-3 h-3 md:w-4 md:h-4" />
                           </Button>
                           {user.role !== 'super_admin' && (
                             <Button
                               variant="ghost"
                               size="icon"
                               onClick={() => handleDelete(user.id)}
+                              className="h-8 w-8"
                             >
-                              <Trash2 className="w-4 h-4 text-red-600" />
+                              <Trash2 className="w-3 h-3 md:w-4 md:h-4 text-red-600" />
                             </Button>
                           )}
                         </div>

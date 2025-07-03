@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -32,6 +33,7 @@ interface Property {
 }
 
 const AdminProperties = () => {
+  const navigate = useNavigate();
   const [properties, setProperties] = useState<Property[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
@@ -162,30 +164,30 @@ const AdminProperties = () => {
     <AdminLayout>
       <div className="space-y-6">
         {/* Page Header */}
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Gestão de Imóveis</h1>
-            <p className="text-gray-600">Gerencie todos os imóveis cadastrados no sistema</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Gestão de Imóveis</h1>
+            <p className="text-gray-600 dark:text-gray-400">Gerencie todos os imóveis cadastrados no sistema</p>
           </div>
           <Button 
-            onClick={() => setIsModalOpen(true)}
-            className="bg-wine hover:bg-wine-dark"
+            onClick={() => navigate('/admin/add-property')}
+            className="bg-wine hover:bg-wine-dark shrink-0"
           >
             <Plus className="w-4 h-4 mr-2" />
-            Novo Imóvel
+            ADD IMÓVEIS
           </Button>
         </div>
 
         {/* Properties Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total</p>
-                  <p className="text-2xl font-bold">{properties.length}</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total</p>
+                  <p className="text-xl md:text-2xl font-bold">{properties.length}</p>
                 </div>
-                <Home className="h-8 w-8 text-wine" />
+                <Home className="h-6 w-6 md:h-8 md:w-8 text-wine" />
               </div>
             </CardContent>
           </Card>
@@ -194,12 +196,12 @@ const AdminProperties = () => {
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Disponíveis</p>
-                  <p className="text-2xl font-bold text-green-600">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Disponíveis</p>
+                  <p className="text-xl md:text-2xl font-bold text-green-600">
                     {properties.filter(p => p.status === 'disponivel').length}
                   </p>
                 </div>
-                <Home className="h-8 w-8 text-green-600" />
+                <Home className="h-6 w-6 md:h-8 md:w-8 text-green-600" />
               </div>
             </CardContent>
           </Card>
@@ -208,12 +210,12 @@ const AdminProperties = () => {
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Vendidos</p>
-                  <p className="text-2xl font-bold text-red-600">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Vendidos</p>
+                  <p className="text-xl md:text-2xl font-bold text-red-600">
                     {properties.filter(p => p.status === 'vendido').length}
                   </p>
                 </div>
-                <Home className="h-8 w-8 text-red-600" />
+                <Home className="h-6 w-6 md:h-8 md:w-8 text-red-600" />
               </div>
             </CardContent>
           </Card>
@@ -222,12 +224,12 @@ const AdminProperties = () => {
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Alugados</p>
-                  <p className="text-2xl font-bold text-blue-600">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Alugados</p>
+                  <p className="text-xl md:text-2xl font-bold text-blue-600">
                     {properties.filter(p => p.status === 'alugado').length}
                   </p>
                 </div>
-                <Home className="h-8 w-8 text-blue-600" />
+                <Home className="h-6 w-6 md:h-8 md:w-8 text-blue-600" />
               </div>
             </CardContent>
           </Card>
@@ -243,57 +245,59 @@ const AdminProperties = () => {
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left p-4">Imóvel</th>
-                    <th className="text-left p-4">Tipo</th>
-                    <th className="text-left p-4">Preço</th>
-                    <th className="text-left p-4">Status</th>
-                    <th className="text-left p-4">Localização</th>
-                    <th className="text-left p-4">Área</th>
-                    <th className="text-left p-4">Ações</th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base">Imóvel</th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden sm:table-cell">Tipo</th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base">Preço</th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden md:table-cell">Status</th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden lg:table-cell">Localização</th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden sm:table-cell">Área</th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
                   {properties.map((property) => (
-                    <tr key={property.id} className="border-b hover:bg-gray-50">
-                      <td className="p-4">
+                    <tr key={property.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
+                      <td className="p-2 md:p-4">
                         <div>
-                          <p className="font-medium">{property.title}</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-sm md:text-base truncate">{property.title}</p>
+                          <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
                             {property.bedrooms} qtos • {property.bathrooms} bans
                           </p>
                         </div>
                       </td>
-                      <td className="p-4">{getTypeLabel(property.type)}</td>
-                      <td className="p-4 font-medium">
+                      <td className="p-2 md:p-4 hidden sm:table-cell text-sm md:text-base">{getTypeLabel(property.type)}</td>
+                      <td className="p-2 md:p-4 font-medium text-sm md:text-base">
                         R$ {property.price.toLocaleString('pt-BR')}
                       </td>
-                      <td className="p-4">
+                      <td className="p-2 md:p-4 hidden md:table-cell">
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(property.status)}`}>
                           {getStatusLabel(property.status)}
                         </span>
                       </td>
-                      <td className="p-4 text-gray-600">
+                      <td className="p-2 md:p-4 text-gray-600 dark:text-gray-400 hidden lg:table-cell text-sm">
                         {property.neighborhood}, {property.city}
                       </td>
-                      <td className="p-4">{property.area}m²</td>
-                      <td className="p-4">
-                        <div className="flex space-x-2">
-                          <Button variant="ghost" size="icon">
-                            <Eye className="w-4 h-4" />
+                      <td className="p-2 md:p-4 hidden sm:table-cell text-sm md:text-base">{property.area}m²</td>
+                      <td className="p-2 md:p-4">
+                        <div className="flex space-x-1 md:space-x-2">
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <Eye className="w-3 h-3 md:w-4 md:h-4" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => handleEdit(property)}
+                            className="h-8 w-8"
                           >
-                            <Edit2 className="w-4 h-4" />
+                            <Edit2 className="w-3 h-3 md:w-4 md:h-4" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => handleDelete(property.id)}
+                            className="h-8 w-8"
                           >
-                            <Trash2 className="w-4 h-4 text-red-600" />
+                            <Trash2 className="w-3 h-3 md:w-4 md:h-4 text-red-600" />
                           </Button>
                         </div>
                       </td>

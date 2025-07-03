@@ -1,11 +1,15 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
 import StatCard from '@/components/admin/StatCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Home, TrendingUp, Eye, MessageSquare, Clock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Users, Home, TrendingUp, Eye, MessageSquare, Clock, Plus, BarChart3, UserPlus } from 'lucide-react';
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
+
   const stats = [
     {
       title: 'Total de Imóveis',
@@ -67,29 +71,32 @@ const AdminDashboard = () => {
       title: 'Adicionar Novo Imóvel',
       description: 'Cadastrar novo imóvel no sistema',
       color: 'bg-wine hover:bg-wine-dark',
-      icon: Home
+      icon: Home,
+      onClick: () => navigate('/admin/add-property')
     },
     {
       title: 'Criar Novo Admin',
       description: 'Adicionar usuário administrador',
       color: 'bg-blue-600 hover:bg-blue-700',
-      icon: Users
+      icon: Users,
+      onClick: () => navigate('/admin/add-admin')
     },
     {
       title: 'Ver Relatórios',
       description: 'Acessar estatísticas detalhadas',
       color: 'bg-green-600 hover:bg-green-700',
-      icon: TrendingUp
+      icon: TrendingUp,
+      onClick: () => navigate('/admin/reports-view')
     }
   ];
 
   return (
     <AdminLayout>
-      <div className="space-y-8">
+      <div className="space-y-6 lg:space-y-8">
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
             <p className="text-gray-600 dark:text-gray-400">Visão geral do sistema administrativo</p>
           </div>
           <div className="text-sm text-gray-500 dark:text-gray-400">
@@ -97,15 +104,40 @@ const AdminDashboard = () => {
           </div>
         </div>
 
+        {/* Quick Action Buttons - Mobile Priority */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:hidden">
+          <Button 
+            onClick={() => navigate('/admin/add-property')}
+            className="bg-wine hover:bg-wine-dark p-4 h-auto flex flex-col items-center gap-2"
+          >
+            <Plus className="w-5 h-5" />
+            <span className="text-sm">Add Imóvel</span>
+          </Button>
+          <Button 
+            onClick={() => navigate('/admin/add-admin')}
+            className="bg-blue-600 hover:bg-blue-700 p-4 h-auto flex flex-col items-center gap-2"
+          >
+            <UserPlus className="w-5 h-5" />
+            <span className="text-sm">Novo ADM</span>
+          </Button>
+          <Button 
+            onClick={() => navigate('/admin/reports-view')}
+            className="bg-green-600 hover:bg-green-700 p-4 h-auto flex flex-col items-center gap-2"
+          >
+            <BarChart3 className="w-5 h-5" />
+            <span className="text-sm">Relatórios</span>
+          </Button>
+        </div>
+
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 gap-4 lg:gap-6">
           {stats.map((stat, index) => (
             <StatCard key={index} {...stat} />
           ))}
         </div>
 
         {/* Content Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
           {/* Recent Activities */}
           <div className="xl:col-span-2">
             <Card className="backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 border-gray-200/50 dark:border-gray-700/50">
@@ -123,9 +155,9 @@ const AdminDashboard = () => {
                       activity.type === 'sale' ? 'bg-blue-500' :
                       activity.type === 'user' ? 'bg-purple-500' : 'bg-orange-500'
                     }`}></div>
-                    <div className="flex-1">
-                      <p className="font-medium text-gray-900 dark:text-white">{activity.action}</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">por {activity.user} • {activity.time}</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-900 dark:text-white truncate">{activity.action}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 truncate">por {activity.user} • {activity.time}</p>
                     </div>
                   </div>
                 ))}
@@ -133,8 +165,8 @@ const AdminDashboard = () => {
             </Card>
           </div>
 
-          {/* Quick Actions */}
-          <div>
+          {/* Quick Actions - Desktop */}
+          <div className="hidden lg:block">
             <Card className="backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 border-gray-200/50 dark:border-gray-700/50">
               <CardHeader>
                 <CardTitle>Ações Rápidas</CardTitle>
@@ -143,13 +175,14 @@ const AdminDashboard = () => {
                 {quickActions.map((action, index) => (
                   <button
                     key={index}
+                    onClick={action.onClick}
                     className={`w-full p-4 text-left text-white rounded-lg ${action.color} transition-all duration-200 hover:scale-105 hover:shadow-lg group`}
                   >
                     <div className="flex items-center gap-3">
-                      <action.icon className="w-5 h-5" />
-                      <div>
-                        <div className="font-medium">{action.title}</div>
-                        <div className="text-sm opacity-90">{action.description}</div>
+                      <action.icon className="w-5 h-5 shrink-0" />
+                      <div className="min-w-0">
+                        <div className="font-medium truncate">{action.title}</div>
+                        <div className="text-sm opacity-90 truncate">{action.description}</div>
                       </div>
                     </div>
                   </button>
