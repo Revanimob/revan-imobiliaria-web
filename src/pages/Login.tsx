@@ -35,18 +35,18 @@ export default function Login (){
 
     console.log('📦 Payload final:', payload);
 
-    const { accessToken, refreshToken } = await LoginService(payload);
+    //const { accessToken, refreshToken } = await LoginService(payload);
 
-    console.log('✅ Login bem-sucedido');
-    console.log('🔐 accessToken:', accessToken);
-    console.log('🔁 refreshToken:', refreshToken);
+    //console.log('✅ Login bem-sucedido');
+    //console.log('🔐 accessToken:', accessToken);
+    //console.log('🔁 refreshToken:', refreshToken);
 
-    login({
+    /*login({
       email: formData.email,
       accessToken,
       refreshToken,
     });
-
+   */
     toast({ title: 'Login realizado com sucesso!' });
     navigate('/admin/dashboard');
   } catch (error: any) {
