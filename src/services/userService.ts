@@ -1,4 +1,4 @@
-import { User } from "@/types/User";
+import { User } from "@/types/user";
 import axios from "axios";
 
 const BASE_URL = `${import.meta.env.VITE_PROD}/api/users`;
