@@ -84,8 +84,8 @@ const AdminDashboard = () => {
       onClick: () => navigate("/admin/add-property"),
     },
     {
-      title: "Criar Novo Admin",
-      description: "Adicionar usuário administrador",
+      title: "Criar Novo Usuário",
+      description: "Adicionar usuário",
       color: "bg-blue-600 hover:bg-blue-700",
       icon: Users,
       onClick: () => navigate("/admin/add-admin"),

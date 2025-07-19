@@ -27,6 +27,7 @@ import {
   getAllPropertiesService,
   updatePropertyService,
 } from "@/services/propertyService";
+import { Loader2 } from "lucide-react";
 
 interface Property {
   id: string;
@@ -51,6 +52,8 @@ interface Property {
 const AdminProperties = () => {
   const navigate = useNavigate();
   const [properties, setProperties] = useState<Property[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [formData, setFormData] = useState<Partial<Property>>({
@@ -84,6 +87,8 @@ const AdminProperties = () => {
           description: "Verifique sua conexão ou tente novamente mais tarde.",
           variant: "destructive",
         });
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -194,6 +199,16 @@ const AdminProperties = () => {
     };
     return labels[type];
   };
+
+  if (isLoading) {
+    return (
+      <AdminLayout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="w-8 h-8 text-gray-600 dark:text-gray-300 animate-spin" />
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>

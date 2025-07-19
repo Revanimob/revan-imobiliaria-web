@@ -1,7 +1,7 @@
 import { Property } from "@/types/property";
 import axios from "axios";
 
-const BASE_URL = `${import.meta.env.VITE_DEV}/api/properties`;
+const BASE_URL = `${import.meta.env.VITE_PROD}/api/properties`;
 
 // 🔹 Criar nova propriedade
 export async function addPropertyService(payload: Partial<Property>) {

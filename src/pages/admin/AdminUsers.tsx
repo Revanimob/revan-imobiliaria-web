@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Edit2, Trash2, User } from "lucide-react";
+import { Plus, Edit2, Trash2, User, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   deleteAdminUserByIdService,
@@ -41,6 +41,8 @@ const AdminUsers = () => {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -60,6 +62,8 @@ const AdminUsers = () => {
       } catch (error) {
         console.error("Erro ao buscar usuários:", error);
         toast({ title: "Erro ao carregar usuários", variant: "destructive" });
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -164,7 +168,15 @@ const AdminUsers = () => {
     };
     return colors[role];
   };
-
+  if (isLoading) {
+    return (
+      <AdminLayout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="w-8 h-8 text-gray-600 dark:text-gray-300 animate-spin" />
+        </div>
+      </AdminLayout>
+    );
+  }
   return (
     <AdminLayout>
       <div className="space-y-6">
