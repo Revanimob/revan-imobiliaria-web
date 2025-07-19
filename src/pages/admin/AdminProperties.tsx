@@ -1,24 +1,40 @@
-
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AdminLayout from '@/components/admin/AdminLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Plus, Edit2, Trash2, Eye, Home } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import AdminLayout from "@/components/admin/AdminLayout";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Plus, Edit2, Trash2, Eye, Home } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import {
+  addPropertyService,
+  deletePropertyService,
+  getAllPropertiesService,
+  updatePropertyService,
+} from "@/services/propertyService";
 
 interface Property {
   id: string;
   title: string;
   description: string;
   price: number;
-  type: 'casa' | 'apartamento' | 'terreno' | 'comercial';
-  status: 'disponivel' | 'vendido' | 'alugado' | 'reservado';
+  type: "casa" | "apartamento" | "terreno" | "comercial";
+  status: "disponivel" | "vendido" | "alugado" | "reservado";
   address: string;
   neighborhood: string;
   city: string;
@@ -27,7 +43,7 @@ interface Property {
   bathrooms: number;
   area: number;
   garage: number;
-  images: string[];
+  images: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -38,61 +54,70 @@ const AdminProperties = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [formData, setFormData] = useState<Partial<Property>>({
-    title: '',
-    description: '',
+    title: "",
+    description: "",
     price: 0,
-    type: 'apartamento',
-    status: 'disponivel',
-    address: '',
-    neighborhood: '',
-    city: '',
-    zipCode: '',
+    type: "apartamento",
+    status: "disponivel",
+    address: "",
+    neighborhood: "",
+    city: "",
+    zipCode: "",
     bedrooms: 0,
     bathrooms: 0,
     area: 0,
     garage: 0,
-    images: []
+    images: "",
   });
   const { toast } = useToast();
 
-  // Load properties from localStorage on component mount
   useEffect(() => {
-    const savedProperties = localStorage.getItem('admin_properties');
-    if (savedProperties) {
-      setProperties(JSON.parse(savedProperties));
-    }
+    const fetchProperties = async () => {
+      try {
+        const response = await getAllPropertiesService();
+        setProperties(response);
+        localStorage.setItem("admin_properties", JSON.stringify(response));
+      } catch (error) {
+        console.error("Erro ao buscar propriedades:", error);
+        toast({
+          title: "Erro ao carregar imóveis",
+          description: "Verifique sua conexão ou tente novamente mais tarde.",
+          variant: "destructive",
+        });
+      }
+    };
+
+    fetchProperties();
   }, []);
 
   const saveProperties = (newProperties: Property[]) => {
     setProperties(newProperties);
-    localStorage.setItem('admin_properties', JSON.stringify(newProperties));
+    localStorage.setItem("admin_properties", JSON.stringify(newProperties));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (editingProperty) {
-      // Update existing property
-      const updatedProperties = properties.map(property => 
-        property.id === editingProperty.id 
-          ? { ...property, ...formData, updatedAt: new Date().toISOString() }
-          : property
-      );
-      saveProperties(updatedProperties);
-      toast({ title: "Imóvel atualizado com sucesso!" });
-    } else {
-      // Create new property
-      const newProperty: Property = {
-        id: Date.now().toString(),
-        ...formData as Property,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      saveProperties([...properties, newProperty]);
-      toast({ title: "Imóvel cadastrado com sucesso!" });
+    try {
+      if (editingProperty) {
+        await updatePropertyService(editingProperty.id, formData);
+        toast({ title: "Imóvel atualizado com sucesso!" });
+      } else {
+        await addPropertyService(formData as Property);
+        toast({ title: "Imóvel cadastrado com sucesso!" });
+      }
+
+      // Recarrega os imóveis após criar/atualizar
+      const updated = await getAllPropertiesService();
+      saveProperties(updated);
+      resetForm();
+    } catch (error) {
+      console.error("Erro ao salvar imóvel:", error);
+      toast({
+        title: "Erro ao salvar imóvel",
+        description: "Verifique os dados e tente novamente.",
+        variant: "destructive",
+      });
     }
-    
-    resetForm();
   };
 
   const handleEdit = (property: Property) => {
@@ -101,61 +126,71 @@ const AdminProperties = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (propertyId: string) => {
-    if (confirm('Tem certeza que deseja excluir este imóvel?')) {
-      const updatedProperties = properties.filter(property => property.id !== propertyId);
-      saveProperties(updatedProperties);
-      toast({ title: "Imóvel excluído com sucesso!" });
+  const handleDelete = async (propertyId: string) => {
+    if (confirm("Tem certeza que deseja excluir este imóvel?")) {
+      try {
+        await deletePropertyService(propertyId);
+        const updated = await getAllPropertiesService();
+        saveProperties(updated);
+        toast({ title: "Imóvel excluído com sucesso!" });
+      } catch (error) {
+        console.error("Erro ao excluir imóvel:", error);
+        toast({
+          title: "Erro ao excluir imóvel",
+          description: "Tente novamente mais tarde.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
   const resetForm = () => {
     setFormData({
-      title: '',
-      description: '',
+      title: "",
+      description: "",
       price: 0,
-      type: 'apartamento',
-      status: 'disponivel',
-      address: '',
-      neighborhood: '',
-      city: '',
-      zipCode: '',
+      type: "apartamento",
+      status: "disponivel",
+      address: "",
+      neighborhood: "",
+      city: "",
+      zipCode: "",
       bedrooms: 0,
       bathrooms: 0,
       area: 0,
       garage: 0,
-      images: []
+      images: "",
     });
     setEditingProperty(null);
     setIsModalOpen(false);
   };
 
-  const getStatusBadgeColor = (status: Property['status']) => {
+  const getStatusBadgeColor = (status: Property["status"]) => {
     const colors = {
-      disponivel: 'bg-green-100 text-green-800',
-      vendido: 'bg-red-100 text-red-800',
-      alugado: 'bg-blue-100 text-blue-800',
-      reservado: 'bg-yellow-100 text-yellow-800'
+      disponivel: "bg-green-100 text-green-800",
+      vendido: "bg-red-100 text-red-800",
+      alugado: "bg-blue-100 text-blue-800",
+      reservado: "bg-yellow-100 text-yellow-800",
     };
     return colors[status];
   };
 
-  const getStatusLabel = (status: Property['status']) => {
+  const getStatusLabel = (status: Property["status"]) => {
     const labels = {
-      disponivel: 'Disponível',
-      vendido: 'Vendido',
-      alugado: 'Alugado',
-      reservado: 'Reservado'
+      disponivel: "Disponível",
+      vendido: "Vendido",
+      alugado: "Alugado",
+      reservado: "Reservado",
     };
     return labels[status];
   };
 
-  const getTypeLabel = (type: Property['type']) => {
+  const getTypeLabel = (type: Property["type"]) => {
     const labels = {
-      casa: 'Casa',
-      apartamento: 'Apartamento',
-      terreno: 'Terreno',
-      comercial: 'Comercial'
+      casa: "Casa",
+      apartamento: "Apartamento",
+      terreno: "Terreno",
+      comercial: "Comercial",
     };
     return labels[type];
   };
@@ -166,11 +201,15 @@ const AdminProperties = () => {
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Gestão de Imóveis</h1>
-            <p className="text-gray-600 dark:text-gray-400">Gerencie todos os imóveis cadastrados no sistema</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+              Gestão de Imóveis
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Gerencie todos os imóveis cadastrados no sistema
+            </p>
           </div>
-          <Button 
-            onClick={() => navigate('/admin/add-property')}
+          <Button
+            onClick={() => navigate("/admin/add-property")}
             className="bg-wine hover:bg-wine-dark shrink-0"
           >
             <Plus className="w-4 h-4 mr-2" />
@@ -184,49 +223,59 @@ const AdminProperties = () => {
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total</p>
-                  <p className="text-xl md:text-2xl font-bold">{properties.length}</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Total
+                  </p>
+                  <p className="text-xl md:text-2xl font-bold">
+                    {properties.length}
+                  </p>
                 </div>
                 <Home className="h-6 w-6 md:h-8 md:w-8 text-wine" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Disponíveis</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Disponíveis
+                  </p>
                   <p className="text-xl md:text-2xl font-bold text-green-600">
-                    {properties.filter(p => p.status === 'disponivel').length}
+                    {properties.filter((p) => p.status === "disponivel").length}
                   </p>
                 </div>
                 <Home className="h-6 w-6 md:h-8 md:w-8 text-green-600" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Vendidos</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Vendidos
+                  </p>
                   <p className="text-xl md:text-2xl font-bold text-red-600">
-                    {properties.filter(p => p.status === 'vendido').length}
+                    {properties.filter((p) => p.status === "vendido").length}
                   </p>
                 </div>
                 <Home className="h-6 w-6 md:h-8 md:w-8 text-red-600" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Alugados</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Alugados
+                  </p>
                   <p className="text-xl md:text-2xl font-bold text-blue-600">
-                    {properties.filter(p => p.status === 'alugado').length}
+                    {properties.filter((p) => p.status === "alugado").length}
                   </p>
                 </div>
                 <Home className="h-6 w-6 md:h-8 md:w-8 text-blue-600" />
@@ -245,42 +294,73 @@ const AdminProperties = () => {
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left p-2 md:p-4 text-sm md:text-base">Imóvel</th>
-                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden sm:table-cell">Tipo</th>
-                    <th className="text-left p-2 md:p-4 text-sm md:text-base">Preço</th>
-                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden md:table-cell">Status</th>
-                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden lg:table-cell">Localização</th>
-                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden sm:table-cell">Área</th>
-                    <th className="text-left p-2 md:p-4 text-sm md:text-base">Ações</th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base">
+                      Imóvel
+                    </th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden sm:table-cell">
+                      Tipo
+                    </th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base">
+                      Preço
+                    </th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden md:table-cell">
+                      Status
+                    </th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden lg:table-cell">
+                      Localização
+                    </th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden sm:table-cell">
+                      Área
+                    </th>
+                    <th className="text-left p-2 md:p-4 text-sm md:text-base">
+                      Ações
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {properties.map((property) => (
-                    <tr key={property.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
+                    <tr
+                      key={property.id}
+                      className="border-b hover:bg-gray-50 dark:hover:bg-gray-800"
+                    >
                       <td className="p-2 md:p-4">
                         <div>
-                          <p className="font-medium text-sm md:text-base truncate">{property.title}</p>
+                          <p className="font-medium text-sm md:text-base truncate">
+                            {property.title}
+                          </p>
                           <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
                             {property.bedrooms} qtos • {property.bathrooms} bans
                           </p>
                         </div>
                       </td>
-                      <td className="p-2 md:p-4 hidden sm:table-cell text-sm md:text-base">{getTypeLabel(property.type)}</td>
+                      <td className="p-2 md:p-4 hidden sm:table-cell text-sm md:text-base">
+                        {getTypeLabel(property.type)}
+                      </td>
                       <td className="p-2 md:p-4 font-medium text-sm md:text-base">
-                        R$ {property.price.toLocaleString('pt-BR')}
+                        R$ {property.price.toLocaleString("pt-BR")}
                       </td>
                       <td className="p-2 md:p-4 hidden md:table-cell">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(property.status)}`}>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(
+                            property.status
+                          )}`}
+                        >
                           {getStatusLabel(property.status)}
                         </span>
                       </td>
                       <td className="p-2 md:p-4 text-gray-600 dark:text-gray-400 hidden lg:table-cell text-sm">
                         {property.neighborhood}, {property.city}
                       </td>
-                      <td className="p-2 md:p-4 hidden sm:table-cell text-sm md:text-base">{property.area}m²</td>
+                      <td className="p-2 md:p-4 hidden sm:table-cell text-sm md:text-base">
+                        {property.area}m²
+                      </td>
                       <td className="p-2 md:p-4">
                         <div className="flex space-x-1 md:space-x-2">
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                          >
                             <Eye className="w-3 h-3 md:w-4 md:h-4" />
                           </Button>
                           <Button
@@ -314,10 +394,10 @@ const AdminProperties = () => {
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
-                {editingProperty ? 'Editar Imóvel' : 'Novo Imóvel'}
+                {editingProperty ? "Editar Imóvel" : "Novo Imóvel"}
               </DialogTitle>
             </DialogHeader>
-            
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
@@ -325,7 +405,9 @@ const AdminProperties = () => {
                   <Input
                     id="title"
                     value={formData.title}
-                    onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, title: e.target.value })
+                    }
                     placeholder="Casa em condomínio fechado..."
                     required
                   />
@@ -333,8 +415,12 @@ const AdminProperties = () => {
 
                 <div>
                   <Label htmlFor="type">Tipo</Label>
-                  <Select value={formData.type} onValueChange={(value: Property['type']) => 
-                    setFormData({...formData, type: value})}>
+                  <Select
+                    value={formData.type}
+                    onValueChange={(value: Property["type"]) =>
+                      setFormData({ ...formData, type: value })
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -349,8 +435,12 @@ const AdminProperties = () => {
 
                 <div>
                   <Label htmlFor="status">Status</Label>
-                  <Select value={formData.status} onValueChange={(value: Property['status']) => 
-                    setFormData({...formData, status: value})}>
+                  <Select
+                    value={formData.status}
+                    onValueChange={(value: Property["status"]) =>
+                      setFormData({ ...formData, status: value })
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -369,7 +459,12 @@ const AdminProperties = () => {
                     id="price"
                     type="number"
                     value={formData.price}
-                    onChange={(e) => setFormData({...formData, price: Number(e.target.value)})}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        price: Number(e.target.value),
+                      })
+                    }
                     placeholder="350000"
                     required
                   />
@@ -381,7 +476,9 @@ const AdminProperties = () => {
                     id="area"
                     type="number"
                     value={formData.area}
-                    onChange={(e) => setFormData({...formData, area: Number(e.target.value)})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, area: Number(e.target.value) })
+                    }
                     placeholder="120"
                     required
                   />
@@ -393,7 +490,12 @@ const AdminProperties = () => {
                     id="bedrooms"
                     type="number"
                     value={formData.bedrooms}
-                    onChange={(e) => setFormData({...formData, bedrooms: Number(e.target.value)})}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        bedrooms: Number(e.target.value),
+                      })
+                    }
                     placeholder="3"
                     required
                   />
@@ -405,7 +507,12 @@ const AdminProperties = () => {
                     id="bathrooms"
                     type="number"
                     value={formData.bathrooms}
-                    onChange={(e) => setFormData({...formData, bathrooms: Number(e.target.value)})}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        bathrooms: Number(e.target.value),
+                      })
+                    }
                     placeholder="2"
                     required
                   />
@@ -417,7 +524,12 @@ const AdminProperties = () => {
                     id="garage"
                     type="number"
                     value={formData.garage}
-                    onChange={(e) => setFormData({...formData, garage: Number(e.target.value)})}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        garage: Number(e.target.value),
+                      })
+                    }
                     placeholder="2"
                     required
                   />
@@ -428,7 +540,9 @@ const AdminProperties = () => {
                   <Input
                     id="zipCode"
                     value={formData.zipCode}
-                    onChange={(e) => setFormData({...formData, zipCode: e.target.value})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, zipCode: e.target.value })
+                    }
                     placeholder="00000-000"
                     required
                   />
@@ -439,7 +553,9 @@ const AdminProperties = () => {
                   <Input
                     id="address"
                     value={formData.address}
-                    onChange={(e) => setFormData({...formData, address: e.target.value})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, address: e.target.value })
+                    }
                     placeholder="Rua das Flores, 123"
                     required
                   />
@@ -450,7 +566,9 @@ const AdminProperties = () => {
                   <Input
                     id="neighborhood"
                     value={formData.neighborhood}
-                    onChange={(e) => setFormData({...formData, neighborhood: e.target.value})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, neighborhood: e.target.value })
+                    }
                     placeholder="Centro"
                     required
                   />
@@ -461,7 +579,9 @@ const AdminProperties = () => {
                   <Input
                     id="city"
                     value={formData.city}
-                    onChange={(e) => setFormData({...formData, city: e.target.value})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, city: e.target.value })
+                    }
                     placeholder="São Paulo"
                     required
                   />
@@ -472,7 +592,9 @@ const AdminProperties = () => {
                   <Textarea
                     id="description"
                     value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
                     placeholder="Descrição detalhada do imóvel..."
                     rows={4}
                     required
@@ -481,11 +603,19 @@ const AdminProperties = () => {
               </div>
 
               <div className="flex gap-3 pt-4">
-                <Button type="button" variant="outline" onClick={resetForm} className="flex-1">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={resetForm}
+                  className="flex-1"
+                >
                   Cancelar
                 </Button>
-                <Button type="submit" className="flex-1 bg-wine hover:bg-wine-dark">
-                  {editingProperty ? 'Atualizar' : 'Cadastrar'}
+                <Button
+                  type="submit"
+                  className="flex-1 bg-wine hover:bg-wine-dark"
+                >
+                  {editingProperty ? "Atualizar" : "Cadastrar"}
                 </Button>
               </div>
             </form>

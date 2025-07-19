@@ -1,77 +1,89 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import AdminLayout from "@/components/admin/AdminLayout";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ArrowLeft, UserPlus, Shield, Mail, Phone, User } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { addAdminUserService } from "@/services/userService";
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AdminLayout from '@/components/admin/AdminLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ArrowLeft, UserPlus, Shield, Mail, Phone, User } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-
-interface AdminUser {
-  id: string;
+type FormValues = {
   name: string;
   email: string;
   phone: string;
-  role: 'super_admin' | 'admin' | 'moderator';
-  createdAt: string;
-  status: 'active' | 'inactive';
-}
+  password: string;
+  confirmPassword: string;
+  role: "admin" | "super_admin" | "moderator";
+};
 
 const AddAdmin = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: '',
-    role: 'admin' as AdminUser['role']
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
+      confirmPassword: "",
+      role: "admin",
+    },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (formData.password !== formData.confirmPassword) {
-      toast({ 
-        title: "Erro", 
+  const onSubmit = async (data: FormValues) => {
+    if (data.password !== data.confirmPassword) {
+      toast({
+        title: "Erro",
         description: "As senhas não coincidem",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
 
-    // Get existing users
-    const existingUsers = JSON.parse(localStorage.getItem('admin_users') || '[]');
-    
-    // Create new user
-    const newUser: AdminUser = {
-      id: Date.now().toString(),
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      role: formData.role,
-      createdAt: new Date().toISOString(),
-      status: 'active'
-    };
-    
-    // Save to localStorage
-    const updatedUsers = [...existingUsers, newUser];
-    localStorage.setItem('admin_users', JSON.stringify(updatedUsers));
-    
-    toast({ title: "Administrador cadastrado com sucesso!" });
-    navigate('/admin/users');
+    try {
+      await addAdminUserService({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        password: data.password,
+        role: data.role.toUpperCase() as "SUPER_ADMIN" | "USER" | "ADMIN",
+        status: "active",
+      });
+
+      toast({ title: "Administrador cadastrado com sucesso!" });
+      navigate("/admin/users");
+    } catch (error: any) {
+      toast({
+        title: "Erro ao cadastrar",
+        description:
+          error?.response?.data?.message || "Tente novamente mais tarde.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const getRoleDescription = (role: AdminUser['role']) => {
+  const getRoleDescription = (role: FormValues["role"]) => {
     const descriptions = {
-      super_admin: 'Acesso total ao sistema, pode gerenciar todos os usuários e configurações',
-      admin: 'Pode gerenciar imóveis, relatórios e usuários moderadores',
-      moderator: 'Pode gerenciar imóveis e visualizar relatórios básicos'
+      super_admin: "Acesso total ao sistema",
+      admin: "Pode gerenciar imóveis, relatórios e usuários moderadores",
+      moderator: "Pode gerenciar imóveis e visualizar relatórios básicos",
     };
     return descriptions[role];
   };
@@ -79,23 +91,25 @@ const AddAdmin = () => {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        {/* Header */}
         <div className="flex items-center gap-4">
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             size="icon"
-            onClick={() => navigate('/admin/users')}
+            onClick={() => navigate("/admin/users")}
             className="shrink-0"
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold">Cadastrar Novo Administrador</h1>
-            <p className="text-gray-600 dark:text-gray-400">Preencha os dados do novo usuário</p>
+            <h1 className="text-2xl md:text-3xl font-bold">
+              Cadastrar Novo Administrador
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Preencha os dados do novo usuário
+            </p>
           </div>
         </div>
 
-        {/* Form */}
         <Card className="max-w-2xl">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -104,22 +118,21 @@ const AddAdmin = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Personal Info */}
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <User className="w-4 h-4 text-wine" />
-                  <Label className="text-base font-semibold">Dados Pessoais</Label>
+                  <Label className="text-base font-semibold">
+                    Dados Pessoais
+                  </Label>
                 </div>
-                
+
                 <div>
                   <Label htmlFor="name">Nome Completo *</Label>
                   <Input
                     id="name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    {...register("name", { required: true })}
                     placeholder="João Silva Santos"
-                    required
                     className="mt-1"
                   />
                 </div>
@@ -132,11 +145,9 @@ const AddAdmin = () => {
                       <Input
                         id="email"
                         type="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        {...register("email", { required: true })}
                         placeholder="joao@empresa.com"
                         className="pl-10"
-                        required
                       />
                     </div>
                   </div>
@@ -147,8 +158,7 @@ const AddAdmin = () => {
                       <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                       <Input
                         id="phone"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        {...register("phone")}
                         placeholder="(11) 99999-9999"
                         className="pl-10"
                       />
@@ -157,11 +167,12 @@ const AddAdmin = () => {
                 </div>
               </div>
 
-              {/* Security */}
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-wine" />
-                  <Label className="text-base font-semibold">Segurança e Permissões</Label>
+                  <Label className="text-base font-semibold">
+                    Segurança e Permissões
+                  </Label>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -170,10 +181,8 @@ const AddAdmin = () => {
                     <Input
                       id="password"
                       type="password"
-                      value={formData.password}
-                      onChange={(e) => setFormData({...formData, password: e.target.value})}
+                      {...register("password", { required: true })}
                       placeholder="••••••••"
-                      required
                       className="mt-1"
                     />
                   </div>
@@ -183,10 +192,8 @@ const AddAdmin = () => {
                     <Input
                       id="confirmPassword"
                       type="password"
-                      value={formData.confirmPassword}
-                      onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                      {...register("confirmPassword", { required: true })}
                       placeholder="••••••••"
-                      required
                       className="mt-1"
                     />
                   </div>
@@ -194,52 +201,38 @@ const AddAdmin = () => {
 
                 <div>
                   <Label htmlFor="role">Nível de Acesso *</Label>
-                  <Select 
-                    value={formData.role} 
-                    onValueChange={(value: AdminUser['role']) => setFormData({...formData, role: value})}
+                  <Select
+                    value={watch("role")}
+                    onValueChange={(value) =>
+                      setValue("role", value as FormValues["role"])
+                    }
                   >
                     <SelectTrigger className="mt-1">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="moderator">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          Moderador
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="admin">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                          Administrador
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="super_admin">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                          Super Admin
-                        </div>
-                      </SelectItem>
+                      <SelectItem value="moderator">USER</SelectItem>
+                      <SelectItem value="admin">SUPER_ADMIN</SelectItem>
+                      <SelectItem value="super_admin">ADMIN</SelectItem>
                     </SelectContent>
                   </Select>
                   <p className="text-sm text-gray-500 mt-1">
-                    {getRoleDescription(formData.role)}
+                    {getRoleDescription(watch("role"))}
                   </p>
                 </div>
               </div>
 
-              {/* Actions */}
               <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => navigate('/admin/users')}
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => navigate("/admin/users")}
                   className="flex-1 sm:flex-none"
                 >
                   Cancelar
                 </Button>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="flex-1 bg-wine hover:bg-wine-dark"
                 >
                   <UserPlus className="w-4 h-4 mr-2" />
