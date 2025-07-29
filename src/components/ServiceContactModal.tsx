@@ -1,11 +1,16 @@
-
-import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Phone, Mail, User } from 'lucide-react';
+import React, { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Phone, Mail, User } from "lucide-react";
+import { sendWpp } from "@/services/wppService";
 
 interface ServiceContactModalProps {
   isOpen: boolean;
@@ -13,26 +18,32 @@ interface ServiceContactModalProps {
   serviceName: string;
 }
 
-const ServiceContactModal = ({ isOpen, onClose, serviceName }: ServiceContactModalProps) => {
+const ServiceContactModal = ({
+  isOpen,
+  onClose,
+  serviceName,
+}: ServiceContactModalProps) => {
   const [formData, setFormData] = useState({
-    nome: '',
-    telefone: '',
-    email: '',
-    mensagem: ''
+    nome: "",
+    telefone: "",
+    email: "",
+    mensagem: "",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Service contact form:', { service: serviceName, ...formData });
-    alert(`Obrigado ${formData.nome}! Recebemos seu interesse em ${serviceName}. Entraremos em contato em breve.`);
-    setFormData({ nome: '', telefone: '', email: '', mensagem: '' });
+    sendWpp(formData);
+
+    setFormData({ nome: "", telefone: "", email: "", mensagem: "" });
     onClose();
   };
 
@@ -47,7 +58,7 @@ const ServiceContactModal = ({ isOpen, onClose, serviceName }: ServiceContactMod
             Preencha seus dados e entraremos em contato
           </p>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="nome" className="flex items-center gap-2">
@@ -112,7 +123,12 @@ const ServiceContactModal = ({ isOpen, onClose, serviceName }: ServiceContactMod
           </div>
 
           <div className="flex gap-3 pt-4">
-            <Button type="button" variant="outline" onClick={onClose} className="flex-1">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              className="flex-1"
+            >
               Cancelar
             </Button>
             <Button type="submit" className="flex-1 bg-wine hover:bg-wine-dark">

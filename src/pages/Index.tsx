@@ -1,13 +1,12 @@
-
-import React from 'react';
-import Header from '@/components/Header';
-import HeroBanner from '@/components/HeroBanner';
-import SearchBar from '@/components/SearchBar';
-import FeaturedProperties from '@/components/FeaturedProperties';
-import Services from '@/components/Services';
-import AboutUs from '@/components/AboutUs';
-import Footer from '@/components/Footer';
-import { PropertyProvider } from '@/contexts/PropertyContext';
+import React from "react";
+import Header from "@/components/Header";
+import HeroBanner from "@/components/HeroBanner";
+import SearchBar from "@/components/SearchBar";
+import FeaturedProperties from "@/components/FeaturedProperties";
+import Services from "@/components/Services";
+import AboutUs from "@/components/AboutUs";
+import Footer from "@/components/Footer";
+import { PropertyProvider } from "@/contexts/PropertyContext";
 
 const Index = () => {
   return (
@@ -19,7 +18,7 @@ const Index = () => {
           <SearchBar />
           <FeaturedProperties />
           <Services />
-          <AboutUs />
+          {/* <AboutUs /> */}
         </main>
         <Footer />
       </div>

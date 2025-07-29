@@ -1,34 +1,68 @@
-
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
-import { Home, MapPin, Phone, Mail, Facebook, Instagram, Linkedin, Youtube } from 'lucide-react';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import {
+  Home,
+  MapPin,
+  Phone,
+  Mail,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Youtube,
+} from "lucide-react";
+import { Imail } from "@/types/mail";
+import { sendMailService } from "@/services/sendEmail";
+import { toast } from "@/hooks/use-toast";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
   const quickLinks = [
-    { label: 'Imóveis para Venda', href: '#' },
-    { label: 'Imóveis para Locação', href: '#' },
-    { label: 'Lançamentos', href: '#' },
-    { label: 'Financiamento', href: '#' },
-    { label: 'Avaliação Gratuita', href: '#' }
+    { label: "Imóveis para Venda", href: "#" },
+    { label: "Imóveis para Locação", href: "#" },
+    { label: "Lançamentos", href: "#" },
+    { label: "Financiamento", href: "#" },
+    { label: "Avaliação Gratuita", href: "#" },
   ];
 
   const services = [
-    { label: 'Compra e Venda', href: '#' },
-    { label: 'Locação', href: '#' },
-    { label: 'Administração Predial', href: '#' },
-    { label: 'Consultoria', href: '#' },
-    { label: 'Gestão de Investimentos', href: '#' }
+    { label: "Compra e Venda", href: "#" },
+    { label: "Locação", href: "#" },
+    { label: "Administração Predial", href: "#" },
+    { label: "Consultoria", href: "#" },
+    { label: "Gestão de Investimentos", href: "#" },
   ];
 
   const regions = [
-    { label: 'Copacabana', href: '#' },
-    { label: 'Ipanema', href: '#' },
-    { label: 'Barra da Tijuca', href: '#' },
-    { label: 'Leblon', href: '#' },
-    { label: 'Centro', href: '#' }
+    { label: "Copacabana", href: "#" },
+    { label: "Ipanema", href: "#" },
+    { label: "Barra da Tijuca", href: "#" },
+    { label: "Leblon", href: "#" },
+    { label: "Centro", href: "#" },
   ];
+
+  const handleMail = async () => {
+    if (!email) return toast({ title: "Digite um e-mail válido." });
+    try {
+      setLoading(true);
+      sendMailService({ message: `Novo cadastro de e-mail: ${email}` });
+      toast({ title: "E-mail enviado com sucesso!" });
+
+      setEmail("");
+    } catch (error) {
+      console.error(error);
+
+      toast({
+        title: "Erro!",
+        description: "Erro ao enviar e-mail.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <footer className="bg-wine text-white">
@@ -47,12 +81,15 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-white opacity-90 leading-relaxed">
-              Há 25 anos conectando pessoas aos melhores imóveis com ética, transparência e excelência no atendimento.
+              Há 25 anos conectando pessoas aos melhores imóveis com ética,
+              transparência e excelência no atendimento.
             </p>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <MapPin className="w-5 h-5 opacity-80" />
-                <span className="text-sm opacity-90">Av. Atlântica, 1500 - Copacabana, RJ</span>
+                <span className="text-sm opacity-90">
+                  Av. Atlântica, 1500 - Copacabana, RJ
+                </span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 opacity-80" />
@@ -108,23 +145,29 @@ const Footer = () => {
             <div className="space-y-3 mb-6">
               <Input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Seu e-mail"
                 className="bg-white bg-opacity-20 border-white border-opacity-30 text-white placeholder:text-white placeholder:opacity-70"
               />
-              <Button className="w-full bg-white text-wine hover:bg-beige hover:text-wine">
-                Inscrever-se
+              <Button
+                className="w-full bg-white text-wine hover:bg-beige hover:text-wine"
+                onClick={handleMail}
+                disabled={loading}
+              >
+                {loading ? "Enviando..." : "Inscrever-se"}
               </Button>
             </div>
-            
+
             {/* Social Media */}
             <div>
               <h5 className="font-semibold mb-3">Siga-nos</h5>
               <div className="flex space-x-3">
                 {[
-                  { icon: Facebook, href: '#' },
-                  { icon: Instagram, href: '#' },
-                  { icon: Linkedin, href: '#' },
-                  { icon: Youtube, href: '#' }
+                  { icon: Facebook, href: "#" },
+                  { icon: Instagram, href: "#" },
+                  { icon: Linkedin, href: "#" },
+                  { icon: Youtube, href: "#" },
                 ].map((social, index) => {
                   const Icon = social.icon;
                   return (
@@ -168,13 +211,22 @@ const Footer = () => {
               © 2024 REVAN Imobiliária. Todos os direitos reservados.
             </div>
             <div className="flex space-x-6 text-sm">
-              <a href="#" className="opacity-90 hover:opacity-100 hover:underline">
+              <a
+                href="#"
+                className="opacity-90 hover:opacity-100 hover:underline"
+              >
                 Política de Privacidade
               </a>
-              <a href="#" className="opacity-90 hover:opacity-100 hover:underline">
+              <a
+                href="#"
+                className="opacity-90 hover:opacity-100 hover:underline"
+              >
                 Termos de Uso
               </a>
-              <a href="#" className="opacity-90 hover:opacity-100 hover:underline">
+              <a
+                href="#"
+                className="opacity-90 hover:opacity-100 hover:underline"
+              >
                 LGPD
               </a>
             </div>
