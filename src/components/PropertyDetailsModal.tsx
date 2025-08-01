@@ -1,9 +1,24 @@
-
-import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { MapPin, Home, Bath, Ruler, Calendar, Phone, Heart, Share2 } from 'lucide-react';
+import React from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  MapPin,
+  Home,
+  Bath,
+  Ruler,
+  Calendar,
+  Phone,
+  Heart,
+  Share2,
+} from "lucide-react";
+import { sendWpp } from "@/services/wppService";
+import { toast } from "sonner";
 
 interface Property {
   id: number;
@@ -24,28 +39,45 @@ interface PropertyDetailsModalProps {
   onClose: () => void;
 }
 
-const PropertyDetailsModal = ({ property, isOpen, onClose }: PropertyDetailsModalProps) => {
+const PropertyDetailsModal = ({
+  property,
+  isOpen,
+  onClose,
+}: PropertyDetailsModalProps) => {
   if (!property) return null;
 
   const handleContact = () => {
-    alert(`Entrando em contato sobre ${property.title}. Em breve, você será direcionado para o WhatsApp ou formulário de contato.`);
+    const message = `Olá, gostaria de um auxílio de especialista da Revan,Entrando em contato sobre ${property.title}.`;
+    sendWpp({ mensagem: message });
+  };
+
+  const handleVisit = () => {
+    const message = `Olá, gostaria de visitar o empreendimento ${property.title} ,como eu faço?.`;
+    sendWpp({ mensagem: message });
+  };
+
+  const handleFinancial = () => {
+    const message = `Olá, gostaria de simular um financiamento para o empreendimento ${property.title} ,como eu faço?.`;
+    sendWpp({ mensagem: message });
   };
 
   const handleShare = () => {
-    alert('Funcionalidade de compartilhamento será implementada em breve.');
+    toast("Funcionalidade de compartilhamento será implementada em breve.");
   };
 
   const handleFavorite = () => {
-    alert('Imóvel adicionado aos favoritos!');
+    toast("Imóvel adicionado aos favoritos!");
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl text-wine">{property.title}</DialogTitle>
+          <DialogTitle className="text-2xl text-wine">
+            {property.title}
+          </DialogTitle>
         </DialogHeader>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Imagem Principal */}
           <div className="space-y-4">
@@ -56,42 +88,57 @@ const PropertyDetailsModal = ({ property, isOpen, onClose }: PropertyDetailsModa
                 className="w-full h-64 lg:h-80 object-cover rounded-lg"
               />
               <div className="absolute top-3 left-3 flex gap-2">
-                <Badge className="bg-wine text-white">
-                  {property.badge}
-                </Badge>
+                <Badge className="bg-wine text-white">{property.badge}</Badge>
                 {property.isNew && (
-                  <Badge variant="outline" className="bg-green-500 text-white border-green-500">
+                  <Badge
+                    variant="outline"
+                    className="bg-green-500 text-white border-green-500"
+                  >
                     Novo
                   </Badge>
                 )}
               </div>
               <div className="absolute top-3 right-3 flex gap-2">
-                <Button size="icon" variant="ghost" className="bg-white/80" onClick={handleFavorite}>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="bg-white/80"
+                  onClick={handleFavorite}
+                >
                   <Heart className="w-4 h-4" />
                 </Button>
-                <Button size="icon" variant="ghost" className="bg-white/80" onClick={handleShare}>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="bg-white/80"
+                  onClick={handleShare}
+                >
                   <Share2 className="w-4 h-4" />
                 </Button>
               </div>
             </div>
-            
+
             {/* Galeria de Imagens Menores */}
             <div className="grid grid-cols-3 gap-2">
-              {[property.image, property.image, property.image].map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  alt={`${property.title} - ${index + 1}`}
-                  className="w-full h-20 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
-                />
-              ))}
+              {[property.image, property.image, property.image].map(
+                (img, index) => (
+                  <img
+                    key={index}
+                    src={img}
+                    alt={`${property.title} - ${index + 1}`}
+                    className="w-full h-20 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
+                  />
+                )
+              )}
             </div>
           </div>
 
           {/* Detalhes do Imóvel */}
           <div className="space-y-6">
             <div>
-              <div className="text-3xl font-bold text-wine mb-2">{property.price}</div>
+              <div className="text-3xl font-bold text-wine mb-2">
+                {property.price}
+              </div>
               <div className="flex items-center text-gray-600">
                 <MapPin className="w-4 h-4 mr-1" />
                 {property.location}
@@ -119,17 +166,20 @@ const PropertyDetailsModal = ({ property, isOpen, onClose }: PropertyDetailsModa
 
             {/* Descrição */}
             <div>
-              <h3 className="text-lg font-semibold text-wine mb-2">Descrição</h3>
+              <h3 className="text-lg font-semibold text-wine mb-2">
+                Descrição
+              </h3>
               <p className="text-gray-700 leading-relaxed">
-                Excelente imóvel localizado em uma das melhores regiões da cidade. 
-                Com acabamento de primeira qualidade, ambientes amplos e bem iluminados. 
-                Próximo a escolas, comércio e transporte público. Uma oportunidade única 
-                para quem busca conforto e qualidade de vida.
+                Excelente imóvel localizado em uma das melhores regiões da
+                cidade. Com acabamento de primeira qualidade, ambientes amplos e
+                bem iluminados. Próximo a escolas, comércio e transporte
+                público. Uma oportunidade única para quem busca conforto e
+                qualidade de vida.
               </p>
             </div>
 
             {/* Características Extras */}
-            <div>
+            {/* <div>
               <h3 className="text-lg font-semibold text-wine mb-2">Características</h3>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div className="flex items-center">
@@ -149,11 +199,11 @@ const PropertyDetailsModal = ({ property, isOpen, onClose }: PropertyDetailsModa
                   Elevador
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Botões de Ação */}
             <div className="space-y-3">
-              <Button 
+              <Button
                 className="w-full bg-wine hover:bg-wine-dark text-white"
                 onClick={handleContact}
               >
@@ -161,10 +211,18 @@ const PropertyDetailsModal = ({ property, isOpen, onClose }: PropertyDetailsModa
                 Entrar em Contato
               </Button>
               <div className="grid grid-cols-2 gap-3">
-                <Button variant="outline" className="border-wine text-wine hover:bg-wine hover:text-white">
+                <Button
+                  variant="outline"
+                  className="border-wine text-wine hover:bg-wine hover:text-white"
+                  onClick={handleVisit}
+                >
                   Agendar Visita
                 </Button>
-                <Button variant="outline" className="border-wine text-wine hover:bg-wine hover:text-white">
+                <Button
+                  variant="outline"
+                  className="border-wine text-wine hover:bg-wine hover:text-white"
+                  onClick={handleFinancial}
+                >
                   Simular Financiamento
                 </Button>
               </div>

@@ -41,7 +41,9 @@ const ServiceContactModal = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    sendWpp(formData);
+    let mensagem = `Meu nome é ${formData.nome},meu email é ${formData.email} e meu telefone é ${formData.telefone}, 
+    tenho interesse em ${serviceName} e gostaria de mais informações sobre,pode me ajudar ?  detalhamento do que preciso ${formData.mensagem}.`;
+    sendWpp({ mensagem });
 
     setFormData({ nome: "", telefone: "", email: "", mensagem: "" });
     onClose();

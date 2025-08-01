@@ -1,49 +1,67 @@
-
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, MapPin, Home as HomeIcon, DollarSign } from 'lucide-react';
-import { Card } from '@/components/ui/card';
-import { useProperty } from '@/contexts/PropertyContext';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Search, MapPin, Home as HomeIcon, DollarSign } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { useProperty } from "@/contexts/PropertyContext";
 
 const SearchBar = () => {
   const { searchFilters, updateFilters, searchProperties } = useProperty();
 
   const handleSearch = () => {
-    console.log('Searching with:', searchFilters);
+    console.log("Searching with:", searchFilters);
     searchProperties();
-    
+
     // Scroll to results
-    const propertiesElement = document.getElementById('imoveis');
+    const propertiesElement = document.getElementById("imoveis");
     if (propertiesElement) {
-      propertiesElement.scrollIntoView({ behavior: 'smooth' });
+      propertiesElement.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const handleQuickFilter = (filter: string) => {
-    if (filter === 'Apartamento 2 quartos') {
-      updateFilters({ type: 'apartamento', bedrooms: '2' });
-    } else if (filter === 'Casa 3 quartos') {
-      updateFilters({ type: 'casa', bedrooms: '3' });
-    } else if (filter === 'Cobertura') {
-      updateFilters({ type: 'apartamento', bedrooms: '4' });
-    } else if (filter === 'Terreno') {
-      updateFilters({ type: 'terreno' });
+    let newFilters: Partial<typeof searchFilters> = {};
+
+    switch (filter) {
+      case "Apartamento 2 quartos":
+        newFilters = { type: "apartamento", bedrooms: "2" };
+        break;
+      case "Casa 3 quartos":
+        newFilters = { type: "casa", bedrooms: "3" };
+        break;
+      case "Cobertura":
+        newFilters = { type: "apartamento", bedrooms: "4" };
+        break;
+      case "Terreno":
+        newFilters = { type: "terreno" };
+        break;
+      default:
+        break;
     }
-    
-    // Automatically search after quick filter
+
+    // Atualiza os filtros
+    updateFilters(newFilters);
+
+    // Aguarda próximo tick para garantir que os filtros foram aplicados
     setTimeout(() => {
       searchProperties();
-      const propertiesElement = document.getElementById('imoveis');
+
+      const propertiesElement = document.getElementById("imoveis");
       if (propertiesElement) {
-        propertiesElement.scrollIntoView({ behavior: 'smooth' });
+        propertiesElement.scrollIntoView({ behavior: "smooth" });
       }
-    }, 100);
+    }, 0);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSearch();
     }
   };
@@ -73,7 +91,10 @@ const SearchBar = () => {
               <HomeIcon className="w-4 h-4 mr-1 text-wine" />
               Tipo
             </label>
-            <Select value={searchFilters.type} onValueChange={(value) => updateFilters({ type: value })}>
+            <Select
+              value={searchFilters.type}
+              onValueChange={(value) => updateFilters({ type: value })}
+            >
               <SelectTrigger className="border-gray-300">
                 <SelectValue placeholder="Selecione" />
               </SelectTrigger>
@@ -89,8 +110,13 @@ const SearchBar = () => {
 
           {/* Operação */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Operação</label>
-            <Select value={searchFilters.operation} onValueChange={(value) => updateFilters({ operation: value })}>
+            <label className="text-sm font-medium text-gray-700">
+              Operação
+            </label>
+            <Select
+              value={searchFilters.operation}
+              onValueChange={(value) => updateFilters({ operation: value })}
+            >
               <SelectTrigger className="border-gray-300">
                 <SelectValue placeholder="Comprar/Alugar" />
               </SelectTrigger>
@@ -107,7 +133,10 @@ const SearchBar = () => {
               <DollarSign className="w-4 h-4 mr-1 text-wine" />
               Preço Mínimo
             </label>
-            <Select value={searchFilters.minPrice} onValueChange={(value) => updateFilters({ minPrice: value })}>
+            <Select
+              value={searchFilters.minPrice}
+              onValueChange={(value) => updateFilters({ minPrice: value })}
+            >
               <SelectTrigger className="border-gray-300">
                 <SelectValue placeholder="Mín" />
               </SelectTrigger>
@@ -124,7 +153,10 @@ const SearchBar = () => {
           {/* Quartos */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">Quartos</label>
-            <Select value={searchFilters.bedrooms} onValueChange={(value) => updateFilters({ bedrooms: value })}>
+            <Select
+              value={searchFilters.bedrooms}
+              onValueChange={(value) => updateFilters({ bedrooms: value })}
+            >
               <SelectTrigger className="border-gray-300">
                 <SelectValue placeholder="Qtd" />
               </SelectTrigger>
@@ -137,8 +169,22 @@ const SearchBar = () => {
             </Select>
           </div>
 
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700 flex items-center">
+              <HomeIcon className="w-4 h-4 mr-1 text-wine" />
+              Empreendimento
+            </label>
+            <Input
+              placeholder="Ex: Residencial Camila"
+              value={searchFilters.title || ""}
+              onChange={(e) => updateFilters({ title: e.target.value })}
+              onKeyPress={handleKeyPress}
+              className="border-gray-300 focus:border-wine"
+            />
+          </div>
+
           {/* Botão de Busca */}
-          <Button 
+          <Button
             onClick={handleSearch}
             className="bg-wine hover:bg-wine-dark text-white h-10 px-6"
             type="button"
@@ -152,7 +198,12 @@ const SearchBar = () => {
         <div className="mt-4 pt-4 border-t border-gray-200">
           <div className="flex flex-wrap gap-2">
             <span className="text-sm text-gray-600 mr-2">Busca rápida:</span>
-            {['Apartamento 2 quartos', 'Casa 3 quartos', 'Cobertura', 'Terreno'].map((filter) => (
+            {[
+              "Apartamento 2 quartos",
+              "Casa 3 quartos",
+              "Cobertura",
+              "Terreno",
+            ].map((filter) => (
               <Button
                 key={filter}
                 variant="outline"

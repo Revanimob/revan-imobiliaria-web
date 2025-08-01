@@ -165,7 +165,10 @@ const Footer = () => {
               <div className="flex space-x-3">
                 {[
                   { icon: Facebook, href: "#" },
-                  { icon: Instagram, href: "#" },
+                  {
+                    icon: Instagram,
+                    href: "https://www.instagram.com/revanimoveis/?utm_source=ig_web_button_share_sheet",
+                  },
                   { icon: Linkedin, href: "#" },
                   { icon: Youtube, href: "#" },
                 ].map((social, index) => {

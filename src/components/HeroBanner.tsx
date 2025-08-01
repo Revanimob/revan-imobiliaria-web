@@ -1,7 +1,6 @@
-
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 
 const HeroBanner = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -10,21 +9,26 @@ const HeroBanner = () => {
     {
       id: 1,
       title: "Encontre o Imóvel dos Seus Sonhos",
-      subtitle: "Mais de 10.000 imóveis disponíveis para compra, venda e locação",
-      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&h=600&fit=crop&crop=center"
+      subtitle:
+        "Mais de 10.000 imóveis disponíveis para compra, venda e locação",
+      image:
+        "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&h=600&fit=crop&crop=center",
     },
     {
       id: 2,
       title: "Expertise em Mercado Imobiliário",
-      subtitle: "25 anos de experiência conectando pessoas aos melhores imóveis",
-      image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200&h=600&fit=crop&crop=center"
+      subtitle:
+        "25 anos de experiência conectando pessoas aos melhores imóveis",
+      image:
+        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200&h=600&fit=crop&crop=center",
     },
     {
       id: 3,
       title: "Assessoria Completa",
       subtitle: "Da busca ao financiamento, cuidamos de cada detalhe para você",
-      image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1200&h=600&fit=crop&crop=center"
-    }
+      image:
+        "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1200&h=600&fit=crop&crop=center",
+    },
   ];
 
   useEffect(() => {
@@ -44,16 +48,16 @@ const HeroBanner = () => {
   };
 
   const scrollToSearch = () => {
-    const searchElement = document.getElementById('search-bar');
+    const searchElement = document.getElementById("search-bar");
     if (searchElement) {
-      searchElement.scrollIntoView({ behavior: 'smooth' });
+      searchElement.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const scrollToProperties = () => {
-    const propertiesElement = document.getElementById('imoveis');
+    const propertiesElement = document.getElementById("imoveis");
     if (propertiesElement) {
-      propertiesElement.scrollIntoView({ behavior: 'smooth' });
+      propertiesElement.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -64,7 +68,7 @@ const HeroBanner = () => {
         <div
           key={slide.id}
           className={`absolute inset-0 transition-opacity duration-500 ${
-            index === currentSlide ? 'opacity-100' : 'opacity-0'
+            index === currentSlide ? "opacity-100" : "opacity-0"
           }`}
         >
           <div
@@ -86,21 +90,21 @@ const HeroBanner = () => {
             {slides[currentSlide].subtitle}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="bg-wine hover:bg-wine-dark text-white px-8 py-3 text-lg"
               onClick={scrollToSearch}
             >
               <Search className="w-5 h-5 mr-2" />
               Buscar Imóveis
             </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="border-white text-white hover:bg-white hover:text-wine px-8 py-3 text-lg"
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-white text-wine hover:bg-white hover:text-wine px-8 py-3 text-lg"
               onClick={scrollToProperties}
             >
-              Anunciar Gratuitamente
+              Verificar Ofertas
             </Button>
           </div>
         </div>
@@ -127,7 +131,7 @@ const HeroBanner = () => {
             key={index}
             onClick={() => setCurrentSlide(index)}
             className={`w-3 h-3 rounded-full transition-all duration-200 ${
-              index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
+              index === currentSlide ? "bg-white" : "bg-white bg-opacity-50"
             }`}
           />
         ))}
