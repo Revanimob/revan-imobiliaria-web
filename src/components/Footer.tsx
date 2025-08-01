@@ -41,6 +41,7 @@ const Footer = () => {
     { label: "Barra da Tijuca", href: "#" },
     { label: "Leblon", href: "#" },
     { label: "Centro", href: "#" },
+    { label: "Campo Grande", href: "#" },
   ];
 
   const handleMail = async () => {
