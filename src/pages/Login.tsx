@@ -22,30 +22,23 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log("🔄 Iniciando tentativa de login...");
-    console.log("📤 Dados enviados:", formData);
-
     try {
       const payload: Ilogin = {
         email: formData.email,
         password: formData.password,
       };
 
-      console.log("📦 Payload final:", payload);
-
-      //const { accessToken, refreshToken } = await LoginService(payload);
+      const { accessToken, refreshToken } = await LoginService(payload);
 
       //console.log('✅ Login bem-sucedido');
       //console.log('🔐 accessToken:', accessToken);
       //console.log('🔁 refreshToken:', refreshToken);
+      login({
+        email: formData.email,
+        accessToken,
+        refreshToken,
+      });
 
-      /*login({
-      email: formData.email,
-      accessToken,
-      refreshToken,
-    });
-   */
       toast({ title: "Login realizado com sucesso!" });
       navigate("/admin/dashboard");
     } catch (error: any) {
