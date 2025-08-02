@@ -16,6 +16,7 @@ export interface Property {
   badge: string;
   isNew: boolean;
   operation: "comprar" | "alugar";
+  status: "disponivel" | "vendido" | "alugado" | "reservado";
 }
 
 export interface SearchFilters {

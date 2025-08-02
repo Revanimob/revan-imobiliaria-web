@@ -4,6 +4,7 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, Home, TrendingUp, BarChart3, UserPlus } from "lucide-react";
+import { toast } from "sonner";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -29,7 +30,9 @@ const AdminDashboard = () => {
       color:
         "bg-gradient-to-r from-green-600 to-green-500 hover:brightness-110",
       icon: TrendingUp,
-      onClick: () => navigate("/admin/reports-view"),
+      // onClick: () => navigate("/admin/reports-view"),
+      onClick: () =>
+        toast("Em breve essa funcionalidade estará disponivel ..."),
     },
   ];
 

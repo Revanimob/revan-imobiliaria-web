@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, EyeOff, Home } from "lucide-react";
+import { Eye, EyeOff, Home, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { Ilogin } from "@/types/login";
@@ -12,16 +12,20 @@ import { LoginService } from "@/services/loginService";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
   const navigate = useNavigate();
   const { toast } = useToast();
   const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
       const payload: Ilogin = {
         email: formData.email,
@@ -30,9 +34,6 @@ export default function Login() {
 
       const { accessToken, refreshToken } = await LoginService(payload);
 
-      //console.log('✅ Login bem-sucedido');
-      //console.log('🔐 accessToken:', accessToken);
-      //console.log('🔁 refreshToken:', refreshToken);
       login({
         email: formData.email,
         accessToken,
@@ -48,6 +49,8 @@ export default function Login() {
         description: error.response?.data?.error || "Credenciais inválidas",
         variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -122,22 +125,12 @@ export default function Login() {
                 </div>
               </div>
 
-              {/* <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
-                <p><strong>Credenciais de teste:</strong></p>
-                <p>E-mail: admin@revan.com</p>
-                <p>Senha: 123456</p>
-              </div> */}
-
-              {/* <div className="flex items-center justify-between text-sm">
-                <a href="#" className="text-wine hover:underline">
-                  Esqueceu sua senha?
-                </a>
-              </div> */}
-
               <Button
                 type="submit"
+                disabled={loading}
                 className="w-full bg-wine hover:bg-wine-dark"
               >
+                {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 Entrar
               </Button>
             </form>

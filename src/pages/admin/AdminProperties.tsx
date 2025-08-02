@@ -28,49 +28,31 @@ import {
   updatePropertyService,
 } from "@/services/propertyService";
 import { Loader2 } from "lucide-react";
-
-interface Property {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  type: "casa" | "apartamento" | "terreno" | "comercial";
-  status: "disponivel" | "vendido" | "alugado" | "reservado";
-  address: string;
-  neighborhood: string;
-  city: string;
-  zipCode: string;
-  bedrooms: number;
-  bathrooms: number;
-  area: number;
-  garage: number;
-  images: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Property } from "@/contexts/PropertyContext";
+import { NumericFormat } from "react-number-format";
 
 const AdminProperties = () => {
   const navigate = useNavigate();
   const [properties, setProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [formData, setFormData] = useState<Partial<Property>>({
     title: "",
-    description: "",
-    price: 0,
-    type: "apartamento",
-    status: "disponivel",
-    address: "",
-    neighborhood: "",
-    city: "",
-    zipCode: "",
+    price: "",
+    priceValue: 0,
+    location: "",
     bedrooms: 0,
     bathrooms: 0,
-    area: 0,
-    garage: 0,
-    images: "",
+    area: "",
+    areaValue: 0,
+    type: "apartamento",
+    image: "",
+    badge: "",
+    isNew: true,
+    operation: "comprar",
+    status: "disponivel",
   });
   const { toast } = useToast();
 
@@ -131,7 +113,7 @@ const AdminProperties = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (propertyId: string) => {
+  const handleDelete = async (propertyId: number) => {
     if (confirm("Tem certeza que deseja excluir este imóvel?")) {
       try {
         await deletePropertyService(propertyId);
@@ -151,20 +133,21 @@ const AdminProperties = () => {
 
   const resetForm = () => {
     setFormData({
+      id: 0,
       title: "",
-      description: "",
-      price: 0,
-      type: "apartamento",
-      status: "disponivel",
-      address: "",
-      neighborhood: "",
-      city: "",
-      zipCode: "",
+      price: "0",
+      priceValue: 0,
+      location: "",
       bedrooms: 0,
       bathrooms: 0,
-      area: 0,
-      garage: 0,
-      images: "",
+      area: "0",
+      areaValue: 0,
+      type: "apartamento",
+      image: "",
+      badge: "",
+      isNew: false,
+      operation: "comprar",
+      status: "disponivel",
     });
     setEditingProperty(null);
     setIsModalOpen(false);
@@ -352,7 +335,7 @@ const AdminProperties = () => {
                         {getTypeLabel(property.type)}
                       </td>
                       <td className="p-2 md:p-4 font-medium text-sm md:text-base">
-                        R$ {property.price.toLocaleString("pt-BR")}
+                        R$ {property.priceValue.toLocaleString("pt-BR")}
                       </td>
                       <td className="p-2 md:p-4 hidden md:table-cell">
                         <span
@@ -364,10 +347,10 @@ const AdminProperties = () => {
                         </span>
                       </td>
                       <td className="p-2 md:p-4 text-gray-600 dark:text-gray-400 hidden lg:table-cell text-sm">
-                        {property.neighborhood}, {property.city}
+                        {property.location}
                       </td>
                       <td className="p-2 md:p-4 hidden sm:table-cell text-sm md:text-base">
-                        {property.area}m²
+                        {property.areaValue}m²
                       </td>
                       <td className="p-2 md:p-4">
                         <div className="flex space-x-1 md:space-x-2">
@@ -423,9 +406,27 @@ const AdminProperties = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, title: e.target.value })
                     }
-                    placeholder="Casa em condomínio fechado..."
+                    placeholder="Casa de alto padrão"
                     required
                   />
+                </div>
+
+                <div>
+                  <Label htmlFor="operation">Operação</Label>
+                  <Select
+                    value={formData.operation}
+                    onValueChange={(value: Property["operation"]) =>
+                      setFormData({ ...formData, operation: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="comprar">Comprar</SelectItem>
+                      <SelectItem value="alugar">Alugar</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>
@@ -437,7 +438,7 @@ const AdminProperties = () => {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue />
+                      <SelectValue placeholder="Selecione" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="apartamento">Apartamento</SelectItem>
@@ -457,7 +458,7 @@ const AdminProperties = () => {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue />
+                      <SelectValue placeholder="Selecione" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="disponivel">Disponível</SelectItem>
@@ -469,149 +470,96 @@ const AdminProperties = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="price">Preço (R$)</Label>
-                  <Input
-                    id="price"
-                    type="number"
-                    value={formData.price}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        price: Number(e.target.value),
-                      })
-                    }
-                    placeholder="350000"
-                    required
-                  />
+                  <div>
+                    <Label htmlFor="priceValue">Preço (R$)</Label>
+                    <NumericFormat
+                      id="priceValue"
+                      value={formData.priceValue}
+                      onValueChange={(values) =>
+                        setFormData({
+                          ...formData,
+                          priceValue: Number(values.value),
+                        })
+                      }
+                      thousandSeparator="."
+                      decimalSeparator=","
+                      prefix="R$ "
+                      allowNegative={false}
+                      placeholder="Ex: R$ 350.000"
+                      required
+                      className="mt-1 w-full border rounded px-3 py-2"
+                    />
+                  </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="area">Área (m²)</Label>
-                  <Input
-                    id="area"
-                    type="number"
-                    value={formData.area}
-                    onChange={(e) =>
-                      setFormData({ ...formData, area: Number(e.target.value) })
+                  <Label htmlFor="areaValue">Área (m²)</Label>
+                  <NumericFormat
+                    id="areaValue"
+                    value={formData.areaValue}
+                    onValueChange={(values) =>
+                      setFormData({
+                        ...formData,
+                        areaValue: Number(values.value),
+                      })
                     }
-                    placeholder="120"
+                    suffix=" m²"
+                    thousandSeparator="."
+                    decimalSeparator=","
+                    allowNegative={false}
+                    placeholder="Ex: 120"
                     required
+                    className="mt-1 w-full border rounded px-3 py-2"
                   />
                 </div>
 
                 <div>
                   <Label htmlFor="bedrooms">Quartos</Label>
-                  <Input
+                  <NumericFormat
                     id="bedrooms"
-                    type="number"
                     value={formData.bedrooms}
-                    onChange={(e) =>
+                    onValueChange={(values) =>
                       setFormData({
                         ...formData,
-                        bedrooms: Number(e.target.value),
+                        bedrooms: Number(values.value),
                       })
                     }
-                    placeholder="3"
+                    allowNegative={false}
+                    decimalScale={0}
+                    placeholder="Ex: 3"
                     required
+                    className="mt-1 w-full border rounded px-3 py-2"
                   />
                 </div>
 
                 <div>
                   <Label htmlFor="bathrooms">Banheiros</Label>
-                  <Input
+                  <NumericFormat
                     id="bathrooms"
-                    type="number"
                     value={formData.bathrooms}
-                    onChange={(e) =>
+                    onValueChange={(values) =>
                       setFormData({
                         ...formData,
-                        bathrooms: Number(e.target.value),
+                        bathrooms: Number(values.value),
                       })
                     }
-                    placeholder="2"
+                    allowNegative={false}
+                    decimalScale={0}
+                    placeholder="Ex: 2"
                     required
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="garage">Garagem</Label>
-                  <Input
-                    id="garage"
-                    type="number"
-                    value={formData.garage}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        garage: Number(e.target.value),
-                      })
-                    }
-                    placeholder="2"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="zipCode">CEP</Label>
-                  <Input
-                    id="zipCode"
-                    value={formData.zipCode}
-                    onChange={(e) =>
-                      setFormData({ ...formData, zipCode: e.target.value })
-                    }
-                    placeholder="00000-000"
-                    required
+                    className="mt-1 w-full border rounded px-3 py-2"
                   />
                 </div>
 
                 <div className="md:col-span-2">
-                  <Label htmlFor="address">Endereço</Label>
+                  <Label htmlFor="location">Localização</Label>
                   <Input
-                    id="address"
-                    value={formData.address}
+                    id="location"
+                    value={formData.location}
                     onChange={(e) =>
-                      setFormData({ ...formData, address: e.target.value })
+                      setFormData({ ...formData, location: e.target.value })
                     }
-                    placeholder="Rua das Flores, 123"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="neighborhood">Bairro</Label>
-                  <Input
-                    id="neighborhood"
-                    value={formData.neighborhood}
-                    onChange={(e) =>
-                      setFormData({ ...formData, neighborhood: e.target.value })
-                    }
-                    placeholder="Centro"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="city">Cidade</Label>
-                  <Input
-                    id="city"
-                    value={formData.city}
-                    onChange={(e) =>
-                      setFormData({ ...formData, city: e.target.value })
-                    }
-                    placeholder="São Paulo"
-                    required
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <Label htmlFor="description">Descrição</Label>
-                  <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) =>
-                      setFormData({ ...formData, description: e.target.value })
-                    }
-                    placeholder="Descrição detalhada do imóvel..."
-                    rows={4}
+                    placeholder="Rua Exemplo, Bairro, Cidade"
                     required
                   />
                 </div>
@@ -626,11 +574,19 @@ const AdminProperties = () => {
                 >
                   Cancelar
                 </Button>
+
                 <Button
                   type="submit"
+                  disabled={isSubmitting}
                   className="flex-1 bg-wine hover:bg-wine-dark"
                 >
-                  {editingProperty ? "Atualizar" : "Cadastrar"}
+                  {isSubmitting ||
+                    (editingProperty && (
+                      <>
+                        <Home className="w-4 h-4 mr-2" />
+                        Atualizar
+                      </>
+                    ))}
                 </Button>
               </div>
             </form>

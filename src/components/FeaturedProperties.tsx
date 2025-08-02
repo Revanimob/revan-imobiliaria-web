@@ -1,23 +1,37 @@
-import React, { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { MapPin, Calendar, Home as HomeIcon, Image as ImageIcon, Phone, Eye } from 'lucide-react';
-import { useProperty } from '@/contexts/PropertyContext';
-import PropertyDetailsModal from './PropertyDetailsModal';
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  MapPin,
+  Calendar,
+  Home as HomeIcon,
+  Image as ImageIcon,
+  Phone,
+  Eye,
+} from "lucide-react";
+import { useProperty } from "@/contexts/PropertyContext";
+import PropertyDetailsModal from "./PropertyDetailsModal";
+import { useNavigate } from "react-router-dom";
 
 const FeaturedProperties = () => {
   const { filteredProperties } = useProperty();
   const [selectedProperty, setSelectedProperty] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const getBadgeVariant = (badge: string) => {
     switch (badge) {
-      case 'Destaque': return 'default';
-      case 'Promoção': return 'destructive';
-      case 'Exclusivo': return 'secondary';
-      case 'Novo': return 'outline';
-      default: return 'default';
+      case "Destaque":
+        return "default";
+      case "Promoção":
+        return "destructive";
+      case "Exclusivo":
+        return "secondary";
+      case "Novo":
+        return "outline";
+      default:
+        return "default";
     }
   };
 
@@ -28,12 +42,14 @@ const FeaturedProperties = () => {
 
   const handleContact = (propertyId: number) => {
     console.log(`Contacting for property ${propertyId}`);
-    alert(`Entrar em contato sobre o imóvel ${propertyId}. Em breve, abriremos o formulário de contato.`);
+    alert(
+      `Entrar em contato sobre o imóvel ${propertyId}. Em breve, abriremos o formulário de contato.`
+    );
   };
 
   const handleImageGallery = (propertyId: number) => {
     console.log(`Opening image gallery for property ${propertyId}`);
-    const property = filteredProperties.find(p => p.id === propertyId);
+    const property = filteredProperties.find((p) => p.id === propertyId);
     if (property) {
       handleViewDetails(property);
     }
@@ -44,9 +60,12 @@ const FeaturedProperties = () => {
       <section id="imoveis" className="py-16 bg-beige-light">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-wine mb-4">Imóveis em Destaque</h2>
+            <h2 className="text-4xl font-bold text-wine mb-4">
+              Imóveis em Destaque
+            </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Descubra as melhores oportunidades do mercado imobiliário selecionadas especialmente para você
+              Descubra as melhores oportunidades do mercado imobiliário
+              selecionadas especialmente para você
             </p>
             <p className="text-sm text-gray-500 mt-2">
               {filteredProperties.length} imóveis encontrados
@@ -68,7 +87,10 @@ const FeaturedProperties = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
               {filteredProperties.map((property) => (
-                <Card key={property.id} className="group hover:shadow-xl transition-all duration-300 overflow-hidden">
+                <Card
+                  key={property.id}
+                  className="group hover:shadow-xl transition-all duration-300 overflow-hidden"
+                >
                   <div className="relative">
                     <img
                       src={property.image}
@@ -76,22 +98,25 @@ const FeaturedProperties = () => {
                       className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute top-3 left-3 flex gap-2">
-                      <Badge 
+                      <Badge
                         variant={getBadgeVariant(property.badge)}
                         className="bg-wine text-white"
                       >
                         {property.badge}
                       </Badge>
                       {property.isNew && (
-                        <Badge variant="outline" className="bg-green-500 text-white border-green-500">
+                        <Badge
+                          variant="outline"
+                          className="bg-green-500 text-white border-green-500"
+                        >
                           Novo
                         </Badge>
                       )}
                     </div>
                     <div className="absolute top-3 right-3">
-                      <Button 
-                        size="icon" 
-                        variant="ghost" 
+                      <Button
+                        size="icon"
+                        variant="ghost"
                         className="bg-white bg-opacity-80 hover:bg-opacity-100"
                         onClick={() => handleImageGallery(property.id)}
                       >
@@ -124,15 +149,15 @@ const FeaturedProperties = () => {
                     </div>
 
                     <div className="flex gap-2">
-                      <Button 
+                      <Button
                         className="flex-1 bg-wine hover:bg-wine-dark text-white"
                         onClick={() => handleViewDetails(property)}
                       >
                         <Eye className="w-4 h-4 mr-1" />
                         Ver Detalhes
                       </Button>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         className="border-wine text-wine hover:bg-wine hover:text-white"
                         onClick={() => handleContact(property.id)}
                       >
@@ -147,13 +172,12 @@ const FeaturedProperties = () => {
           )}
 
           <div className="text-center">
-            <Button 
-              size="lg" 
-              variant="outline" 
+            <Button
+              size="lg"
+              variant="outline"
               className="border-wine text-wine hover:bg-wine hover:text-white px-8"
               onClick={() => {
-                console.log('View all properties clicked');
-                alert('Em breve, você será redirecionado para a página com todos os imóveis disponíveis.');
+                navigate("/");
               }}
             >
               Ver Todos os Imóveis

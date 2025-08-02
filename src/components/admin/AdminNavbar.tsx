@@ -88,7 +88,7 @@ const AdminNavbar = ({ onToggleSidebar, sidebarOpen }: AdminNavbarProps) => {
 
         {/* Right Section */}
         <div className="flex items-center space-x-3">
-          <AdminThemeToggle />
+          {/* <AdminThemeToggle /> */}
 
           <Button
             variant="ghost"

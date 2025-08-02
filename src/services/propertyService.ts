@@ -1,7 +1,7 @@
-import { Property } from "@/types/property";
+import { Property } from "@/contexts/PropertyContext";
 import axios from "axios";
 
-const BASE_URL = `${import.meta.env.VITE_PROD}/api/properties`;
+const BASE_URL = `${import.meta.env.VITE_DEV}/api/properties`;
 
 // 🔹 Criar nova propriedade
 export async function addPropertyService(payload: Partial<Property>) {
@@ -16,14 +16,14 @@ export async function getAllPropertiesService() {
 }
 
 // 🔹 Buscar propriedade por ID
-export async function getPropertyByIdService(id: string) {
+export async function getPropertyByIdService(id: number) {
   const response = await axios.get(`${BASE_URL}/${id}`);
   return response.data;
 }
 
 // 🔹 Atualizar propriedade
 export async function updatePropertyService(
-  id: string,
+  id: number,
   payload: Partial<Property>
 ) {
   const response = await axios.put(`${BASE_URL}/${id}`, payload);
@@ -31,7 +31,7 @@ export async function updatePropertyService(
 }
 
 // 🔹 Deletar propriedade
-export async function deletePropertyService(id: string) {
+export async function deletePropertyService(id: number) {
   const response = await axios.delete(`${BASE_URL}/${id}`);
   return response.data;
 }
