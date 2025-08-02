@@ -13,11 +13,14 @@ import {
 import { useProperty } from "@/contexts/PropertyContext";
 import PropertyDetailsModal from "./PropertyDetailsModal";
 import { useNavigate } from "react-router-dom";
+import { sendWpp } from "@/services/wppService";
 
 const FeaturedProperties = () => {
   const { filteredProperties } = useProperty();
   const [selectedProperty, setSelectedProperty] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { resetFilters } = useProperty();
+
   const navigate = useNavigate();
 
   const getBadgeVariant = (badge: string) => {
@@ -40,15 +43,14 @@ const FeaturedProperties = () => {
     setIsModalOpen(true);
   };
 
-  const handleContact = (propertyId: number) => {
-    console.log(`Contacting for property ${propertyId}`);
-    alert(
-      `Entrar em contato sobre o imóvel ${propertyId}. Em breve, abriremos o formulário de contato.`
-    );
+  const handleContact = (property: String) => {
+    const message = `Olá, gostaria de um auxílio de especialista da Revan,estou entrando em contato para saber informações 
+    sobre o imóvel ${property}.`;
+
+    sendWpp({ mensagem: message });
   };
 
   const handleImageGallery = (propertyId: number) => {
-    console.log(`Opening image gallery for property ${propertyId}`);
     const property = filteredProperties.find((p) => p.id === propertyId);
     if (property) {
       handleViewDetails(property);
@@ -159,7 +161,7 @@ const FeaturedProperties = () => {
                       <Button
                         variant="outline"
                         className="border-wine text-wine hover:bg-wine hover:text-white"
-                        onClick={() => handleContact(property.id)}
+                        onClick={() => handleContact(property.title)}
                       >
                         <Phone className="w-4 h-4 mr-1" />
                         Contato
@@ -176,9 +178,7 @@ const FeaturedProperties = () => {
               size="lg"
               variant="outline"
               className="border-wine text-wine hover:bg-wine hover:text-white px-8"
-              onClick={() => {
-                navigate("/");
-              }}
+              onClick={resetFilters}
             >
               Ver Todos os Imóveis
             </Button>

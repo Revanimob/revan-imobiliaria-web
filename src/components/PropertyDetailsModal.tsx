@@ -46,8 +46,10 @@ const PropertyDetailsModal = ({
 }: PropertyDetailsModalProps) => {
   if (!property) return null;
 
-  const handleContact = () => {
-    const message = `Olá, gostaria de um auxílio de especialista da Revan,Entrando em contato sobre ${property.title}.`;
+  const handleContact = (property: String) => {
+    const message = `Olá, gostaria de um auxílio de especialista da Revan,estou entrando em contato para saber informações 
+      sobre o imóvel ${property}.`;
+
     sendWpp({ mensagem: message });
   };
 
@@ -205,7 +207,7 @@ const PropertyDetailsModal = ({
             <div className="space-y-3">
               <Button
                 className="w-full bg-wine hover:bg-wine-dark text-white"
-                onClick={handleContact}
+                onClick={() => handleContact(property.title)}
               >
                 <Phone className="w-4 h-4 mr-2" />
                 Entrar em Contato

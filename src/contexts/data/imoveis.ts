@@ -28,6 +28,7 @@ export const initialProperties: Property[] = [
     badge: "",
     isNew: false,
     operation: "comprar",
+    status: "disponivel",
   },
   {
     id: 2,
@@ -44,6 +45,7 @@ export const initialProperties: Property[] = [
     badge: "Em construção",
     isNew: true,
     operation: "comprar",
+    status: "disponivel",
   },
   {
     id: 3,
@@ -60,6 +62,7 @@ export const initialProperties: Property[] = [
     badge: "",
     isNew: false,
     operation: "comprar",
+    status: "disponivel",
   },
   {
     id: 4,
@@ -76,6 +79,7 @@ export const initialProperties: Property[] = [
     badge: "",
     isNew: false,
     operation: "comprar",
+    status: "disponivel",
   },
   {
     id: 5,
@@ -92,6 +96,7 @@ export const initialProperties: Property[] = [
     badge: "Em construção",
     isNew: true,
     operation: "comprar",
+    status: "disponivel",
   },
   {
     id: 6,
@@ -108,6 +113,7 @@ export const initialProperties: Property[] = [
     badge: "",
     isNew: false,
     operation: "comprar",
+    status: "disponivel",
   },
   {
     id: 7,
@@ -124,6 +130,7 @@ export const initialProperties: Property[] = [
     badge: "",
     isNew: false,
     operation: "comprar",
+    status: "disponivel",
   },
   {
     id: 8,
@@ -140,6 +147,7 @@ export const initialProperties: Property[] = [
     badge: "",
     isNew: false,
     operation: "comprar",
+    status: "disponivel",
   },
   {
     id: 9,
@@ -156,6 +164,7 @@ export const initialProperties: Property[] = [
     badge: "",
     isNew: false,
     operation: "comprar",
+    status: "disponivel",
   },
   {
     id: 10,
@@ -172,6 +181,7 @@ export const initialProperties: Property[] = [
     badge: "",
     isNew: false,
     operation: "comprar",
+    status: "disponivel",
   },
   {
     id: 11,
@@ -188,6 +198,7 @@ export const initialProperties: Property[] = [
     badge: "Em construção",
     isNew: true,
     operation: "comprar",
+    status: "disponivel",
   },
   {
     id: 12,
@@ -204,6 +215,7 @@ export const initialProperties: Property[] = [
     badge: "Em construção",
     isNew: true,
     operation: "comprar",
+    status: "disponivel",
   },
   {
     id: 13,
@@ -220,5 +232,6 @@ export const initialProperties: Property[] = [
     badge: "",
     isNew: false,
     operation: "comprar",
+    status: "disponivel",
   },
 ];

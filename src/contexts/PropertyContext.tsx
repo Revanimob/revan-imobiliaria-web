@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { initialProperties } from "./data/imoveis";
+import { normalize } from "@/util/util";
 
 export interface Property {
-  id: number;
+  id?: number;
   title: string;
   price: string;
   priceValue: number;
@@ -36,6 +37,7 @@ interface PropertyContextType {
   searchFilters: SearchFilters;
   updateFilters: (filters: Partial<SearchFilters>) => void;
   searchProperties: () => void;
+  resetFilters: () => void;
 }
 
 const PropertyContext = createContext<PropertyContextType | undefined>(
@@ -77,51 +79,54 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     // Filtro por localização
     if (location?.trim()) {
       filtered = filtered.filter((property) =>
-        property.location.toLowerCase().includes(location.toLowerCase())
+        normalize(property.location).includes(normalize(location))
       );
     }
 
     // Filtro por nome (título do empreendimento)
     if (title?.trim()) {
       filtered = filtered.filter((property) =>
-        property.title.toLowerCase().includes(title.toLowerCase())
+        normalize(property.title).includes(normalize(title))
       );
     }
 
-    // Filtro por tipo
-    if (type) {
-      filtered = filtered.filter((property) => property.type === type);
-    }
-
-    // Filtro por operação
-    if (operation) {
+    // Filtro por tipo de imóvel
+    if (type?.trim()) {
       filtered = filtered.filter(
-        (property) => property.operation === operation
+        (property) => property.type.toLowerCase() === type.toLowerCase()
       );
     }
 
-    // Filtro por preço mínimo
+    // Filtro por operação (comprar/alugar)
+    if (operation?.trim()) {
+      filtered = filtered.filter(
+        (property) =>
+          property.operation.toLowerCase() === operation.toLowerCase()
+      );
+    }
+
+    // Preço mínimo
     if (minPrice && !isNaN(parseInt(minPrice))) {
       filtered = filtered.filter(
         (property) => property.priceValue >= parseInt(minPrice)
       );
     }
 
-    // Filtro por preço máximo
+    // Preço máximo
     if (maxPrice && !isNaN(parseInt(maxPrice))) {
       filtered = filtered.filter(
         (property) => property.priceValue <= parseInt(maxPrice)
       );
     }
 
-    // Filtro por quantidade mínima de quartos
+    // Quartos mínimos
     if (bedrooms && !isNaN(parseInt(bedrooms))) {
       filtered = filtered.filter(
         (property) => property.bedrooms >= parseInt(bedrooms)
       );
     }
 
-    // Filtro por quantidade mínima de banheiros
+    // Banheiros mínimos
     if (bathrooms && !isNaN(parseInt(bathrooms))) {
       filtered = filtered.filter(
         (property) => property.bathrooms >= parseInt(bathrooms)
@@ -132,6 +137,21 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     console.log("Filtered properties:", filtered);
   };
 
+  const resetFilters = () => {
+    setSearchFilters({
+      location: "",
+      type: "",
+      operation: "",
+      minPrice: "",
+      maxPrice: "",
+      bedrooms: "",
+      bathrooms: "",
+      title: "",
+    });
+
+    setFilteredProperties(properties);
+  };
+
   return (
     <PropertyContext.Provider
       value={{
@@ -140,6 +160,7 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
         searchFilters,
         updateFilters,
         searchProperties,
+        resetFilters,
       }}
     >
       {children}

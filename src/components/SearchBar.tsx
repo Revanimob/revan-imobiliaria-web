@@ -16,7 +16,6 @@ const SearchBar = () => {
   const { searchFilters, updateFilters, searchProperties } = useProperty();
 
   const handleSearch = () => {
-    console.log("Searching with:", searchFilters);
     searchProperties();
 
     // Scroll to results
