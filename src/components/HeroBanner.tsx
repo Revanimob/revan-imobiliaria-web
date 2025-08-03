@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import rua03numero480 from "@/assets/Rua03-numero480.jpg";
+import RuaSetePronta from "@/assets/RuaSetePronta.jpg";
+import RuaZezeMacedoResidencialCamila from "@/assets/RuaZezeMacedoResidencialCamila.jpg";
 
 const HeroBanner = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -11,23 +14,20 @@ const HeroBanner = () => {
       title: "Encontre o Imóvel dos Seus Sonhos",
       subtitle:
         "Mais de 10.000 imóveis disponíveis para compra, venda e locação",
-      image:
-        "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&h=600&fit=crop&crop=center",
+      image: rua03numero480,
     },
     {
       id: 2,
       title: "Expertise em Mercado Imobiliário",
       subtitle:
         "25 anos de experiência conectando pessoas aos melhores imóveis",
-      image:
-        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200&h=600&fit=crop&crop=center",
+      image: RuaSetePronta,
     },
     {
       id: 3,
       title: "Assessoria Completa",
       subtitle: "Da busca ao financiamento, cuidamos de cada detalhe para você",
-      image:
-        "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1200&h=600&fit=crop&crop=center",
+      image: RuaZezeMacedoResidencialCamila,
     },
   ];
 

@@ -16,8 +16,9 @@ export const initialProperties: Property[] = [
   {
     id: 1,
     title: "Casa - Rua Mauro Borja (Bairro Andréia)",
-    price: "R$ 741.000",
-    priceValue: 741000,
+    price: "Sob consulta",
+
+    priceValue: 0,
     location: "Rua Mauro Borja, Bairro Andréia",
     bedrooms: 2,
     bathrooms: 1,
