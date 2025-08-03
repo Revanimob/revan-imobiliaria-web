@@ -89,7 +89,7 @@ const Footer = () => {
               <div className="flex items-center space-x-3">
                 <MapPin className="w-5 h-5 opacity-80" />
                 <span className="text-sm opacity-90">
-                  Av. Atlântica, 1500 - Copacabana, RJ
+                  Estrada do Mendanha 789 sala 418 - RJ
                 </span>
               </div>
               <div className="flex items-center space-x-3">

@@ -12,8 +12,7 @@ const HeroBanner = () => {
     {
       id: 1,
       title: "Encontre o Imóvel dos Seus Sonhos",
-      subtitle:
-        "Mais de 10.000 imóveis disponíveis para compra, venda e locação",
+      subtitle: "",
       image: rua03numero480,
     },
     {

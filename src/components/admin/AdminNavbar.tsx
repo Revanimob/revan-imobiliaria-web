@@ -55,17 +55,12 @@ const AdminNavbar = ({ onToggleSidebar, sidebarOpen }: AdminNavbarProps) => {
           </Button>
 
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-wine to-wine-dark rounded-lg flex items-center justify-center">
-              <img src={logo} />
-            </div>
-            <div className="hidden sm:block">
-              <h1
-                className={`text-lg font-bold ${
-                  adminTheme === "dark" ? "text-white" : "text-wine"
-                }`}
-              >
-                REVAN
-              </h1>
+            <div className="w-28 h-28 rounded-lg flex items-center justify-center">
+              <img
+                src={logo}
+                alt="Logo Revan"
+                className="w-full h-full object-contain"
+              />
             </div>
           </Link>
         </div>

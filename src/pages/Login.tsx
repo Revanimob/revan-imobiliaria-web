@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, EyeOff, Home, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { Ilogin } from "@/types/login";
@@ -14,10 +14,7 @@ import logo from "@/assets/Logo Revan Vinho.png";
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
 
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -32,15 +29,9 @@ export default function Login() {
         email: formData.email,
         password: formData.password,
       };
-
       const { accessToken, refreshToken } = await LoginService(payload);
 
-      login({
-        email: formData.email,
-        accessToken,
-        refreshToken,
-      });
-
+      login({ email: formData.email, accessToken, refreshToken });
       toast({ title: "Login realizado com sucesso!" });
       navigate("/admin/dashboard");
     } catch (error: any) {
@@ -56,31 +47,29 @@ export default function Login() {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-beige-light to-beige flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="flex flex-col items-center mb-0">
-          <img
-            src={logo}
-            alt="Logo Revan"
-            className="w-64 h-auto max-h-64 object-contain mb-4"
-          />
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-beige-light to-beige px-4">
+      <div className="w-full max-w-md flex flex-col items-center gap-6">
+        <img
+          src={logo}
+          alt="Logo Revan"
+          className="w-48 h-auto object-contain"
+        />
 
-        <Card className="shadow-xl border-0 mb-12">
-          <CardHeader className="text-center pb-4">
+        <Card className="w-full shadow-xl border-0">
+          <CardHeader className="text-center space-y-1">
             <CardTitle className="text-2xl text-wine">Fazer Login</CardTitle>
-            <p className="text-gray-600">Acesse sua conta para continuar</p>
+            <p className="text-gray-600 text-sm">
+              Acesse sua conta para continuar
+            </p>
           </CardHeader>
-          <CardContent>
+
+          <CardContent className="space-y-6">
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
+              <div className="space-y-1">
                 <Label htmlFor="email">E-mail</Label>
                 <Input
                   id="email"
@@ -90,13 +79,12 @@ export default function Login() {
                   onChange={handleInputChange}
                   placeholder="admin@revan.com"
                   required
-                  className="mt-1"
                 />
               </div>
 
-              <div>
+              <div className="space-y-1">
                 <Label htmlFor="password">Senha</Label>
-                <div className="relative mt-1">
+                <div className="relative">
                   <Input
                     id="password"
                     name="password"
@@ -132,7 +120,7 @@ export default function Login() {
               </Button>
             </form>
 
-            <div className="mt-6 text-center">
+            <div className="text-center pt-2">
               <p className="text-sm text-gray-600">
                 © {new Date().getFullYear()}{" "}
                 <a
