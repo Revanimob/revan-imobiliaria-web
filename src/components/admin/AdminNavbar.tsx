@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { useAuthContext } from "@/contexts/hook/useAuthContext";
+import logo from "@/assets/Logo Revan Vinho.png";
 
 interface AdminNavbarProps {
   onToggleSidebar: () => void;
@@ -55,7 +56,7 @@ const AdminNavbar = ({ onToggleSidebar, sidebarOpen }: AdminNavbarProps) => {
 
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-br from-wine to-wine-dark rounded-lg flex items-center justify-center">
-              <Home className="w-5 h-5 text-white" />
+              <img src={logo} />
             </div>
             <div className="hidden sm:block">
               <h1

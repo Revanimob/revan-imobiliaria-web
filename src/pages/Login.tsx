@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Ilogin } from "@/types/login";
 import { useAuth } from "@/hooks/useAuth";
 import { LoginService } from "@/services/loginService";
+import logo from "@/assets/Logo Revan Vinho.png";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -64,19 +65,15 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-beige-light to-beige flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center space-x-2 mb-6">
-            <div className="w-12 h-12 bg-gradient-to-br from-wine to-wine-dark rounded-lg flex items-center justify-center">
-              <Home className="w-8 h-8 text-white" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold text-wine">REVAN</h1>
-              <p className="text-sm text-gray-600">IMOBILIÁRIA</p>
-            </div>
-          </Link>
+        <div className="flex flex-col items-center mb-0">
+          <img
+            src={logo}
+            alt="Logo Revan"
+            className="w-64 h-auto max-h-64 object-contain mb-4"
+          />
         </div>
 
-        <Card className="shadow-xl border-0">
+        <Card className="shadow-xl border-0 mb-12">
           <CardHeader className="text-center pb-4">
             <CardTitle className="text-2xl text-wine">Fazer Login</CardTitle>
             <p className="text-gray-600">Acesse sua conta para continuar</p>

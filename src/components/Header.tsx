@@ -1,8 +1,8 @@
-
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Home, User } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Home, User } from "lucide-react";
+import { Link } from "react-router-dom";
+import logo from "@/assets/Logo Revan Vinho.png";
 
 const Header = () => {
   return (
@@ -11,9 +11,14 @@ const Header = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-wine to-wine-dark rounded-lg flex items-center justify-center">
-              <Home className="w-6 h-6 text-white" />
+            <div className="w-28 h-28 rounded-lg flex items-center justify-center">
+              <img
+                src={logo}
+                alt="Logo Revan"
+                className="w-full h-full object-contain"
+              />
             </div>
+
             <div>
               <h1 className="text-2xl font-bold text-wine">REVAN</h1>
               <p className="text-xs text-gray-600">IMOBILIÁRIA</p>
@@ -23,7 +28,10 @@ const Header = () => {
           {/* Login Button */}
           <div className="flex items-center space-x-3">
             <Link to="/login">
-              <Button variant="outline" className="border-wine text-wine hover:bg-wine hover:text-white">
+              <Button
+                variant="outline"
+                className="border-wine text-wine hover:bg-wine hover:text-white"
+              >
                 <User className="w-4 h-4 mr-2" />
                 Login
               </Button>
