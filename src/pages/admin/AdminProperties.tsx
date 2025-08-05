@@ -228,166 +228,121 @@ const AdminProperties = () => {
         </div>
 
         {/* Properties Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="max-w-full overflow-x-auto">
-            <CardContent className="p-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+          <Card>
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">
                     Total
                   </p>
-                  <p className="text-xl md:text-2xl font-bold">
+                  <p className="text-lg md:text-xl lg:text-2xl font-bold">
                     {properties.length}
                   </p>
                 </div>
-                <Home className="h-6 w-6 md:h-8 md:w-8 text-wine" />
+                <Home className="h-5 w-5 md:h-6 md:w-6 lg:h-8 lg:w-8 text-wine" />
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">
                     Disponíveis
                   </p>
-                  <p className="text-xl md:text-2xl font-bold text-green-600">
+                  <p className="text-lg md:text-xl lg:text-2xl font-bold text-green-600">
                     {properties.filter((p) => p.status === "disponivel").length}
                   </p>
                 </div>
-                <Home className="h-6 w-6 md:h-8 md:w-8 text-green-600" />
+                <Home className="h-5 w-5 md:h-6 md:w-6 lg:h-8 lg:w-8 text-green-600" />
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">
                     Vendidos
                   </p>
-                  <p className="text-xl md:text-2xl font-bold text-red-600">
+                  <p className="text-lg md:text-xl lg:text-2xl font-bold text-red-600">
                     {properties.filter((p) => p.status === "vendido").length}
                   </p>
                 </div>
-                <Home className="h-6 w-6 md:h-8 md:w-8 text-red-600" />
+                <Home className="h-5 w-5 md:h-6 md:w-6 lg:h-8 lg:w-8 text-red-600" />
               </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 md:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <p className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">
                     Alugados
                   </p>
-                  <p className="text-xl md:text-2xl font-bold text-blue-600">
+                  <p className="text-lg md:text-xl lg:text-2xl font-bold text-blue-600">
                     {properties.filter((p) => p.status === "alugado").length}
                   </p>
                 </div>
-                <Home className="h-6 w-6 md:h-8 md:w-8 text-blue-600" />
+                <Home className="h-5 w-5 md:h-6 md:w-6 lg:h-8 lg:w-8 text-blue-600" />
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Properties Table */}
+        {/* Properties Table/Cards */}
         <Card>
           <CardHeader>
-            <CardTitle>Lista de Imóveis ({properties.length})</CardTitle>
+            <CardTitle className="text-lg md:text-xl">Lista de Imóveis ({properties.length})</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
+          <CardContent className="p-2 md:p-6">
+            {/* Desktop/Tablet Table View */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left p-2 md:p-4 text-sm md:text-base">
-                      Imóvel
-                    </th>
-                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden sm:table-cell">
-                      Tipo
-                    </th>
-                    <th className="text-left p-2 md:p-4 text-sm md:text-base">
-                      Preço
-                    </th>
-                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden md:table-cell">
-                      Status
-                    </th>
-                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden lg:table-cell">
-                      Localização
-                    </th>
-                    <th className="text-left p-2 md:p-4 text-sm md:text-base hidden sm:table-cell">
-                      Área
-                    </th>
-                    <th className="text-left p-2 md:p-4 text-sm md:text-base">
-                      Ações
-                    </th>
+                    <th className="text-left p-3 text-sm font-medium">Imóvel</th>
+                    <th className="text-left p-3 text-sm font-medium">Tipo</th>
+                    <th className="text-left p-3 text-sm font-medium">Preço</th>
+                    <th className="text-left p-3 text-sm font-medium">Status</th>
+                    <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">Localização</th>
+                    <th className="text-left p-3 text-sm font-medium">Área</th>
+                    <th className="text-left p-3 text-sm font-medium">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
                   {properties.map((property) => (
-                    <tr
-                      key={property.id}
-                      className="border-b hover:bg-gray-50 dark:hover:bg-gray-800"
-                    >
-                      <td className="p-2 md:p-4">
+                    <tr key={property.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
+                      <td className="p-3">
                         <div>
-                          <p className="font-medium text-sm md:text-base truncate">
-                            {property.title}
-                          </p>
-                          <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+                          <p className="font-medium text-sm truncate max-w-[200px]">{property.title}</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">
                             {property.bedrooms} qtos • {property.bathrooms} bans
                           </p>
                         </div>
                       </td>
-                      <td className="p-2 md:p-4 hidden sm:table-cell text-sm md:text-base">
-                        {getTypeLabel(property.type)}
-                      </td>
-                      <td className="p-2 md:p-4 font-medium text-sm md:text-base">
-                        R$ {property.priceValue.toLocaleString("pt-BR")}
-                      </td>
-                      <td className="p-2 md:p-4 hidden md:table-cell">
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(
-                            property.status
-                          )}`}
-                        >
+                      <td className="p-3 text-sm">{getTypeLabel(property.type)}</td>
+                      <td className="p-3 font-medium text-sm">R$ {property.priceValue.toLocaleString("pt-BR")}</td>
+                      <td className="p-3">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(property.status)}`}>
                           {getStatusLabel(property.status)}
                         </span>
                       </td>
-                      <td className="p-2 md:p-4 text-gray-600 dark:text-gray-400 hidden lg:table-cell text-sm">
+                      <td className="p-3 text-gray-600 dark:text-gray-400 text-sm hidden lg:table-cell max-w-[150px] truncate">
                         {property.location}
                       </td>
-                      <td className="p-2 md:p-4 hidden sm:table-cell text-sm md:text-base">
-                        {property.areaValue}m²
-                      </td>
-                      <td className="p-2 md:p-4">
-                        <div className="flex space-x-1 md:space-x-2">
-                          {/* <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8"
-                          >
-                            <Eye className="w-3 h-3 md:w-4 md:h-4" />
-                          </Button> */}
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleEdit(property)}
-                            className="h-8 w-8"
-                          >
-                            <Edit2 className="w-3 h-3 md:w-4 md:h-4" />
+                      <td className="p-3 text-sm">{property.areaValue}m²</td>
+                      <td className="p-3">
+                        <div className="flex space-x-1">
+                          <Button variant="ghost" size="icon" onClick={() => handleEdit(property)} className="h-8 w-8">
+                            <Edit2 className="w-4 h-4" />
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => openDeleteDialog(property.id)}
-                            className="h-8 w-8"
-                          >
-                            <Trash2 className="w-3 h-3 md:w-4 md:h-4 text-red-600" />
+                          <Button variant="ghost" size="icon" onClick={() => openDeleteDialog(property.id)} className="h-8 w-8">
+                            <Trash2 className="w-4 h-4 text-red-600" />
                           </Button>
                         </div>
                       </td>
@@ -396,19 +351,67 @@ const AdminProperties = () => {
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-3">
+              {properties.map((property) => (
+                <Card key={property.id} className="border border-gray-200 dark:border-gray-700">
+                  <CardContent className="p-4">
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-medium text-sm truncate">{property.title}</h3>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                          {getTypeLabel(property.type)} • {property.bedrooms} qtos • {property.bathrooms} bans
+                        </p>
+                      </div>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ml-2 ${getStatusBadgeColor(property.status)}`}>
+                        {getStatusLabel(property.status)}
+                      </span>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-2 mb-3 text-xs">
+                      <div>
+                        <span className="text-gray-600 dark:text-gray-400">Preço:</span>
+                        <p className="font-medium">R$ {property.priceValue.toLocaleString("pt-BR")}</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-600 dark:text-gray-400">Área:</span>
+                        <p className="font-medium">{property.areaValue}m²</p>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-3">
+                      <span className="text-gray-600 dark:text-gray-400 text-xs">Localização:</span>
+                      <p className="text-sm truncate">{property.location}</p>
+                    </div>
+                    
+                    <div className="flex justify-end space-x-2">
+                      <Button variant="outline" size="sm" onClick={() => handleEdit(property)} className="h-8">
+                        <Edit2 className="w-3 h-3 mr-1" />
+                        Editar
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => openDeleteDialog(property.id)} className="h-8 text-red-600 border-red-200 hover:bg-red-50">
+                        <Trash2 className="w-3 h-3 mr-1" />
+                        Excluir
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </CardContent>
         </Card>
 
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>
+          <DialogContent className="max-w-[95vw] md:max-w-2xl max-h-[95vh] overflow-y-auto">
+            <DialogHeader className="pb-4">
+              <DialogTitle className="text-lg md:text-xl">
                 {editingProperty ? "Editar Imóvel" : "Novo Imóvel"}
               </DialogTitle>
             </DialogHeader>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                 <div className="md:col-span-2">
                   <Label htmlFor="title">Título do Imóvel</Label>
                   <Input
