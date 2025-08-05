@@ -22,6 +22,8 @@ const FeaturedProperties = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { resetFilters } = useProperty();
   const [isIframeLoading, setIsIframeLoading] = useState(true);
+  const isLoadingProperties =
+    filteredProperties.length === 0 && isIframeLoading;
 
   const navigate = useNavigate();
 
@@ -82,7 +84,17 @@ const FeaturedProperties = () => {
             </p>
           </div>
 
-          {filteredProperties.length === 0 ? (
+          {isLoadingProperties ? (
+            <div className="text-center py-12">
+              <Loader2 className="w-10 h-10 mx-auto animate-spin text-wine mb-4" />
+              <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                Buscando imóveis no banco de dados...
+              </h3>
+              <p className="text-gray-500">
+                Aguarde enquanto carregamos as melhores opções para você.
+              </p>
+            </div>
+          ) : filteredProperties.length === 0 ? (
             <div className="text-center py-12">
               <div className="text-gray-400 mb-4">
                 <HomeIcon className="w-16 h-16 mx-auto" />

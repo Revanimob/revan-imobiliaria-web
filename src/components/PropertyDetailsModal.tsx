@@ -111,7 +111,7 @@ const PropertyDetailsModal = ({
                 onLoad={() => setIsIframeLoading(false)}
               />
 
-              <div className="hidden lg:block">
+              <div className="hidden lg:flex justify-center mt-4">
                 <img src={logo} alt="Logo" className="w-32" />
               </div>
 
