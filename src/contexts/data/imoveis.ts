@@ -25,7 +25,8 @@ export const initialProperties: Property[] = [
     area: "71m²",
     areaValue: 157,
     type: "casa",
-    image: Mauro_Borja,
+    image:
+      "https://drive.google.com/file/d/1m1Yq7yP3mm1XYHmJU7BgrkG74eRqstuL/view?usp=drive_link",
     badge: "",
     isNew: false,
     operation: "comprar",
@@ -42,7 +43,8 @@ export const initialProperties: Property[] = [
     area: "157m²",
     areaValue: 157,
     type: "casa",
-    image: JoseSoaresFerreira,
+    image:
+      "https://drive.google.com/file/d/1lK3mF_XrvkxXncJ8uo3QLOoEB7xLzp7-/view?usp=drive_link",
     badge: "Em construção",
     isNew: true,
     operation: "comprar",
@@ -59,7 +61,8 @@ export const initialProperties: Property[] = [
     area: "53m²",
     areaValue: 53,
     type: "casa",
-    image: RuaZezeMacedo,
+    image:
+      "https://drive.google.com/file/d/1lPcNGay3wJ9HLvUs22788GBDpJN0U6NU/view?usp=drive_link",
     badge: "",
     isNew: false,
     operation: "comprar",
@@ -76,7 +79,8 @@ export const initialProperties: Property[] = [
     area: "56m²",
     areaValue: 56,
     type: "casa",
-    image: RuaZezeMacedoResidencialCamila,
+    image:
+      "https://drive.google.com/file/d/1m0EVNStD_TA613uLLsYT2jUwDKBwLiEx/view?usp=drive_link",
     badge: "",
     isNew: false,
     operation: "comprar",
@@ -93,7 +97,8 @@ export const initialProperties: Property[] = [
     area: "55m²",
     areaValue: 55,
     type: "casa",
-    image: RuaSete,
+    image:
+      "https://drive.google.com/file/d/1oT3XhyKkp5MDqyhs2fUUe4Y5_QmPFkQF/view?usp=drive_link",
     badge: "Em finalização",
     isNew: true,
     operation: "comprar",
@@ -127,7 +132,8 @@ export const initialProperties: Property[] = [
     area: "60m²",
     areaValue: 60,
     type: "casa",
-    image: rua06,
+    image:
+      "https://drive.google.com/file/d/1r1sKvrwD5gVu4ldC9IKghv5RBH3p-QNe/view?usp=drive_link",
     badge: "",
     isNew: false,
     operation: "comprar",
@@ -144,7 +150,8 @@ export const initialProperties: Property[] = [
     area: "60m²",
     areaValue: 60,
     type: "casa",
-    image: Rua05,
+    image:
+      "https://drive.google.com/file/d/1qa6os4ADxIAdmfwvoj41jSMoe6_wR9cE/view?usp=drive_link",
     badge: "",
     isNew: false,
     operation: "comprar",
@@ -161,7 +168,8 @@ export const initialProperties: Property[] = [
     area: "72m²",
     areaValue: 72,
     type: "casa",
-    image: Rua03,
+    image:
+      "https://drive.google.com/file/d/1rlyJTnXI34rrEM-DQk0G2UaOLcOnpwQC/view?usp=drive_link",
     badge: "",
     isNew: false,
     operation: "comprar",
@@ -178,7 +186,8 @@ export const initialProperties: Property[] = [
     area: "76m²",
     areaValue: 76,
     type: "casa",
-    image: rua03numero480,
+    image:
+      "https://drive.google.com/file/d/1sdTRClgkOLvvWi0RpzEY2IYyleKu9ycz/view?usp=drive_link",
     badge: "",
     isNew: false,
     operation: "comprar",
@@ -195,7 +204,8 @@ export const initialProperties: Property[] = [
     area: "60m²",
     areaValue: 60,
     type: "casa",
-    image: Rua01numero10,
+    image:
+      "https://drive.google.com/file/d/1tEqmE_ymdIPLYXieo-Xweh8c-KPIgQvT/view?usp=drive_link",
     badge: "Em construção",
     isNew: true,
     operation: "comprar",
@@ -212,7 +222,8 @@ export const initialProperties: Property[] = [
     area: "53m²",
     areaValue: 53,
     type: "casa",
-    image: Rua01numero10,
+    image:
+      "https://drive.google.com/file/d/1tGhTRqnQ-3kuPGsm2G85S-ArRmPeiPb7/view?usp=drive_link",
     badge: "Em construção",
     isNew: true,
     operation: "comprar",
@@ -229,7 +240,8 @@ export const initialProperties: Property[] = [
     area: "60m²",
     areaValue: 60,
     type: "casa",
-    image: Rua01numero11,
+    image:
+      "https://drive.google.com/file/d/1uPJ1e1iHsTIuRpd6gMK-0oTo7OedXk1x/view?usp=drive_link",
     badge: "",
     isNew: false,
     operation: "comprar",

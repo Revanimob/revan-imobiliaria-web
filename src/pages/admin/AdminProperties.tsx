@@ -30,6 +30,7 @@ import {
 import { Loader2 } from "lucide-react";
 import { Property } from "@/contexts/PropertyContext";
 import { NumericFormat } from "react-number-format";
+import ConfirmDialog from "@/components/dialog/cancelDialog";
 
 const AdminProperties = () => {
   const navigate = useNavigate();
@@ -54,6 +55,9 @@ const AdminProperties = () => {
     operation: "comprar",
     status: "disponivel",
   });
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [propertyToDelete, setPropertyToDelete] = useState<number | null>(null);
+
   const { toast } = useToast();
 
   useEffect(() => {
@@ -113,22 +117,30 @@ const AdminProperties = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (propertyId: number) => {
-    if (confirm("Tem certeza que deseja excluir este imóvel?")) {
-      try {
-        await deletePropertyService(propertyId);
-        const updated = await getAllPropertiesService();
-        saveProperties(updated);
-        toast({ title: "Imóvel excluído com sucesso!" });
-      } catch (error) {
-        console.error("Erro ao excluir imóvel:", error);
-        toast({
-          title: "Erro ao excluir imóvel",
-          description: "Tente novamente mais tarde.",
-          variant: "destructive",
-        });
-      }
+  const confirmDelete = async () => {
+    if (!propertyToDelete) return;
+
+    try {
+      await deletePropertyService(propertyToDelete);
+      const updated = await getAllPropertiesService();
+      saveProperties(updated);
+      toast({ title: "Imóvel excluído com sucesso!" });
+    } catch (error) {
+      console.error("Erro ao excluir imóvel:", error);
+      toast({
+        title: "Erro ao excluir imóvel",
+        description: "Tente novamente mais tarde.",
+        variant: "destructive",
+      });
+    } finally {
+      setDeleteDialogOpen(false);
+      setPropertyToDelete(null);
     }
+  };
+
+  const openDeleteDialog = (propertyId: number) => {
+    setPropertyToDelete(propertyId);
+    setDeleteDialogOpen(true);
   };
 
   const resetForm = () => {
@@ -186,7 +198,7 @@ const AdminProperties = () => {
   if (isLoading) {
     return (
       <AdminLayout>
-        <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-hidden">
           <Loader2 className="w-8 h-8 text-gray-600 dark:text-gray-300 animate-spin" />
         </div>
       </AdminLayout>
@@ -195,7 +207,7 @@ const AdminProperties = () => {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
+      <div className="space-y-6 px-4 sm:px-6 md:px-8 lg:px-10 py-6 max-w-full overflow-x-hidden">
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -208,7 +220,7 @@ const AdminProperties = () => {
           </div>
           <Button
             onClick={() => navigate("/admin/add-property")}
-            className="bg-wine hover:bg-wine-dark shrink-0"
+            className="w-full sm:w-auto bg-wine hover:bg-wine-dark"
           >
             <Plus className="w-4 h-4 mr-2" />
             ADD IMÓVEIS
@@ -216,8 +228,8 @@ const AdminProperties = () => {
         </div>
 
         {/* Properties Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="max-w-full overflow-x-auto">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -354,13 +366,13 @@ const AdminProperties = () => {
                       </td>
                       <td className="p-2 md:p-4">
                         <div className="flex space-x-1 md:space-x-2">
-                          <Button
+                          {/* <Button
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8"
                           >
                             <Eye className="w-3 h-3 md:w-4 md:h-4" />
-                          </Button>
+                          </Button> */}
                           <Button
                             variant="ghost"
                             size="icon"
@@ -372,7 +384,7 @@ const AdminProperties = () => {
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => handleDelete(property.id)}
+                            onClick={() => openDeleteDialog(property.id)}
                             className="h-8 w-8"
                           >
                             <Trash2 className="w-3 h-3 md:w-4 md:h-4 text-red-600" />
@@ -387,7 +399,6 @@ const AdminProperties = () => {
           </CardContent>
         </Card>
 
-        {/* Add/Edit Property Modal */}
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
@@ -563,6 +574,19 @@ const AdminProperties = () => {
                     required
                   />
                 </div>
+
+                <div className="md:col-span-2">
+                  <Label htmlFor="image">Link da Imagem da Casa</Label>
+                  <Input
+                    id="image"
+                    value={formData.image}
+                    onChange={(e) =>
+                      setFormData({ ...formData, image: e.target.value })
+                    }
+                    placeholder="Link da imagem da casa"
+                    required
+                  />
+                </div>
               </div>
 
               <div className="flex gap-3 pt-4">
@@ -578,20 +602,36 @@ const AdminProperties = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 bg-wine hover:bg-wine-dark"
+                  className="flex-1 bg-wine hover:bg-wine-dark text-white flex items-center justify-center gap-2"
                 >
-                  {isSubmitting ||
-                    (editingProperty && (
-                      <>
-                        <Home className="w-4 h-4 mr-2" />
-                        Atualizar
-                      </>
-                    ))}
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Salvando...
+                    </>
+                  ) : editingProperty ? (
+                    <>
+                      <Home className="w-4 h-4" />
+                      Atualizar
+                    </>
+                  ) : (
+                    "Cadastrar"
+                  )}
                 </Button>
               </div>
             </form>
           </DialogContent>
         </Dialog>
+
+        <ConfirmDialog
+          isOpen={deleteDialogOpen}
+          onClose={() => setDeleteDialogOpen(false)}
+          onConfirm={confirmDelete}
+          title="Excluir imóvel"
+          description="Essa ação é irreversível. Deseja realmente excluir este imóvel?"
+          confirmText="Excluir"
+          cancelText="Cancelar"
+        />
       </div>
     </AdminLayout>
   );

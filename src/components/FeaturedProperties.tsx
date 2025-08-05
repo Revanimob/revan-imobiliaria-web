@@ -9,6 +9,7 @@ import {
   Image as ImageIcon,
   Phone,
   Eye,
+  Loader2,
 } from "lucide-react";
 import { useProperty } from "@/contexts/PropertyContext";
 import PropertyDetailsModal from "./PropertyDetailsModal";
@@ -20,6 +21,7 @@ const FeaturedProperties = () => {
   const [selectedProperty, setSelectedProperty] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { resetFilters } = useProperty();
+  const [isIframeLoading, setIsIframeLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -55,6 +57,12 @@ const FeaturedProperties = () => {
     if (property) {
       handleViewDetails(property);
     }
+  };
+  const getIframeUrl = (image?: string | null): string => {
+    if (!image) return "";
+    const match = image.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    const id = match?.[1];
+    return id ? `https://drive.google.com/file/d/${id}/preview` : "";
   };
 
   return (
@@ -94,11 +102,22 @@ const FeaturedProperties = () => {
                   className="group hover:shadow-xl transition-all duration-300 overflow-hidden"
                 >
                   <div className="relative">
-                    <img
-                      src={property.image}
-                      alt={property.title}
+                    {isIframeLoading && (
+                      <div className="absolute inset-0 z-10 bg-white/90 flex flex-col items-center justify-center text-center p-6 rounded-lg">
+                        <Loader2 className="w-6 h-6 animate-spin text-wine mb-2" />
+                        <p className="text-sm text-wine font-medium">
+                          Estamos carregando a foto do imóvel, aguarde uns
+                          instantes...
+                        </p>
+                      </div>
+                    )}
+                    <iframe
+                      src={getIframeUrl(property.image)}
+                      title={property.title}
                       className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                      onLoad={() => setIsIframeLoading(false)}
+                    ></iframe>
+
                     <div className="absolute top-3 left-3 flex gap-2">
                       <Badge
                         variant={getBadgeVariant(property.badge)}

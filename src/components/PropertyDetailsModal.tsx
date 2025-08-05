@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,9 +16,11 @@ import {
   Phone,
   Heart,
   Share2,
+  Loader2,
 } from "lucide-react";
 import { sendWpp } from "@/services/wppService";
 import { toast } from "sonner";
+import logo from "@/assets/fotor-2025080311745.jpg";
 
 interface Property {
   id: number;
@@ -45,6 +47,7 @@ const PropertyDetailsModal = ({
   onClose,
 }: PropertyDetailsModalProps) => {
   if (!property) return null;
+  const [isIframeLoading, setIsIframeLoading] = useState(true);
 
   const handleContact = (property: String) => {
     const message = `Olá, gostaria de um auxílio de especialista da Revan,estou entrando em contato para saber informações 
@@ -71,6 +74,13 @@ const PropertyDetailsModal = ({
     toast("Imóvel adicionado aos favoritos!");
   };
 
+  const getIframeUrl = (image?: string | null): string => {
+    if (!image) return "";
+    const match = image.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    const id = match?.[1];
+    return id ? `https://drive.google.com/file/d/${id}/preview` : "";
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -84,11 +94,27 @@ const PropertyDetailsModal = ({
           {/* Imagem Principal */}
           <div className="space-y-4">
             <div className="relative">
-              <img
-                src={property.image}
-                alt={property.title}
-                className="w-full h-64 lg:h-80 object-cover rounded-lg"
+              {isIframeLoading && (
+                <div className="absolute inset-0 z-10 bg-white/90 flex flex-col items-center justify-center text-center p-6 rounded-lg">
+                  <Loader2 className="w-6 h-6 animate-spin text-wine mb-2" />
+                  <p className="text-sm text-wine font-medium">
+                    Estamos carregando a foto do imóvel, aguarde uns
+                    instantes...
+                  </p>
+                </div>
+              )}
+              <iframe
+                src={getIframeUrl(property.image)}
+                title={property.title}
+                className="w-full mt-8 aspect-video rounded-lg"
+                allow="autoplay"
+                onLoad={() => setIsIframeLoading(false)}
               />
+
+              <div className="hidden lg:block">
+                <img src={logo} alt="Logo" className="w-32" />
+              </div>
+
               <div className="absolute top-3 left-3 flex gap-2">
                 <Badge className="bg-wine text-white">{property.badge}</Badge>
                 {property.isNew && (
@@ -121,18 +147,18 @@ const PropertyDetailsModal = ({
             </div>
 
             {/* Galeria de Imagens Menores */}
-            <div className="grid grid-cols-3 gap-2">
+            {/* <div className="grid grid-cols-3 gap-2">
               {[property.image, property.image, property.image].map(
                 (img, index) => (
-                  <img
+                  <iframe
                     key={index}
-                    src={img}
-                    alt={`${property.title} - ${index + 1}`}
+                    src={getIframeUrl(img)}
+                    title={property.title}
                     className="w-full h-20 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
-                  />
+                  ></iframe>
                 )
               )}
-            </div>
+            </div> */}
           </div>
 
           {/* Detalhes do Imóvel */}

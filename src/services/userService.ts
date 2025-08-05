@@ -1,7 +1,7 @@
 import { User } from "@/types/user";
 import axios from "axios";
 
-const BASE_URL = `${import.meta.env.VITE_DEV}/api/users`;
+const BASE_URL = `${import.meta.env.VITE_PROD}/api/users`;
 
 // 🔹 Criar novo usuário admin
 export async function addAdminUserService(payload: Partial<User>) {

@@ -336,23 +336,6 @@ const AddProperty = () => {
                   </div>
                 </div>
 
-                <div>
-                  <Label htmlFor="description">Descrição</Label>
-                  <Textarea
-                    id="description"
-                    value={(formData as any).description || ""}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        description: e.target.value,
-                      } as any)
-                    }
-                    placeholder="Descrição detalhada do imóvel"
-                    rows={4}
-                    className="mt-1"
-                  />
-                </div>
-
                 <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
                   <Button
                     type="button"

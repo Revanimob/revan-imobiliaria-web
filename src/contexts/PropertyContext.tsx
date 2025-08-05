@@ -1,6 +1,13 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import { initialProperties } from "./data/imoveis";
 import { normalize } from "@/util/util";
+import { getAllPropertiesService } from "@/services/propertyService";
 
 export interface Property {
   id?: number;
@@ -45,9 +52,24 @@ const PropertyContext = createContext<PropertyContextType | undefined>(
 );
 
 export const PropertyProvider = ({ children }: { children: ReactNode }) => {
-  const [properties] = useState<Property[]>(initialProperties);
-  const [filteredProperties, setFilteredProperties] =
-    useState<Property[]>(initialProperties);
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const data = await getAllPropertiesService();
+        setProperties(data);
+        setFilteredProperties(data);
+        console.log("Propriedades carregadas:", data);
+      } catch (error) {
+        console.error("Erro ao buscar propriedades:", error);
+      }
+    };
+
+    fetchProperties();
+  }, []);
+
   const [searchFilters, setSearchFilters] = useState<SearchFilters>({
     location: "",
     type: "",
