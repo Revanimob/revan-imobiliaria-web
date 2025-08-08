@@ -31,6 +31,7 @@ import { Loader2 } from "lucide-react";
 import { Property } from "@/contexts/PropertyContext";
 import { NumericFormat } from "react-number-format";
 import ConfirmDialog from "@/components/dialog/cancelDialog";
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
 const AdminProperties = () => {
   const navigate = useNavigate();
@@ -57,8 +58,13 @@ const AdminProperties = () => {
   });
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState<number | null>(null);
+const [page, setPage] = useState(1);
+const pageSize = 10;
+const totalPages = Math.max(1, Math.ceil(properties.length / pageSize));
+const startIndex = (page - 1) * pageSize;
+const currentItems = properties.slice(startIndex, startIndex + pageSize);
 
-  const { toast } = useToast();
+const { toast } = useToast();
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -80,6 +86,12 @@ const AdminProperties = () => {
 
     fetchProperties();
   }, []);
+
+  // Ajusta página quando a quantidade muda
+  useEffect(() => {
+    const tp = Math.max(1, Math.ceil(properties.length / pageSize));
+    if (page > tp) setPage(tp);
+  }, [properties.length, pageSize, page]);
 
   const saveProperties = (newProperties: Property[]) => {
     setProperties(newProperties);
@@ -315,7 +327,7 @@ const AdminProperties = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {properties.map((property) => (
+                  {currentItems.map((property) => (
                     <tr key={property.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
                       <td className="p-3">
                         <div>
@@ -354,7 +366,7 @@ const AdminProperties = () => {
 
             {/* Mobile Card View */}
             <div className="md:hidden space-y-3">
-              {properties.map((property) => (
+              {currentItems.map((property) => (
                 <Card key={property.id} className="border border-gray-200 dark:border-gray-700">
                   <CardContent className="p-4">
                     <div className="flex justify-between items-start mb-3">
@@ -399,6 +411,79 @@ const AdminProperties = () => {
                 </Card>
               ))}
             </div>
+
+            <div className="mt-4 flex items-center justify-center">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#"
+                      className={page === 1 ? "pointer-events-none opacity-50" : ""}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (page > 1) setPage(page - 1);
+                      }}
+                    />
+                  </PaginationItem>
+
+                  {(() => {
+                    const items: React.ReactNode[] = [];
+                    const total = totalPages;
+                    const current = page;
+                    const pushPage = (p: number) =>
+                      items.push(
+                        <PaginationItem key={p}>
+                          <PaginationLink
+                            href="#"
+                            isActive={current === p}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setPage(p);
+                            }}
+                          >
+                            {p}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+
+                    if (total <= 7) {
+                      for (let i = 1; i <= total; i++) pushPage(i);
+                    } else {
+                      pushPage(1);
+                      if (current > 3)
+                        items.push(
+                          <PaginationItem key="e1">
+                            <PaginationEllipsis />
+                          </PaginationItem>
+                        );
+                      const start = Math.max(2, current - 1);
+                      const end = Math.min(total - 1, current + 1);
+                      for (let i = start; i <= end; i++) pushPage(i);
+                      if (current < total - 2)
+                        items.push(
+                          <PaginationItem key="e2">
+                            <PaginationEllipsis />
+                          </PaginationItem>
+                        );
+                      pushPage(total);
+                    }
+                    return items;
+                  })()}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      className={page === totalPages ? "pointer-events-none opacity-50" : ""}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (page < totalPages) setPage(page + 1);
+                      }}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+
           </CardContent>
         </Card>
 
