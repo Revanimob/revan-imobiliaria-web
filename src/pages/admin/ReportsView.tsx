@@ -119,14 +119,14 @@ const ReportsView = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
-            <Button
+            {/* <Button
               variant="outline"
               onClick={() => handleExportData("excel")}
               className="flex items-center gap-2"
             >
               <Download className="w-4 h-4" />
               Excel
-            </Button>
+            </Button> */}
             <Button
               variant="outline"
               onClick={() => handleExportData("pdf")}
