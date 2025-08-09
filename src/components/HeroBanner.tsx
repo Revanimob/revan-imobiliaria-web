@@ -19,7 +19,8 @@ const HeroBanner = () => {
       id: 2,
       title: "Expertise em Mercado Imobiliário",
       subtitle:
-        "25 anos de experiência conectando pessoas aos melhores imóveis",
+        "Ampla experiência no mercado imobiliário, conectando clientes aos melhores imóveis",
+
       image: RuaSetePronta,
     },
     {

@@ -2,7 +2,8 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Home, User } from "lucide-react";
 import { Link } from "react-router-dom";
-import logo from "@/assets/Logo Revan Vinho.png";
+import logo from "@/assets/Logo Revan P1.png";
+import logodois from "@/assets/Logo Revan P2.png";
 
 const Header = () => {
   return (
@@ -10,8 +11,8 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-28 h-28 rounded-lg flex items-center justify-center">
+          <Link to="/" className="flex items-center gap-0">
+            <div className="w-48 h-48 flex items-center justify-center">
               <img
                 src={logo}
                 alt="Logo Revan"
@@ -19,9 +20,12 @@ const Header = () => {
               />
             </div>
 
-            <div>
-              <h1 className="text-2xl font-bold text-wine">REVAN</h1>
-              <p className="text-xs text-gray-600">Consulturia Imobiliária</p>
+            <div className="w-48 h-48 flex items-center justify-center">
+              <img
+                src={logodois}
+                alt="Logo Revan"
+                className="w-full h-full object-contain"
+              />
             </div>
           </Link>
 

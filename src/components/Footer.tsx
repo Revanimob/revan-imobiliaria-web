@@ -12,9 +12,10 @@ import {
   Linkedin,
   Youtube,
 } from "lucide-react";
-import { Imail } from "@/types/mail";
 import { sendMailService } from "@/services/sendEmail";
 import { toast } from "@/hooks/use-toast";
+import RevanSemFundo from "@/assets/RevanSemFundo.png";
+import badge from "@/assets/badge.png";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -42,6 +43,11 @@ const Footer = () => {
     { label: "Leblon", href: "#" },
     { label: "Centro", href: "#" },
     { label: "Campo Grande", href: "#" },
+    { label: "Santa Cruz", href: "#" },
+    { label: "Santissimo", href: "#" },
+    { label: "Cosmos", href: "#" },
+    { label: "Paciência", href: "#" },
+    { label: "Guaratiba", href: "#" },
   ];
 
   const handleMail = async () => {
@@ -72,18 +78,21 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-6">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-                <Home className="w-6 h-6 text-white" />
-              </div>
+            <div className="flex items-center space-x-4">
+              <img
+                src={RevanSemFundo}
+                alt="Logo Revan"
+                className="w-28 h-auto object-contain"
+              />
               <div>
                 <h3 className="text-2xl font-bold">REVAN</h3>
-                <p className="text-sm opacity-90">IMOBILIÁRIA</p>
+                <p className="text-sm opacity-90">Consulturia Imobiliária</p>
               </div>
             </div>
+
             <p className="text-white opacity-90 leading-relaxed">
-              Há 25 anos conectando pessoas aos melhores imóveis com ética,
-              transparência e excelência no atendimento.
+              Conectando pessoas aos melhores imóveis com ética, transparência e
+              excelência no atendimento.
             </p>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
@@ -99,6 +108,23 @@ const Footer = () => {
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 opacity-80" />
                 <span className="text-sm opacity-90">revanimob@gmail.com</span>
+              </div>
+
+              <div className="flex items-center space-x-3">
+                <img src={badge} className="w-5 h-5" />
+                <span className="text-sm opacity-90">
+                  Creci Juridico: 12246
+                </span>
+              </div>
+
+              <div className="flex items-center space-x-3">
+                <span className="text-sm opacity-90">
+                  Revan Consultoria Imobiliária Ltda
+                </span>
+              </div>
+
+              <div className="flex items-center space-x-3">
+                <span className="text-sm opacity-90">61.407.447/0001-74</span>
               </div>
             </div>
           </div>

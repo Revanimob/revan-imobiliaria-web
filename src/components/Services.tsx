@@ -110,8 +110,8 @@ const Services = () => {
               Nossos Serviços
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Oferecemos soluções completas no mercado imobiliário com 25 anos
-              de experiência e compromisso com a excelência
+              Oferecemos soluções completas no mercado imobiliário com
+              excelência
             </p>
           </div>
 

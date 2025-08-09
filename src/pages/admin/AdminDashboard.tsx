@@ -30,9 +30,9 @@ const AdminDashboard = () => {
       color:
         "bg-gradient-to-r from-green-600 to-green-500 hover:brightness-110",
       icon: TrendingUp,
-      onClick: () => navigate("/admin/reports-view"),
-      // onClick: () =>
-      //   toast("Em breve essa funcionalidade estará disponivel ..."),
+      // onClick: () => navigate("/admin/reports-view"),
+      onClick: () =>
+        toast("Em breve essa funcionalidade estará disponivel ..."),
     },
   ];
 
