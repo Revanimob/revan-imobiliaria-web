@@ -13,13 +13,32 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Edit2, Trash2, Eye, Home } from "lucide-react";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Plus, Edit2, Trash2, Eye, Home, HandCoins, CalendarIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import {
   addPropertyService,
@@ -58,6 +77,8 @@ const AdminProperties = () => {
   });
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState<number | null>(null);
+  const [saleModalOpen, setSaleModalOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
 const [page, setPage] = useState(1);
 const pageSize = 10;
 const totalPages = Math.max(1, Math.ceil(properties.length / pageSize));
@@ -65,6 +86,30 @@ const startIndex = (page - 1) * pageSize;
 const currentItems = properties.slice(startIndex, startIndex + pageSize);
 
 const { toast } = useToast();
+
+  // Schema para validação do formulário de venda
+  const saleFormSchema = z.object({
+    negotiationDate: z.date({
+      required_error: "Data da negociação é obrigatória",
+    }),
+    clientName: z.string().min(2, "Nome do cliente deve ter pelo menos 2 caracteres"),
+    realtorName: z.string().min(2, "Nome do corretor/imobiliária deve ter pelo menos 2 caracteres"),
+    paymentMethod: z.string().min(1, "Forma de pagamento é obrigatória"),
+    deliveryDate: z.date({
+      required_error: "Data de entrega é obrigatória",
+    }),
+  });
+
+  type SaleFormData = z.infer<typeof saleFormSchema>;
+
+  const saleForm = useForm<SaleFormData>({
+    resolver: zodResolver(saleFormSchema),
+    defaultValues: {
+      clientName: "",
+      realtorName: "",
+      paymentMethod: "",
+    },
+  });
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -153,6 +198,37 @@ const { toast } = useToast();
   const openDeleteDialog = (propertyId: number) => {
     setPropertyToDelete(propertyId);
     setDeleteDialogOpen(true);
+  };
+
+  const openSaleModal = (property: Property) => {
+    setSelectedProperty(property);
+    setSaleModalOpen(true);
+    saleForm.reset();
+  };
+
+  const handleSaleSubmit = async (data: SaleFormData) => {
+    try {
+      console.log("Dados da venda:", {
+        property: selectedProperty,
+        saleData: data,
+      });
+      
+      toast({
+        title: "Venda registrada com sucesso!",
+        description: `Venda do imóvel "${selectedProperty?.title}" foi registrada.`,
+      });
+      
+      setSaleModalOpen(false);
+      setSelectedProperty(null);
+      saleForm.reset();
+    } catch (error) {
+      console.error("Erro ao registrar venda:", error);
+      toast({
+        title: "Erro ao registrar venda",
+        description: "Tente novamente mais tarde.",
+        variant: "destructive",
+      });
+    }
   };
 
   const resetForm = () => {
@@ -353,6 +429,15 @@ const { toast } = useToast();
                           <Button variant="ghost" size="icon" onClick={() => handleEdit(property)} className="h-8 w-8">
                             <Edit2 className="w-4 h-4" />
                           </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => openSaleModal(property)} 
+                            className="h-8 w-8"
+                            disabled={property.status === 'vendido'}
+                          >
+                            <HandCoins className="w-4 h-4 text-green-600" />
+                          </Button>
                           <Button variant="ghost" size="icon" onClick={() => openDeleteDialog(property.id)} className="h-8 w-8">
                             <Trash2 className="w-4 h-4 text-red-600" />
                           </Button>
@@ -401,6 +486,16 @@ const { toast } = useToast();
                       <Button variant="outline" size="sm" onClick={() => handleEdit(property)} className="h-8">
                         <Edit2 className="w-3 h-3 mr-1" />
                         Editar
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => openSaleModal(property)} 
+                        className="h-8 text-green-600 border-green-200 hover:bg-green-50"
+                        disabled={property.status === 'vendido'}
+                      >
+                        <HandCoins className="w-3 h-3 mr-1" />
+                        Venda
                       </Button>
                       <Button variant="outline" size="sm" onClick={() => openDeleteDialog(property.id)} className="h-8 text-red-600 border-red-200 hover:bg-red-50">
                         <Trash2 className="w-3 h-3 mr-1" />
@@ -487,6 +582,183 @@ const { toast } = useToast();
           </CardContent>
         </Card>
 
+        {/* Sale Registration Modal */}
+        <Dialog open={saleModalOpen} onOpenChange={setSaleModalOpen}>
+          <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <HandCoins className="w-5 h-5 text-green-600" />
+                Registrar Venda
+              </DialogTitle>
+            </DialogHeader>
+            
+            {selectedProperty && (
+              <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <h4 className="font-medium text-sm">{selectedProperty.title}</h4>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                  {selectedProperty.location} • R$ {selectedProperty.priceValue.toLocaleString("pt-BR")}
+                </p>
+              </div>
+            )}
+
+            <Form {...saleForm}>
+              <form onSubmit={saleForm.handleSubmit(handleSaleSubmit)} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={saleForm.control}
+                    name="negotiationDate"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Data da Negociação</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                className={cn(
+                                  "w-full pl-3 text-left font-normal",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "dd/MM/yyyy")
+                                ) : (
+                                  <span>Selecione uma data</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) => date > new Date()}
+                              initialFocus
+                              className="p-3 pointer-events-auto"
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={saleForm.control}
+                    name="deliveryDate"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Data de Entrega</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                className={cn(
+                                  "w-full pl-3 text-left font-normal",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "dd/MM/yyyy")
+                                ) : (
+                                  <span>Selecione uma data</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) => date < new Date()}
+                              initialFocus
+                              className="p-3 pointer-events-auto"
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <FormField
+                  control={saleForm.control}
+                  name="clientName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nome do Cliente</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Digite o nome completo do cliente" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={saleForm.control}
+                  name="realtorName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nome do Corretor/Imobiliária</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Digite o nome do corretor ou imobiliária" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={saleForm.control}
+                  name="paymentMethod"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Forma de Pagamento</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione a forma de pagamento" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="a-vista">À Vista</SelectItem>
+                          <SelectItem value="financiamento">Financiamento Bancário</SelectItem>
+                          <SelectItem value="fgts">FGTS</SelectItem>
+                          <SelectItem value="parcelado">Parcelado</SelectItem>
+                          <SelectItem value="permuta">Permuta</SelectItem>
+                          <SelectItem value="outros">Outros</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="flex justify-end space-x-3 pt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setSaleModalOpen(false)}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button type="submit" className="bg-green-600 hover:bg-green-700">
+                    Registrar Venda
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </DialogContent>
+        </Dialog>
+
+        {/* Edit Property Modal */}
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
           <DialogContent className="max-w-[95vw] md:max-w-2xl max-h-[95vh] overflow-y-auto">
             <DialogHeader className="pb-4">
