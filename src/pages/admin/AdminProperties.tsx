@@ -33,7 +33,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Plus, Edit2, Trash2, Eye, Home, HandCoins, CalendarIcon } from "lucide-react";
+import {
+  Plus,
+  Edit2,
+  Trash2,
+  Eye,
+  Home,
+  HandCoins,
+  CalendarIcon,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -50,7 +58,15 @@ import { Loader2 } from "lucide-react";
 import { Property } from "@/contexts/PropertyContext";
 import { NumericFormat } from "react-number-format";
 import ConfirmDialog from "@/components/dialog/cancelDialog";
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 const AdminProperties = () => {
   const navigate = useNavigate();
@@ -78,22 +94,28 @@ const AdminProperties = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState<number | null>(null);
   const [saleModalOpen, setSaleModalOpen] = useState(false);
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
-const [page, setPage] = useState(1);
-const pageSize = 10;
-const totalPages = Math.max(1, Math.ceil(properties.length / pageSize));
-const startIndex = (page - 1) * pageSize;
-const currentItems = properties.slice(startIndex, startIndex + pageSize);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(
+    null
+  );
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+  const totalPages = Math.max(1, Math.ceil(properties.length / pageSize));
+  const startIndex = (page - 1) * pageSize;
+  const currentItems = properties.slice(startIndex, startIndex + pageSize);
 
-const { toast } = useToast();
+  const { toast } = useToast();
 
   // Schema para validação do formulário de venda
   const saleFormSchema = z.object({
     negotiationDate: z.date({
       required_error: "Data da negociação é obrigatória",
     }),
-    clientName: z.string().min(2, "Nome do cliente deve ter pelo menos 2 caracteres"),
-    realtorName: z.string().min(2, "Nome do corretor/imobiliária deve ter pelo menos 2 caracteres"),
+    clientName: z
+      .string()
+      .min(2, "Nome do cliente deve ter pelo menos 2 caracteres"),
+    realtorName: z
+      .string()
+      .min(2, "Nome do corretor/imobiliária deve ter pelo menos 2 caracteres"),
     paymentMethod: z.string().min(1, "Forma de pagamento é obrigatória"),
     deliveryDate: z.date({
       required_error: "Data de entrega é obrigatória",
@@ -212,12 +234,12 @@ const { toast } = useToast();
         property: selectedProperty,
         saleData: data,
       });
-      
+
       toast({
         title: "Venda registrada com sucesso!",
         description: `Venda do imóvel "${selectedProperty?.title}" foi registrada.`,
       });
-      
+
       setSaleModalOpen(false);
       setSelectedProperty(null);
       saleForm.reset();
@@ -385,7 +407,9 @@ const { toast } = useToast();
         {/* Properties Table/Cards */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg md:text-xl">Lista de Imóveis ({properties.length})</CardTitle>
+            <CardTitle className="text-lg md:text-xl">
+              Lista de Imóveis ({properties.length})
+            </CardTitle>
           </CardHeader>
           <CardContent className="p-2 md:p-6">
             {/* Desktop/Tablet Table View */}
@@ -393,30 +417,49 @@ const { toast } = useToast();
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left p-3 text-sm font-medium">Imóvel</th>
+                    <th className="text-left p-3 text-sm font-medium">
+                      Imóvel
+                    </th>
                     <th className="text-left p-3 text-sm font-medium">Tipo</th>
                     <th className="text-left p-3 text-sm font-medium">Preço</th>
-                    <th className="text-left p-3 text-sm font-medium">Status</th>
-                    <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">Localização</th>
+                    <th className="text-left p-3 text-sm font-medium">
+                      Status
+                    </th>
+                    <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">
+                      Localização
+                    </th>
                     <th className="text-left p-3 text-sm font-medium">Área</th>
                     <th className="text-left p-3 text-sm font-medium">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
                   {currentItems.map((property) => (
-                    <tr key={property.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
+                    <tr
+                      key={property.id}
+                      className="border-b hover:bg-gray-50 dark:hover:bg-gray-800"
+                    >
                       <td className="p-3">
                         <div>
-                          <p className="font-medium text-sm truncate max-w-[200px]">{property.title}</p>
+                          <p className="font-medium text-sm truncate max-w-[200px]">
+                            {property.title}
+                          </p>
                           <p className="text-xs text-gray-600 dark:text-gray-400">
                             {property.bedrooms} qtos • {property.bathrooms} bans
                           </p>
                         </div>
                       </td>
-                      <td className="p-3 text-sm">{getTypeLabel(property.type)}</td>
-                      <td className="p-3 font-medium text-sm">R$ {property.priceValue.toLocaleString("pt-BR")}</td>
+                      <td className="p-3 text-sm">
+                        {getTypeLabel(property.type)}
+                      </td>
+                      <td className="p-3 font-medium text-sm">
+                        {property.price}
+                      </td>
                       <td className="p-3">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(property.status)}`}>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(
+                            property.status
+                          )}`}
+                        >
                           {getStatusLabel(property.status)}
                         </span>
                       </td>
@@ -426,19 +469,35 @@ const { toast } = useToast();
                       <td className="p-3 text-sm">{property.areaValue}m²</td>
                       <td className="p-3">
                         <div className="flex space-x-1">
-                          <Button variant="ghost" size="icon" onClick={() => handleEdit(property)} className="h-8 w-8">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleEdit(property)}
+                            className="h-8 w-8"
+                          >
                             <Edit2 className="w-4 h-4" />
                           </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            onClick={() => openSaleModal(property)} 
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() =>
+                              toast({
+                                title:
+                                  "Em breve essa funcionalidade estará pronta",
+                              })
+                            }
+                            //onClick={() => openSaleModal(property)}
                             className="h-8 w-8"
-                            disabled={property.status === 'vendido'}
+                            disabled={property.status === "vendido"}
                           >
                             <HandCoins className="w-4 h-4 text-green-600" />
                           </Button>
-                          <Button variant="ghost" size="icon" onClick={() => openDeleteDialog(property.id)} className="h-8 w-8">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => openDeleteDialog(property.id)}
+                            className="h-8 w-8"
+                          >
                             <Trash2 className="w-4 h-4 text-red-600" />
                           </Button>
                         </div>
@@ -452,52 +511,78 @@ const { toast } = useToast();
             {/* Mobile Card View */}
             <div className="md:hidden space-y-3">
               {currentItems.map((property) => (
-                <Card key={property.id} className="border border-gray-200 dark:border-gray-700">
+                <Card
+                  key={property.id}
+                  className="border border-gray-200 dark:border-gray-700"
+                >
                   <CardContent className="p-4">
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-medium text-sm truncate">{property.title}</h3>
+                        <h3 className="font-medium text-sm truncate">
+                          {property.title}
+                        </h3>
                         <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                          {getTypeLabel(property.type)} • {property.bedrooms} qtos • {property.bathrooms} bans
+                          {getTypeLabel(property.type)} • {property.bedrooms}{" "}
+                          qtos • {property.bathrooms} bans
                         </p>
                       </div>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ml-2 ${getStatusBadgeColor(property.status)}`}>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ml-2 ${getStatusBadgeColor(
+                          property.status
+                        )}`}
+                      >
                         {getStatusLabel(property.status)}
                       </span>
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-2 mb-3 text-xs">
                       <div>
-                        <span className="text-gray-600 dark:text-gray-400">Preço:</span>
-                        <p className="font-medium">R$ {property.priceValue.toLocaleString("pt-BR")}</p>
+                        <span className="text-gray-600 dark:text-gray-400">
+                          Preço:
+                        </span>
+                        <p className="font-medium">{property.price}</p>
                       </div>
                       <div>
-                        <span className="text-gray-600 dark:text-gray-400">Área:</span>
+                        <span className="text-gray-600 dark:text-gray-400">
+                          Área:
+                        </span>
                         <p className="font-medium">{property.areaValue}m²</p>
                       </div>
                     </div>
-                    
+
                     <div className="mb-3">
-                      <span className="text-gray-600 dark:text-gray-400 text-xs">Localização:</span>
+                      <span className="text-gray-600 dark:text-gray-400 text-xs">
+                        Localização:
+                      </span>
                       <p className="text-sm truncate">{property.location}</p>
                     </div>
-                    
+
                     <div className="flex justify-end space-x-2">
-                      <Button variant="outline" size="sm" onClick={() => handleEdit(property)} className="h-8">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEdit(property)}
+                        className="h-8"
+                      >
                         <Edit2 className="w-3 h-3 mr-1" />
                         Editar
                       </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => openSaleModal(property)} 
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openSaleModal(property)}
                         className="h-8 text-green-600 border-green-200 hover:bg-green-50"
-                        disabled={property.status === 'vendido'}
+                        disabled={property.status === "vendido"}
                       >
                         <HandCoins className="w-3 h-3 mr-1" />
                         Venda
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => openDeleteDialog(property.id)} className="h-8 text-red-600 border-red-200 hover:bg-red-50">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openDeleteDialog(property.id)}
+                        className="h-8 text-red-600 border-red-200 hover:bg-red-50"
+                      >
                         <Trash2 className="w-3 h-3 mr-1" />
                         Excluir
                       </Button>
@@ -513,7 +598,9 @@ const { toast } = useToast();
                   <PaginationItem>
                     <PaginationPrevious
                       href="#"
-                      className={page === 1 ? "pointer-events-none opacity-50" : ""}
+                      className={
+                        page === 1 ? "pointer-events-none opacity-50" : ""
+                      }
                       onClick={(e) => {
                         e.preventDefault();
                         if (page > 1) setPage(page - 1);
@@ -568,7 +655,11 @@ const { toast } = useToast();
                   <PaginationItem>
                     <PaginationNext
                       href="#"
-                      className={page === totalPages ? "pointer-events-none opacity-50" : ""}
+                      className={
+                        page === totalPages
+                          ? "pointer-events-none opacity-50"
+                          : ""
+                      }
                       onClick={(e) => {
                         e.preventDefault();
                         if (page < totalPages) setPage(page + 1);
@@ -578,7 +669,6 @@ const { toast } = useToast();
                 </PaginationContent>
               </Pagination>
             </div>
-
           </CardContent>
         </Card>
 
@@ -591,18 +681,24 @@ const { toast } = useToast();
                 Registrar Venda
               </DialogTitle>
             </DialogHeader>
-            
+
             {selectedProperty && (
               <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                <h4 className="font-medium text-sm">{selectedProperty.title}</h4>
+                <h4 className="font-medium text-sm">
+                  {selectedProperty.title}
+                </h4>
                 <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                  {selectedProperty.location} • R$ {selectedProperty.priceValue.toLocaleString("pt-BR")}
+                  {selectedProperty.location} • R${" "}
+                  {selectedProperty.priceValue.toLocaleString("pt-BR")}
                 </p>
               </div>
             )}
 
             <Form {...saleForm}>
-              <form onSubmit={saleForm.handleSubmit(handleSaleSubmit)} className="space-y-4">
+              <form
+                onSubmit={saleForm.handleSubmit(handleSaleSubmit)}
+                className="space-y-4"
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
                     control={saleForm.control}
@@ -694,7 +790,10 @@ const { toast } = useToast();
                     <FormItem>
                       <FormLabel>Nome do Cliente</FormLabel>
                       <FormControl>
-                        <Input placeholder="Digite o nome completo do cliente" {...field} />
+                        <Input
+                          placeholder="Digite o nome completo do cliente"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -708,7 +807,10 @@ const { toast } = useToast();
                     <FormItem>
                       <FormLabel>Nome do Corretor/Imobiliária</FormLabel>
                       <FormControl>
-                        <Input placeholder="Digite o nome do corretor ou imobiliária" {...field} />
+                        <Input
+                          placeholder="Digite o nome do corretor ou imobiliária"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -721,7 +823,10 @@ const { toast } = useToast();
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Forma de Pagamento</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione a forma de pagamento" />
@@ -729,7 +834,9 @@ const { toast } = useToast();
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="a-vista">À Vista</SelectItem>
-                          <SelectItem value="financiamento">Financiamento Bancário</SelectItem>
+                          <SelectItem value="financiamento">
+                            Financiamento Bancário
+                          </SelectItem>
                           <SelectItem value="fgts">FGTS</SelectItem>
                           <SelectItem value="parcelado">Parcelado</SelectItem>
                           <SelectItem value="permuta">Permuta</SelectItem>
@@ -749,7 +856,10 @@ const { toast } = useToast();
                   >
                     Cancelar
                   </Button>
-                  <Button type="submit" className="bg-green-600 hover:bg-green-700">
+                  <Button
+                    type="submit"
+                    className="bg-green-600 hover:bg-green-700"
+                  >
                     Registrar Venda
                   </Button>
                 </div>
@@ -838,6 +948,22 @@ const { toast } = useToast();
                       <SelectItem value="reservado">Reservado</SelectItem>
                     </SelectContent>
                   </Select>
+                </div>
+
+                <div>
+                  <div>
+                    <Label htmlFor="priceValue">Preço da Tela (R$)</Label>
+                    <Input
+                      id="price"
+                      value={formData.price}
+                      onChange={(e) =>
+                        setFormData({ ...formData, price: e.target.value })
+                      }
+                      placeholder="Ex: R$ 350.000"
+                      required
+                      className="mt-1 w-full border rounded px-3 py-2"
+                    />
+                  </div>
                 </div>
 
                 <div>
