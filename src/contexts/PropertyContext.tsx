@@ -5,7 +5,6 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { initialProperties } from "./data/imoveis";
 import { normalize } from "@/util/util";
 import { getAllPropertiesService } from "@/services/propertyService";
 
@@ -21,7 +20,7 @@ export interface Property {
   area: string;
   areaValue: number;
   type: string;
-  image: string;
+  image?: string;
   mainImage?: string;
   secondImage?: string;
   thirdImage?: string;

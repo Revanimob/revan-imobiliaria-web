@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast";
 import { addPropertyService } from "@/services/propertyService";
 import { Property } from "@/contexts/PropertyContext";
 import gifCasas from "@/assets/gifCasas.gif";
+import { uploadToImgBB } from "@/services/imgBBService";
 
 const AddProperty = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,65 +28,44 @@ const AddProperty = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Função para converter arquivo para base64
-  const convertToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
   // Função para lidar com upload da imagem principal
-  const handleMainImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      try {
-        const base64 = await convertToBase64(file);
-        setFormData({ ...formData, mainImage: base64 });
-      } catch (error) {
-        toast({
-          title: "Erro ao carregar imagem",
-          description: "Não foi possível processar a imagem principal.",
-          variant: "destructive",
-        });
-      }
+
+  const handleMainImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (!e.target.files?.length) return;
+    const file = e.target.files[0];
+
+    const url = await uploadToImgBB(file);
+    if (url) {
+      // aqui você salva no formData ou manda para o backend
+      setFormData((prev) => ({ ...prev, mainImage: url }));
     }
   };
 
   // Função para lidar com upload das imagens secundárias
-  const handleSecondaryImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, imageType: 'second' | 'third' | 'fourth') => {
-    const file = e.target.files?.[0];
-    if (file) {
-      try {
-        const base64 = await convertToBase64(file);
-        if (imageType === 'second') {
-          setFormData({ ...formData, secondImage: base64 });
-        } else if (imageType === 'third') {
-          setFormData({ ...formData, thirdImage: base64 });
-        } else if (imageType === 'fourth') {
-          setFormData({ ...formData, fourthImage: base64 });
-        }
-      } catch (error) {
-        toast({
-          title: "Erro ao carregar imagem",
-          description: `Não foi possível processar a imagem ${imageType}.`,
-          variant: "destructive",
-        });
-      }
+  const handleSecondaryImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: "second" | "third" | "fourth"
+  ) => {
+    if (!e.target.files?.length) return;
+    const file = e.target.files[0];
+
+    const url = await uploadToImgBB(file);
+    if (url) {
+      setFormData((prev) => ({ ...prev, [`${type}Image`]: url }));
     }
   };
 
   // Função para remover imagem
-  const removeImage = (type: 'main' | 'second' | 'third' | 'fourth') => {
-    if (type === 'main') {
+  const removeImage = (type: "main" | "second" | "third" | "fourth") => {
+    if (type === "main") {
       setFormData({ ...formData, mainImage: "" });
-    } else if (type === 'second') {
+    } else if (type === "second") {
       setFormData({ ...formData, secondImage: "" });
-    } else if (type === 'third') {
+    } else if (type === "third") {
       setFormData({ ...formData, thirdImage: "" });
-    } else if (type === 'fourth') {
+    } else if (type === "fourth") {
       setFormData({ ...formData, fourthImage: "" });
     }
   };
@@ -389,7 +369,9 @@ const AddProperty = () => {
                     <div className="mt-2 space-y-4">
                       {/* Imagem Principal */}
                       <div>
-                        <Label className="text-sm font-medium">Imagem Principal *</Label>
+                        <Label className="text-sm font-medium">
+                          Imagem Principal *
+                        </Label>
                         <div className="mt-1 flex items-center gap-3">
                           <Input
                             type="file"
@@ -402,7 +384,7 @@ const AddProperty = () => {
                               type="button"
                               variant="outline"
                               size="sm"
-                              onClick={() => removeImage('main')}
+                              onClick={() => removeImage("main")}
                               className="shrink-0"
                             >
                               <X className="w-4 h-4" />
@@ -422,19 +404,35 @@ const AddProperty = () => {
 
                       {/* Imagens Secundárias */}
                       <div>
-                        <Label className="text-sm font-medium">Imagens Secundárias (máx. 3)</Label>
+                        <Label className="text-sm font-medium">
+                          Imagens Secundárias (máx. 3)
+                        </Label>
                         <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-3">
                           {[
-                            { image: formData.secondImage, type: 'second' as const, label: 'Segunda' },
-                            { image: formData.thirdImage, type: 'third' as const, label: 'Terceira' },
-                            { image: formData.fourthImage, type: 'fourth' as const, label: 'Quarta' }
+                            {
+                              image: formData.secondImage,
+                              type: "second" as const,
+                              label: "Segunda",
+                            },
+                            {
+                              image: formData.thirdImage,
+                              type: "third" as const,
+                              label: "Terceira",
+                            },
+                            {
+                              image: formData.fourthImage,
+                              type: "fourth" as const,
+                              label: "Quarta",
+                            },
                           ].map(({ image, type, label }, index) => (
                             <div key={index} className="space-y-2">
                               <div className="flex items-center gap-2">
                                 <Input
                                   type="file"
                                   accept="image/*"
-                                  onChange={(e) => handleSecondaryImageUpload(e, type)}
+                                  onChange={(e) =>
+                                    handleSecondaryImageUpload(e, type)
+                                  }
                                   className="flex-1"
                                 />
                                 {image && (
@@ -461,7 +459,7 @@ const AddProperty = () => {
                       </div>
                     </div>
                   </div>
-
+                  {/* 
                   <div>
                     <Label htmlFor="image">URL da Imagem (Opcional)</Label>
                     <Input
@@ -473,7 +471,7 @@ const AddProperty = () => {
                       placeholder="https://exemplo.com/foto.jpg"
                       className="mt-1"
                     />
-                  </div>
+                  </div> */}
 
                   <div>
                     <Label htmlFor="location">Localização</Label>
