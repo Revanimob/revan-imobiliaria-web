@@ -55,18 +55,22 @@ const AddProperty = () => {
   };
 
   // Função para lidar com upload das imagens secundárias
-  const handleSecondaryImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const handleSecondaryImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, imageType: 'second' | 'third' | 'fourth') => {
     const file = e.target.files?.[0];
     if (file) {
       try {
         const base64 = await convertToBase64(file);
-        const updatedSecondaryImages = [...(formData.secondaryImages || ["", "", ""])];
-        updatedSecondaryImages[index] = base64;
-        setFormData({ ...formData, secondaryImages: updatedSecondaryImages });
+        if (imageType === 'second') {
+          setFormData({ ...formData, secondImage: base64 });
+        } else if (imageType === 'third') {
+          setFormData({ ...formData, thirdImage: base64 });
+        } else if (imageType === 'fourth') {
+          setFormData({ ...formData, fourthImage: base64 });
+        }
       } catch (error) {
         toast({
           title: "Erro ao carregar imagem",
-          description: `Não foi possível processar a imagem secundária ${index + 1}.`,
+          description: `Não foi possível processar a imagem ${imageType}.`,
           variant: "destructive",
         });
       }
@@ -74,13 +78,15 @@ const AddProperty = () => {
   };
 
   // Função para remover imagem
-  const removeImage = (type: 'main' | 'secondary', index?: number) => {
+  const removeImage = (type: 'main' | 'second' | 'third' | 'fourth') => {
     if (type === 'main') {
       setFormData({ ...formData, mainImage: "" });
-    } else if (type === 'secondary' && index !== undefined) {
-      const updatedSecondaryImages = [...(formData.secondaryImages || ["", "", ""])];
-      updatedSecondaryImages[index] = "";
-      setFormData({ ...formData, secondaryImages: updatedSecondaryImages });
+    } else if (type === 'second') {
+      setFormData({ ...formData, secondImage: "" });
+    } else if (type === 'third') {
+      setFormData({ ...formData, thirdImage: "" });
+    } else if (type === 'fourth') {
+      setFormData({ ...formData, fourthImage: "" });
     }
   };
 
@@ -96,7 +102,9 @@ const AddProperty = () => {
     type: "apartamento",
     image: "",
     mainImage: "",
-    secondaryImages: ["", "", ""],
+    secondImage: "",
+    thirdImage: "",
+    fourthImage: "",
     badge: "",
     isNew: true,
     operation: "comprar",
@@ -416,30 +424,34 @@ const AddProperty = () => {
                       <div>
                         <Label className="text-sm font-medium">Imagens Secundárias (máx. 3)</Label>
                         <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-3">
-                          {[0, 1, 2].map((index) => (
+                          {[
+                            { image: formData.secondImage, type: 'second' as const, label: 'Segunda' },
+                            { image: formData.thirdImage, type: 'third' as const, label: 'Terceira' },
+                            { image: formData.fourthImage, type: 'fourth' as const, label: 'Quarta' }
+                          ].map(({ image, type, label }, index) => (
                             <div key={index} className="space-y-2">
                               <div className="flex items-center gap-2">
                                 <Input
                                   type="file"
                                   accept="image/*"
-                                  onChange={(e) => handleSecondaryImageUpload(e, index)}
+                                  onChange={(e) => handleSecondaryImageUpload(e, type)}
                                   className="flex-1"
                                 />
-                                {formData.secondaryImages?.[index] && (
+                                {image && (
                                   <Button
                                     type="button"
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => removeImage('secondary', index)}
+                                    onClick={() => removeImage(type)}
                                   >
                                     <X className="w-4 h-4" />
                                   </Button>
                                 )}
                               </div>
-                              {formData.secondaryImages?.[index] && (
+                              {image && (
                                 <img
-                                  src={formData.secondaryImages[index]}
-                                  alt={`Preview ${index + 1}`}
+                                  src={image}
+                                  alt={`Preview ${label}`}
                                   className="w-full h-20 object-cover rounded border"
                                 />
                               )}

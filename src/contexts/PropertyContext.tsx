@@ -23,7 +23,9 @@ export interface Property {
   type: string;
   image: string;
   mainImage?: string;
-  secondaryImages?: string[];
+  secondImage?: string;
+  thirdImage?: string;
+  fourthImage?: string;
   badge: string;
   isNew: boolean;
   operation: "comprar" | "alugar";
