@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft, Home, Loader2, MapPin } from "lucide-react";
+import { ArrowLeft, Home, Loader2, MapPin, Upload, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { addPropertyService } from "@/services/propertyService";
 import { Property } from "@/contexts/PropertyContext";
@@ -26,6 +26,63 @@ const AddProperty = () => {
 
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Função para converter arquivo para base64
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  // Função para lidar com upload da imagem principal
+  const handleMainImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        const base64 = await convertToBase64(file);
+        setFormData({ ...formData, mainImage: base64 });
+      } catch (error) {
+        toast({
+          title: "Erro ao carregar imagem",
+          description: "Não foi possível processar a imagem principal.",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  // Função para lidar com upload das imagens secundárias
+  const handleSecondaryImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        const base64 = await convertToBase64(file);
+        const updatedSecondaryImages = [...(formData.secondaryImages || ["", "", ""])];
+        updatedSecondaryImages[index] = base64;
+        setFormData({ ...formData, secondaryImages: updatedSecondaryImages });
+      } catch (error) {
+        toast({
+          title: "Erro ao carregar imagem",
+          description: `Não foi possível processar a imagem secundária ${index + 1}.`,
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  // Função para remover imagem
+  const removeImage = (type: 'main' | 'secondary', index?: number) => {
+    if (type === 'main') {
+      setFormData({ ...formData, mainImage: "" });
+    } else if (type === 'secondary' && index !== undefined) {
+      const updatedSecondaryImages = [...(formData.secondaryImages || ["", "", ""])];
+      updatedSecondaryImages[index] = "";
+      setFormData({ ...formData, secondaryImages: updatedSecondaryImages });
+    }
+  };
 
   const [formData, setFormData] = useState<Partial<Property>>({
     title: "",
@@ -38,6 +95,8 @@ const AddProperty = () => {
     areaValue: 0,
     type: "apartamento",
     image: "",
+    mainImage: "",
+    secondaryImages: ["", "", ""],
     badge: "",
     isNew: true,
     operation: "comprar",
@@ -317,8 +376,82 @@ const AddProperty = () => {
                     />
                   </div>
 
+                  <div className="md:col-span-2">
+                    <Label>Upload de Imagens</Label>
+                    <div className="mt-2 space-y-4">
+                      {/* Imagem Principal */}
+                      <div>
+                        <Label className="text-sm font-medium">Imagem Principal *</Label>
+                        <div className="mt-1 flex items-center gap-3">
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleMainImageUpload}
+                            className="flex-1"
+                          />
+                          {formData.mainImage && (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => removeImage('main')}
+                              className="shrink-0"
+                            >
+                              <X className="w-4 h-4" />
+                            </Button>
+                          )}
+                        </div>
+                        {formData.mainImage && (
+                          <div className="mt-2">
+                            <img
+                              src={formData.mainImage}
+                              alt="Preview principal"
+                              className="w-20 h-20 object-cover rounded border"
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Imagens Secundárias */}
+                      <div>
+                        <Label className="text-sm font-medium">Imagens Secundárias (máx. 3)</Label>
+                        <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-3">
+                          {[0, 1, 2].map((index) => (
+                            <div key={index} className="space-y-2">
+                              <div className="flex items-center gap-2">
+                                <Input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={(e) => handleSecondaryImageUpload(e, index)}
+                                  className="flex-1"
+                                />
+                                {formData.secondaryImages?.[index] && (
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => removeImage('secondary', index)}
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </Button>
+                                )}
+                              </div>
+                              {formData.secondaryImages?.[index] && (
+                                <img
+                                  src={formData.secondaryImages[index]}
+                                  alt={`Preview ${index + 1}`}
+                                  className="w-full h-20 object-cover rounded border"
+                                />
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div>
-                    <Label htmlFor="image">Imagem</Label>
+                    <Label htmlFor="image">URL da Imagem (Opcional)</Label>
                     <Input
                       id="image"
                       value={formData.image}

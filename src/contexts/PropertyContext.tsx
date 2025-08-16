@@ -22,6 +22,8 @@ export interface Property {
   areaValue: number;
   type: string;
   image: string;
+  mainImage?: string;
+  secondaryImages?: string[];
   badge: string;
   isNew: boolean;
   operation: "comprar" | "alugar";
