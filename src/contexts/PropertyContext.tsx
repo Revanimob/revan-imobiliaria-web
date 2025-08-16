@@ -13,6 +13,7 @@ export interface Property {
   id?: number;
   title: string;
   price: string;
+  qtdstock: number;
   priceValue: number;
   location: string;
   bedrooms: number;

@@ -216,6 +216,26 @@ const AddProperty = () => {
                   </div>
 
                   <div>
+                    <Label htmlFor="qtdstock">Quatidade em Estoque</Label>
+                    <NumericFormat
+                      id="qtdstock"
+                      value={formData.qtdstock}
+                      onValueChange={(values) =>
+                        setFormData({
+                          ...formData,
+                          qtdstock: Number(values.value),
+                        })
+                      }
+                      thousandSeparator={false}
+                      allowNegative={false}
+                      allowLeadingZeros={false}
+                      placeholder="15"
+                      required
+                      className="mt-1 w-full border rounded px-3 py-2"
+                    />
+                  </div>
+
+                  <div>
                     <Label htmlFor="area">Área (Ex: 120m²)</Label>
                     <NumericFormat
                       id="area"

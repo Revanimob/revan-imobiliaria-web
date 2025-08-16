@@ -67,6 +67,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import saleFormSchema, { SaleFormData } from "@/components/schema/saleSchema";
+import { addSaleService } from "@/services/saleService";
+import { SaleForm } from "@/types/sale";
 
 const AdminProperties = () => {
   const navigate = useNavigate();
@@ -104,25 +107,6 @@ const AdminProperties = () => {
   const currentItems = properties.slice(startIndex, startIndex + pageSize);
 
   const { toast } = useToast();
-
-  // Schema para validação do formulário de venda
-  const saleFormSchema = z.object({
-    negotiationDate: z.date({
-      required_error: "Data da negociação é obrigatória",
-    }),
-    clientName: z
-      .string()
-      .min(2, "Nome do cliente deve ter pelo menos 2 caracteres"),
-    realtorName: z
-      .string()
-      .min(2, "Nome do corretor/imobiliária deve ter pelo menos 2 caracteres"),
-    paymentMethod: z.string().min(1, "Forma de pagamento é obrigatória"),
-    deliveryDate: z.date({
-      required_error: "Data de entrega é obrigatória",
-    }),
-  });
-
-  type SaleFormData = z.infer<typeof saleFormSchema>;
 
   const saleForm = useForm<SaleFormData>({
     resolver: zodResolver(saleFormSchema),
@@ -230,10 +214,7 @@ const AdminProperties = () => {
 
   const handleSaleSubmit = async (data: SaleFormData) => {
     try {
-      console.log("Dados da venda:", {
-        property: selectedProperty,
-        saleData: data,
-      });
+      await addSaleService(data as SaleForm, selectedProperty);
 
       toast({
         title: "Venda registrada com sucesso!",
@@ -243,6 +224,7 @@ const AdminProperties = () => {
       setSaleModalOpen(false);
       setSelectedProperty(null);
       saleForm.reset();
+      navigate("/admin/properties");
     } catch (error) {
       console.error("Erro ao registrar venda:", error);
       toast({
@@ -480,13 +462,13 @@ const AdminProperties = () => {
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() =>
-                              toast({
-                                title:
-                                  "Em breve essa funcionalidade estará pronta",
-                              })
-                            }
-                            //onClick={() => openSaleModal(property)}
+                            // onClick={() =>
+                            //   toast({
+                            //     title:
+                            //       "Em breve essa funcionalidade estará pronta",
+                            //   })
+                            // }
+                            onClick={() => openSaleModal(property)}
                             className="h-8 w-8"
                             disabled={property.status === "vendido"}
                           >
