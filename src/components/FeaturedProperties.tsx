@@ -123,12 +123,18 @@ const FeaturedProperties = () => {
                         </p>
                       </div>
                     )}
-                    <iframe
+                    {/* <iframe
                       src={getIframeUrl(property.image)}
                       title={property.title}
                       className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                       onLoad={() => setIsIframeLoading(false)}
-                    ></iframe>
+                    ></iframe> */}
+                    <img
+                      src={property.mainImage}
+                      title={property.title}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      onLoad={() => setIsIframeLoading(false)}
+                    />
 
                     <div className="absolute top-3 left-3 flex gap-2">
                       <Badge

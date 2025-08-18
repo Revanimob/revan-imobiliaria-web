@@ -116,13 +116,20 @@ const PropertyDetailsModal = ({
                     </p>
                   </div>
                 )}
-                <iframe
+
+                <img
+                  src={property.mainImage}
+                  title={property.title}
+                  className="w-full mt-8 aspect-video rounded-lg"
+                  onLoad={() => setIsIframeLoading(false)}
+                />
+                {/* <iframe
                   src={getIframeUrl(property.image)}
                   title={property.title}
                   className="w-full mt-8 aspect-video rounded-lg"
                   allow="autoplay"
                   onLoad={() => setIsIframeLoading(false)}
-                />
+                /> */}
 
                 <div className="absolute top-3 left-3 flex gap-2">
                   <Badge className="bg-wine text-white">{property.badge}</Badge>
