@@ -25,6 +25,7 @@ export interface Property {
   secondImage?: string;
   thirdImage?: string;
   fourthImage?: string;
+  description?: string;
   badge: string;
   isNew: boolean;
   operation: "comprar" | "alugar";

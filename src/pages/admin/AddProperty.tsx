@@ -87,6 +87,7 @@ const AddProperty = () => {
     fourthImage: "",
     badge: "",
     isNew: true,
+    description: "",
     operation: "comprar",
     status: "disponivel",
   });
@@ -360,6 +361,22 @@ const AddProperty = () => {
                         setFormData({ ...formData, badge: e.target.value })
                       }
                       placeholder="Novo / Redução / Destaque"
+                      className="mt-1"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="description">Descrição da Casa</Label>
+                    <Textarea
+                      id="description"
+                      value={formData.description}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          description: e.target.value,
+                        })
+                      }
+                      placeholder="Faça uma breve descrição da casa"
                       className="mt-1"
                     />
                   </div>

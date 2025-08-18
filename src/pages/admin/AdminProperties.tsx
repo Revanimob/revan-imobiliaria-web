@@ -1104,6 +1104,22 @@ const AdminProperties = () => {
                 </div>
 
                 <div className="md:col-span-2">
+                  <Label htmlFor="description">Descrição da Casa</Label>
+                  <Textarea
+                    id="description"
+                    value={formData.description}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        description: e.target.value,
+                      })
+                    }
+                    placeholder="Faça uma breve descrição da casa"
+                    className="mt-1"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
                   <Label>Upload de Imagens</Label>
                   <div className="mt-2 space-y-4">
                     {/* Imagem Principal */}
