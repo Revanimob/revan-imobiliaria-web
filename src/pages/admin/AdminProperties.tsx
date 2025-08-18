@@ -310,6 +310,7 @@ const AdminProperties = () => {
       fourthImage: "",
       badge: "",
       isNew: false,
+      qtdstock: 1,
       operation: "comprar",
       status: "disponivel",
     });
@@ -1025,6 +1026,25 @@ const AdminProperties = () => {
                       prefix="R$ "
                       allowNegative={false}
                       placeholder="Ex: R$ 350.000"
+                      required
+                      className="mt-1 w-full border rounded px-3 py-2"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div>
+                    <Label htmlFor="qtdstock">Quantidade em Estoque</Label>
+                    <NumericFormat
+                      id="qtdstock"
+                      value={formData.qtdstock}
+                      onValueChange={(values) =>
+                        setFormData({
+                          ...formData,
+                          qtdstock: Number(values.value),
+                        })
+                      }
+                      allowNegative={false}
                       required
                       className="mt-1 w-full border rounded px-3 py-2"
                     />
