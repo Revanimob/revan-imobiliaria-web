@@ -1104,6 +1104,19 @@ const AdminProperties = () => {
                 </div>
 
                 <div className="md:col-span-2">
+                  <Label htmlFor="Selo">Selo</Label>
+                  <Input
+                    id="badge"
+                    value={formData.badge}
+                    onChange={(e) =>
+                      setFormData({ ...formData, badge: e.target.value })
+                    }
+                    placeholder="Em construção , finalizado ..."
+                    required
+                  />
+                </div>
+
+                <div className="md:col-span-2">
                   <Label htmlFor="description">Descrição da Casa</Label>
                   <Textarea
                     id="description"
