@@ -9,6 +9,7 @@ import logodois from "@/assets/Logo Revan P2.png";
 
 const Header = () => {
   const { filterByCategory, currentCategory } = useProperty();
+  const [open, setOpen] = useState(false); // controla o drawer
 
   const scrollToSection = (sectionId: string, category: string) => {
     filterByCategory(category);
@@ -18,6 +19,8 @@ const Header = () => {
         element.scrollIntoView({ behavior: "smooth" });
       }
     }, 100);
+
+    setOpen(false); // fecha o drawer após clicar
   };
 
   const navigationTabs = [
@@ -88,7 +91,7 @@ const Header = () => {
 
           {/* Drawer Mobile */}
           <div className="md:hidden">
-            <Sheet>
+            <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
                   <Menu className="w-6 h-6" />
@@ -120,6 +123,7 @@ const Header = () => {
                           block: "start",
                         });
                       }
+                      setOpen(false); // fecha após clique
                     }}
                   >
                     Anunciar Imóveis
