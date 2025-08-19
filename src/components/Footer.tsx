@@ -189,7 +189,7 @@ const Footer = () => {
             {/* Social Media */}
             <div>
               <h5 className="font-semibold mb-3">Siga-nos</h5>
-              <div className="flex space-x-3">
+              <div className="flex space-x-3 mb-4">
                 {[
                   { icon: Facebook, href: "#" },
                   {
@@ -210,6 +210,16 @@ const Footer = () => {
                     </a>
                   );
                 })}
+              </div>
+              
+              {/* Login Button */}
+              <div className="mt-4">
+                <a
+                  href="/login"
+                  className="inline-block text-xs opacity-70 hover:opacity-90 underline transition-opacity duration-200"
+                >
+                  Acesso Administrativo
+                </a>
               </div>
             </div>
           </div>
@@ -240,7 +250,7 @@ const Footer = () => {
             <div className="text-sm opacity-90">
               © 2024 REVAN Imobiliária. Todos os direitos reservados.
             </div>
-            <div className="flex items-center space-x-6 text-sm">
+            <div className="flex space-x-6 text-sm">
               <a
                 href="#"
                 className="opacity-90 hover:opacity-100 hover:underline"
@@ -258,12 +268,6 @@ const Footer = () => {
                 className="opacity-90 hover:opacity-100 hover:underline"
               >
                 LGPD
-              </a>
-              <a
-                href="/login"
-                className="opacity-70 hover:opacity-90 text-xs underline"
-              >
-                Login
               </a>
             </div>
           </div>
