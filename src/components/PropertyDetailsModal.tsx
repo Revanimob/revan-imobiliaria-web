@@ -40,6 +40,7 @@ export interface Property {
   secondImage?: string;
   thirdImage?: string;
   fourthImage?: string;
+  description?: string;
   badge: string;
   isNew: boolean;
   operation: "comprar" | "alugar";
@@ -225,11 +226,7 @@ const PropertyDetailsModal = ({
                   Descrição
                 </h3>
                 <p className="text-gray-700 leading-relaxed">
-                  Excelente imóvel localizado em uma das melhores regiões da
-                  cidade. Com acabamento de primeira qualidade, ambientes amplos
-                  e bem iluminados. Próximo a escolas, comércio e transporte
-                  público. Uma oportunidade única para quem busca conforto e
-                  qualidade de vida.
+                  {property.description}
                 </p>
               </div>
 
