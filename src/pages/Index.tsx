@@ -6,6 +6,7 @@ import FeaturedProperties from "@/components/FeaturedProperties";
 import Services from "@/components/Services";
 import AboutUs from "@/components/AboutUs";
 import Footer from "@/components/Footer";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import { PropertyProvider } from "@/contexts/PropertyContext";
 
 const Index = () => {
@@ -21,6 +22,7 @@ const Index = () => {
           {/* <AboutUs /> */}
         </main>
         <Footer />
+        <WhatsAppButton />
       </div>
     </PropertyProvider>
   );

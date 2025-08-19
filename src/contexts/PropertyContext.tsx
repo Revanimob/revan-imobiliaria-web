@@ -47,9 +47,11 @@ interface PropertyContextType {
   properties: Property[];
   filteredProperties: Property[];
   searchFilters: SearchFilters;
+  currentCategory: string;
   updateFilters: (filters: Partial<SearchFilters>) => void;
   searchProperties: () => void;
   resetFilters: () => void;
+  filterByCategory: (category: string) => void;
 }
 
 const PropertyContext = createContext<PropertyContextType | undefined>(
@@ -59,6 +61,7 @@ const PropertyContext = createContext<PropertyContextType | undefined>(
 export const PropertyProvider = ({ children }: { children: ReactNode }) => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
+  const [currentCategory, setCurrentCategory] = useState<string>("");
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -176,7 +179,30 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
       title: "",
     });
 
+    setCurrentCategory("");
     setFilteredProperties(properties);
+  };
+
+  const filterByCategory = (category: string) => {
+    setCurrentCategory(category);
+    let filtered = [...properties];
+
+    switch (category) {
+      case "compra":
+        filtered = filtered.filter(property => property.operation === "comprar");
+        break;
+      case "aluguel":
+        filtered = filtered.filter(property => property.operation === "alugar");
+        break;
+      case "lancamentos":
+        filtered = filtered.filter(property => property.isNew === true);
+        break;
+      default:
+        // Se categoria for vazia, mostra todos
+        break;
+    }
+
+    setFilteredProperties(filtered);
   };
 
   return (
@@ -185,9 +211,11 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
         properties,
         filteredProperties,
         searchFilters,
+        currentCategory,
         updateFilters,
         searchProperties,
         resetFilters,
+        filterByCategory,
       }}
     >
       {children}
