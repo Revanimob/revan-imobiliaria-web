@@ -122,6 +122,7 @@ const PropertyDetailsModal = ({
                   title={property.title}
                   className="w-full mt-8 aspect-video rounded-lg"
                   onLoad={() => setIsIframeLoading(false)}
+                  onClick={() => setZoomImage(property.mainImage)}
                 />
                 {/* <iframe
                   src={getIframeUrl(property.image)}

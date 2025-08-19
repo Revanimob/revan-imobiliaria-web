@@ -48,22 +48,17 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20 md:h-24 lg:h-21">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-0.5 md:gap-1">
-            <div className="w-20 h-20 md:w-32 md:h-32 lg:w-48 lg:h-48 flex items-center justify-center">
-              <img
-                src={logo}
-                alt="Logo Revan"
-                className="w-full h-full object-contain"
-              />
-            </div>
-
-            <div className="w-20 h-20 md:w-32 md:h-32 lg:w-48 lg:h-48 flex items-center justify-center">
-              <img
-                src={logodois}
-                alt="Logo Revan"
-                className="w-full h-full object-contain"
-              />
-            </div>
+          <Link to="/" className="flex items-center">
+            <img
+              src={logo}
+              alt="Logo Revan"
+              className="w-20 h-20 md:w-32 md:h-32 lg:w-48 lg:h-48 object-contain"
+            />
+            <img
+              src={logodois}
+              alt="Logo Revan"
+              className="w-20 h-20 md:w-32 md:h-32 lg:w-48 lg:h-48 object-contain"
+            />
           </Link>
 
           {/* Navigation Tabs */}
