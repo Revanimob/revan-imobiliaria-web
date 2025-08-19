@@ -87,6 +87,15 @@ const Header = () => {
             <Button
               variant="outline"
               className="border-wine text-wine hover:bg-wine hover:text-white text-sm md:text-base"
+              onClick={() => {
+                const section = document.getElementById("servicos");
+                if (section) {
+                  section.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }
+              }}
             >
               <Home className="w-4 h-4 mr-1 md:mr-2" />
               Anunciar Imóveis
