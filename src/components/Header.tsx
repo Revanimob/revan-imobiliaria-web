@@ -48,7 +48,7 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20 md:h-24 lg:h-21">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-1 md:gap-2">
+          <Link to="/" className="flex items-center gap-0.5 md:gap-1">
             <div className="w-20 h-20 md:w-32 md:h-32 lg:w-48 lg:h-48 flex items-center justify-center">
               <img
                 src={logo}
@@ -87,17 +87,15 @@ const Header = () => {
             })}
           </nav>
 
-          {/* Login Button */}
+          {/* Anunciar Imóveis Button */}
           <div className="flex items-center space-x-2 md:space-x-3">
-            <Link to="/login">
-              <Button
-                variant="outline"
-                className="border-wine text-wine hover:bg-wine hover:text-white text-sm md:text-base"
-              >
-                <User className="w-4 h-4 mr-1 md:mr-2" />
-                Login
-              </Button>
-            </Link>
+            <Button
+              variant="outline"
+              className="border-wine text-wine hover:bg-wine hover:text-white text-sm md:text-base"
+            >
+              <Home className="w-4 h-4 mr-1 md:mr-2" />
+              Anunciar Imóveis
+            </Button>
           </div>
         </div>
 
