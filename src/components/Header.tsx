@@ -12,7 +12,7 @@ const Header = () => {
   const scrollToSection = (sectionId: string, category: string) => {
     // Primeiro aplica o filtro
     filterByCategory(category);
-    
+
     // Depois faz scroll para a seção
     setTimeout(() => {
       const element = document.getElementById(sectionId);
@@ -24,29 +24,23 @@ const Header = () => {
 
   const navigationTabs = [
     {
-      id: "",
-      label: "Todos",
-      icon: Home,
-      section: "imoveis"
-    },
-    {
       id: "compra",
       label: "Compra",
       icon: Home,
-      section: "imoveis"
+      section: "imoveis",
     },
     {
-      id: "aluguel", 
+      id: "aluguel",
       label: "Aluguel",
       icon: Building,
-      section: "imoveis"
+      section: "imoveis",
     },
     {
       id: "lancamentos",
-      label: "Lançamentos", 
+      label: "Lançamentos",
       icon: Sparkles,
-      section: "imoveis"
-    }
+      section: "imoveis",
+    },
   ];
 
   return (
@@ -86,7 +80,7 @@ const Header = () => {
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >
-                  <IconComponent className="w-4 h-4" />
+                  {/* <IconComponent className="w-4 h-4" /> */}
                   <span className="font-medium">{tab.label}</span>
                 </button>
               );
@@ -106,7 +100,7 @@ const Header = () => {
             </Link>
           </div>
         </div>
-        
+
         {/* Mobile Navigation */}
         <div className="md:hidden pb-4">
           <nav className="flex justify-center space-x-1">

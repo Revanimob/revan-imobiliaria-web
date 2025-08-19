@@ -23,24 +23,24 @@ const Services = () => {
       description:
         "Encontre o imóvel perfeito com nossa equipe especializada. Acompanhamento completo desde a busca até a escrituração.",
       features: [
-        "Busca personalizada",
-        "Visitas acompanhadas",
-        "Negociação de preços",
-        "Documentação completa",
-      ],
-    },
-    {
-      icon: Home,
-      title: "Venda de Imóveis",
-      description:
-        "Venda seu imóvel rapidamente e pelo melhor preço. Marketing digital e estratégias de vendas eficazes.",
-      features: [
         "Avaliação gratuita",
         "Marketing digital",
         "Fotos profissionais",
         "Acompanhamento jurídico",
       ],
     },
+    // {
+    //   icon: Home,
+    //   title: "Venda de Imóveis",
+    //   description:
+    //     "Venda seu imóvel rapidamente e pelo melhor preço. Marketing digital e estratégias de vendas eficazes.",
+    //   features: [
+    //     "Avaliação gratuita",
+    //     "Marketing digital",
+    //     "Fotos profissionais",
+    //     "Acompanhamento jurídico",
+    //   ],
+    // },
     {
       icon: FileText,
       title: "Locação",
@@ -66,10 +66,22 @@ const Services = () => {
       ],
     },
     {
-      icon: User,
+      icon: FileText,
       title: "Consultoria",
       description:
         "Consultoria especializada em investimentos imobiliários. Análise de mercado e oportunidades de investimento.",
+      features: [
+        "Análise de mercado",
+        "Estratégias de investimento",
+        "Relatórios detalhados",
+        "Acompanhamento contínuo",
+      ],
+    },
+    {
+      icon: Home,
+      title: "Anunciar seu Imóvel",
+      description:
+        "Oferecemos consultoria especializada para quem deseja anunciar imóveis. Nossa equipe analisa o mercado, identifica oportunidades e garante que seu anúncio seja visto pelas pessoas certas.",
       features: [
         "Análise de mercado",
         "Estratégias de investimento",
