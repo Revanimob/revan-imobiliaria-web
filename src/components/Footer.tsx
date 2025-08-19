@@ -16,10 +16,12 @@ import { sendMailService } from "@/services/sendEmail";
 import { toast } from "@/hooks/use-toast";
 import RevanSemFundo from "@/assets/RevanSemFundo.png";
 import badge from "@/assets/badge.png";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const quickLinks = [
     { label: "Imóveis para Venda", href: "#" },
     { label: "Imóveis para Locação", href: "#" },
@@ -211,15 +213,15 @@ const Footer = () => {
                   );
                 })}
               </div>
-              
+
               {/* Login Button */}
               <div className="mt-4">
-                <a
-                  href="/login"
+                <Button
+                  onClick={() => navigate("/login")}
                   className="inline-block text-xs opacity-70 hover:opacity-90 underline transition-opacity duration-200"
                 >
                   Acesso Administrativo
-                </a>
+                </Button>
               </div>
             </div>
           </div>
