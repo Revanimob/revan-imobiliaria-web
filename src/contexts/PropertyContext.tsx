@@ -69,7 +69,6 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
         const data = await getAllPropertiesService();
         setProperties(data);
         setFilteredProperties(data);
-        console.log("Propriedades carregadas:", data);
       } catch (error) {
         console.error("Erro ao buscar propriedades:", error);
       }
@@ -189,13 +188,17 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
 
     switch (category) {
       case "compra":
-        filtered = filtered.filter(property => property.operation === "comprar");
+        filtered = filtered.filter(
+          (property) => property.operation === "comprar"
+        );
         break;
       case "aluguel":
-        filtered = filtered.filter(property => property.operation === "alugar");
+        filtered = filtered.filter(
+          (property) => property.operation === "alugar"
+        );
         break;
       case "lancamentos":
-        filtered = filtered.filter(property => property.isNew === true);
+        filtered = filtered.filter((property) => property.isNew === true);
         break;
       default:
         // Se categoria for vazia, mostra todos

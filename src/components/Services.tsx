@@ -18,6 +18,18 @@ const Services = () => {
 
   const services = [
     {
+      icon: Home,
+      title: "Anunciar seu Imóvel",
+      description:
+        "Oferecemos consultoria especializada para quem deseja anunciar imóveis. Nossa equipe analisa o mercado, identifica oportunidades e garante que seu anúncio seja visto pelas pessoas certas.",
+      features: [
+        "Análise de mercado",
+        "Estratégias de investimento",
+        "Relatórios detalhados",
+        "Acompanhamento contínuo",
+      ],
+    },
+    {
       icon: Search,
       title: "Compra de Imóveis",
       description:
@@ -77,18 +89,7 @@ const Services = () => {
         "Acompanhamento contínuo",
       ],
     },
-    {
-      icon: Home,
-      title: "Anunciar seu Imóvel",
-      description:
-        "Oferecemos consultoria especializada para quem deseja anunciar imóveis. Nossa equipe analisa o mercado, identifica oportunidades e garante que seu anúncio seja visto pelas pessoas certas.",
-      features: [
-        "Análise de mercado",
-        "Estratégias de investimento",
-        "Relatórios detalhados",
-        "Acompanhamento contínuo",
-      ],
-    },
+
     {
       icon: Calendar,
       title: "Gestão Predial",
