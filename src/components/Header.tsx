@@ -4,7 +4,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Home, Building, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useProperty } from "@/contexts/PropertyContext";
-import logo from "@/assets/Logo Revan P1.png";
+import logo from "@/assets/Logo Revan Horizontal.png";
 import logodois from "@/assets/Logo Revan P2.png";
 
 const Header = () => {
@@ -45,11 +45,11 @@ const Header = () => {
               alt="Logo Revan"
               className="w-20 h-20 md:w-32 md:h-32 lg:w-48 lg:h-48 object-contain"
             />
-            <img
+            {/* <img
               src={logodois}
               alt="Logo Revan"
               className="w-20 h-20 md:w-32 md:h-32 lg:w-48 lg:h-48 object-contain"
-            />
+            /> */}
           </Link>
 
           {/* Navegação desktop */}
