@@ -140,7 +140,7 @@ const PropertyDetailsModal = ({
                       variant="outline"
                       className="bg-green-500 text-white border-green-500"
                     >
-                      Novo
+                      Lançamento
                     </Badge>
                   )}
                 </div>
