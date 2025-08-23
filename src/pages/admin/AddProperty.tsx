@@ -285,16 +285,22 @@ const AddProperty = () => {
 
                   <div>
                     <Label htmlFor="area">Área (Ex: 120m²)</Label>
-                    <NumericFormat
+
+                    <Input
                       id="area"
+                      type="text"
                       value={formData.area}
-                      onValueChange={(values) =>
-                        setFormData({ ...formData, area: values.value })
-                      }
-                      suffix=" m²"
-                      thousandSeparator="."
-                      decimalSeparator=","
-                      allowNegative={false}
+                      onChange={(e) => {
+                        let value = e.target.value.replace(/\D/g, "");
+                        if (value) {
+                          setFormData({
+                            ...formData,
+                            area: `${value} m²`,
+                          });
+                        } else {
+                          setFormData({ ...formData, area: "" });
+                        }
+                      }}
                       placeholder="120"
                       required
                       className="mt-1 w-full border rounded px-3 py-2"
