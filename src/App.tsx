@@ -19,6 +19,7 @@ import AdminSettings from "./pages/admin/AdminSettings";
 import AdminMessages from "./pages/admin/AdminMessages";
 import AddAdmin from "./pages/admin/AddAdmin";
 import AddProperty from "./pages/admin/AddProperty";
+import AdminBlog from "./pages/admin/AdminBlog";
 import ReportsView from "./pages/admin/ReportsView";
 import { AuthProvider } from "./contexts/AuthContext";
 
@@ -44,6 +45,7 @@ const App = () => (
           <Route path="/admin/add-admin" element={<AddAdmin />} />
           <Route path="/admin/properties" element={<AdminProperties />} />
           <Route path="/admin/add-property" element={<AddProperty />} />
+          <Route path="/admin/blog" element={<AdminBlog />} />
           <Route path="/admin/reports" element={<AdminReports />} />
           <Route path="/admin/reports-view" element={<ReportsView />} />
           <Route path="/admin/messages" element={<AdminMessages />} />

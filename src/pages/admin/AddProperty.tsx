@@ -374,6 +374,24 @@ const AddProperty = () => {
                   </div>
 
                   <div>
+                    <Label htmlFor="isNew">É Lançamento?</Label>
+                    <Select
+                      value={formData.isNew ? "true" : "false"}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, isNew: value === "true" })
+                      }
+                    >
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Selecione" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="true">✅ Sim, é lançamento</SelectItem>
+                        <SelectItem value="false">❌ Não é lançamento</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
                     <Label htmlFor="description">Descrição da Casa</Label>
                     <Textarea
                       id="description"

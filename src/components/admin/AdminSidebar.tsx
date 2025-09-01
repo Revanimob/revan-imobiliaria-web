@@ -9,6 +9,7 @@ import {
   LogOut,
   MessageSquare,
   Bell,
+  BookOpen,
 } from "lucide-react";
 import { useResponsive } from "@/hooks/useResponsive";
 import { useAdminTheme } from "@/hooks/useAdminTheme";
@@ -46,6 +47,12 @@ const AdminSidebar = ({ isOpen, onClose }: AdminSidebarProps) => {
       icon: Home,
       label: "Imóveis",
       path: "/admin/properties",
+      badge: null,
+    },
+    {
+      icon: BookOpen,
+      label: "Blog",
+      path: "/admin/blog",
       badge: null,
     },
     // {

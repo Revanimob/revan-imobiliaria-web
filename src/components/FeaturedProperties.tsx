@@ -3,6 +3,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import {
   MapPin,
   Calendar,
   Home as HomeIcon,
@@ -143,29 +150,25 @@ const FeaturedProperties = () => {
                   className="group hover:shadow-xl transition-all duration-300 overflow-hidden"
                 >
                   <div className="relative">
-                    {isIframeLoading && (
-                      <div className="absolute inset-0 z-10 bg-white/90 flex flex-col items-center justify-center text-center p-6 rounded-lg">
-                        <Loader2 className="w-6 h-6 animate-spin text-wine mb-2" />
-                        <p className="text-sm text-wine font-medium">
-                          Estamos carregando a foto do imóvel, aguarde uns
-                          instantes...
-                        </p>
-                      </div>
-                    )}
-                    {/* <iframe
-                      src={getIframeUrl(property.image)}
-                      title={property.title}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                      onLoad={() => setIsIframeLoading(false)}
-                    ></iframe> */}
-
-                    <img
-                      src={property.mainImage}
-                      title={property.title}
-                      className="w-full h-48 object-cover cursor-pointer group-hover:scale-105 transition-transform duration-300"
-                      onLoad={() => setIsIframeLoading(false)}
-                      onClick={() => handleImageGallery(property.id)}
-                    />
+                    <Carousel className="w-full">
+                      <CarouselContent>
+                        {[property.mainImage, property.secondImage, property.thirdImage, property.fourthImage]
+                          .filter(Boolean)
+                          .map((image, index) => (
+                            <CarouselItem key={index}>
+                              <img
+                                src={image}
+                                alt={`${property.title} - Foto ${index + 1}`}
+                                className="w-full h-48 object-cover cursor-pointer group-hover:scale-105 transition-transform duration-300"
+                                onLoad={() => setIsIframeLoading(false)}
+                                onClick={() => handleImageGallery(property.id)}
+                              />
+                            </CarouselItem>
+                          ))}
+                      </CarouselContent>
+                      <CarouselPrevious className="left-2" />
+                      <CarouselNext className="right-2" />
+                    </Carousel>
 
                     <div className="absolute top-3 left-3 flex gap-2">
                       <Badge
