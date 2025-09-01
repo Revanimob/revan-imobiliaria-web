@@ -9,10 +9,14 @@ import {
   getAllBlogPostsService,
   getPublishedBlogPostsService,
 } from "@/services/blogService";
+import ReadMoreBlog from "@/components/blog/ReadMoreBlog";
+import { useNavigate } from "react-router-dom";
 
 const Blog = () => {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [selectedBlog, setSelectedBlog] = useState<BlogPost | null>(null);
+  const navigate = useNavigate();
 
   const categories = [
     "Todos",
@@ -82,45 +86,61 @@ const Blog = () => {
         {blogs[0] && (
           <div className="mb-16">
             <Card className="overflow-hidden">
-              <div className="grid md:grid-cols-2 gap-0">
-                <div className="aspect-video md:aspect-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                {/* Imagem */}
+                <div className="w-full aspect-video md:aspect-[4/3] lg:aspect-[16/9]">
                   <img
                     src={blogs[0].featuredImage || "/placeholder.svg"}
                     alt={blogs[0].title}
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <CardContent className="p-8">
-                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                    <span className="bg-wine text-white px-3 py-1 rounded-full text-xs">
-                      {blogs[0].category}
-                    </span>
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4" />
-                      {new Date(blogs[0].publishDate).toLocaleDateString(
-                        "pt-BR",
-                        { day: "numeric", month: "long", year: "numeric" }
-                      )}
+
+                {/* Conteúdo */}
+                <CardContent className="p-6 md:p-8 flex flex-col justify-between">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
+                      <span className="bg-wine text-white px-3 py-1 rounded-full text-xs">
+                        {blogs[0].category}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4" />
+                        {new Date(blogs[0].publishDate).toLocaleDateString(
+                          "pt-BR",
+                          {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          }
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        {blogs[0].readTime ? `${blogs[0].readTime} min` : "-"}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
-                      {blogs[0].readTime ? `${blogs[0].readTime} min` : "-"}
-                    </div>
+
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                      {blogs[0].title}
+                    </h2>
+                    <p className="text-gray-600 mb-6 leading-relaxed">
+                      {blogs[0].excerpt}
+                    </p>
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                    {blogs[0].title}
-                  </h2>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    {blogs[0].excerpt}
-                  </p>
-                  <div className="flex items-center justify-between">
+
+                  <div className="flex items-center justify-between mt-4 md:mt-0">
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4 text-gray-500" />
                       <span className="text-sm text-gray-600">
                         {blogs[0].author}
                       </span>
                     </div>
-                    <Button className="bg-wine hover:bg-wine-dark text-white">
+                    <Button
+                      className="bg-wine hover:bg-wine-dark text-white"
+                      onClick={() =>
+                        navigate("/blog/read", { state: { blog: blogs[0] } })
+                      } // passa o blog por state
+                    >
                       Ler mais
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
@@ -173,12 +193,15 @@ const Blog = () => {
                     })}
                   </div>
                   <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-wine hover:text-wine-dark"
+                    className="bg-wine hover:bg-wine-dark text-white"
+                    onClick={() =>
+                      navigate("/blog/read#header", {
+                        state: { blog: blogs[0] },
+                      })
+                    }
                   >
                     Ler mais
-                    <ArrowRight className="w-3 h-3 ml-1" />
+                    <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </div>
               </CardContent>

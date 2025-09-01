@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -22,39 +21,47 @@ import AddProperty from "./pages/admin/AddProperty";
 import AdminBlog from "./pages/admin/AdminBlog";
 import ReportsView from "./pages/admin/ReportsView";
 import { AuthProvider } from "./contexts/AuthContext";
+import ReadMoreBlog from "./components/blog/ReadMoreBlog";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import HeaderOut from "./components/Header-out";
+import FooterOut from "./components/FooterOut";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/nossa-historia" element={<OurHistory />} />
-          <Route path="/certificacoes" element={<Certifications />} />
-          <Route path="/equipe" element={<TeamProfiles />} />
-          {/* Admin Routes */}
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/users" element={<AdminUsers />} />
-          <Route path="/admin/add-admin" element={<AddAdmin />} />
-          <Route path="/admin/properties" element={<AdminProperties />} />
-          <Route path="/admin/add-property" element={<AddProperty />} />
-          <Route path="/admin/blog" element={<AdminBlog />} />
-          <Route path="/admin/reports" element={<AdminReports />} />
-          <Route path="/admin/reports-view" element={<ReportsView />} />
-          <Route path="/admin/messages" element={<AdminMessages />} />
-          <Route path="/admin/settings" element={<AdminSettings />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/nossa-historia" element={<OurHistory />} />
+            <Route path="/certificacoes" element={<Certifications />} />
+            <Route path="/equipe" element={<TeamProfiles />} />
+            <Route path="/blog/read" element={<ReadMoreBlog />} />
+
+            {/* Admin Routes */}
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/users" element={<AdminUsers />} />
+            <Route path="/admin/add-admin" element={<AddAdmin />} />
+            <Route path="/admin/properties" element={<AdminProperties />} />
+            <Route path="/admin/add-property" element={<AddProperty />} />
+            <Route path="/admin/blog" element={<AdminBlog />} />
+            <Route path="/admin/reports" element={<AdminReports />} />
+            <Route path="/admin/reports-view" element={<ReportsView />} />
+            <Route path="/admin/messages" element={<AdminMessages />} />
+            <Route path="/admin/settings" element={<AdminSettings />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>
 );

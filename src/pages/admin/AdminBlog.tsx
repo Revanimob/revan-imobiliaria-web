@@ -71,7 +71,7 @@ const AdminBlog = () => {
     content: "",
     excerpt: "",
     author: "",
-    publishDate: new Date().toISOString().split('T')[0],
+    publishDate: new Date().toISOString().split("T")[0],
     status: "rascunho",
     category: "",
     tags: [],
@@ -175,7 +175,7 @@ const AdminBlog = () => {
       content: "",
       excerpt: "",
       author: "",
-      publishDate: new Date().toISOString().split('T')[0],
+      publishDate: new Date().toISOString().split("T")[0],
       status: "rascunho",
       category: "",
       tags: [],
@@ -307,11 +307,21 @@ const AdminBlog = () => {
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left p-3 text-sm font-medium">Título</th>
-                    <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">Autor</th>
-                    <th className="text-left p-3 text-sm font-medium">Status</th>
-                    <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">Categoria</th>
-                    <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">Data</th>
+                    <th className="text-left p-3 text-sm font-medium">
+                      Título
+                    </th>
+                    <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">
+                      Autor
+                    </th>
+                    <th className="text-left p-3 text-sm font-medium">
+                      Status
+                    </th>
+                    <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">
+                      Categoria
+                    </th>
+                    <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">
+                      Data
+                    </th>
                     <th className="text-left p-3 text-sm font-medium">Ações</th>
                   </tr>
                 </thead>
@@ -331,15 +341,19 @@ const AdminBlog = () => {
                           </p>
                         </div>
                       </td>
-                      <td className="p-3 text-sm hidden lg:table-cell">{post.author}</td>
+                      <td className="p-3 text-sm hidden lg:table-cell">
+                        {post.author}
+                      </td>
                       <td className="p-3">
                         <Badge className={getStatusBadgeColor(post.status)}>
                           {getStatusLabel(post.status)}
                         </Badge>
                       </td>
-                      <td className="p-3 text-sm hidden lg:table-cell">{post.category}</td>
                       <td className="p-3 text-sm hidden lg:table-cell">
-                        {new Date(post.publishDate).toLocaleDateString('pt-BR')}
+                        {post.category}
+                      </td>
+                      <td className="p-3 text-sm hidden lg:table-cell">
+                        {new Date(post.publishDate).toLocaleDateString("pt-BR")}
                       </td>
                       <td className="p-3">
                         <div className="flex gap-1">
@@ -385,14 +399,17 @@ const AdminBlog = () => {
                         {getStatusLabel(post.status)}
                       </Badge>
                     </div>
-                    
+
                     <div className="flex justify-between items-center text-xs text-gray-500">
                       <div>
-                        <span>{post.author}</span> • <span>{post.category}</span>
+                        <span>{post.author}</span> •{" "}
+                        <span>{post.category}</span>
                       </div>
-                      <span>{new Date(post.publishDate).toLocaleDateString('pt-BR')}</span>
+                      <span>
+                        {new Date(post.publishDate).toLocaleDateString("pt-BR")}
+                      </span>
                     </div>
-                    
+
                     <div className="flex gap-2 mt-3">
                       <Button
                         variant="outline"
@@ -425,7 +442,9 @@ const AdminBlog = () => {
                     <PaginationItem>
                       <PaginationPrevious
                         onClick={() => setPage(Math.max(1, page - 1))}
-                        className={page === 1 ? "pointer-events-none opacity-50" : ""}
+                        className={
+                          page === 1 ? "pointer-events-none opacity-50" : ""
+                        }
                       />
                     </PaginationItem>
                     {[...Array(Math.min(5, totalPages))].map((_, i) => {
@@ -444,7 +463,11 @@ const AdminBlog = () => {
                     <PaginationItem>
                       <PaginationNext
                         onClick={() => setPage(Math.min(totalPages, page + 1))}
-                        className={page === totalPages ? "pointer-events-none opacity-50" : ""}
+                        className={
+                          page === totalPages
+                            ? "pointer-events-none opacity-50"
+                            : ""
+                        }
                       />
                     </PaginationItem>
                   </PaginationContent>
@@ -490,14 +513,27 @@ const AdminBlog = () => {
 
                 <div>
                   <Label htmlFor="category">Categoria *</Label>
-                  <Input
-                    id="category"
-                    value={formData.category}
-                    onChange={(e) =>
-                      setFormData({ ...formData, category: e.target.value })
+
+                  <Select
+                    onValueChange={(value: BlogPost["category"]) =>
+                      setFormData({ ...formData, category: value })
                     }
+                    value={formData.category}
                     required
-                  />
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Todos">Todos</SelectItem>
+                      <SelectItem value="Dicas">Dicas</SelectItem>
+                      <SelectItem value="Mercado">Mercado</SelectItem>
+                      <SelectItem value="Mercado">Financiamento</SelectItem>
+                      <SelectItem value="Mercado">Investimento</SelectItem>
+                      <SelectItem value="Mercado">Documentação</SelectItem>
+                      <SelectItem value="Mercado">Vendas</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>
@@ -594,7 +630,10 @@ const AdminBlog = () => {
                     id="seoDescription"
                     value={formData.seoDescription}
                     onChange={(e) =>
-                      setFormData({ ...formData, seoDescription: e.target.value })
+                      setFormData({
+                        ...formData,
+                        seoDescription: e.target.value,
+                      })
                     }
                     placeholder="Descrição para SEO"
                   />
