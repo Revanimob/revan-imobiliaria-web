@@ -1,79 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, ArrowRight, Clock } from "lucide-react";
+import { BlogPost } from "@/types/blog";
+import {
+  getAllBlogPostsService,
+  getPublishedBlogPostsService,
+} from "@/services/blogService";
 
 const Blog = () => {
-  const blogPosts = [
-    {
-      id: 1,
-      title: "Como escolher o imóvel ideal para sua família",
-      excerpt:
-        "Descubra as principais dicas para encontrar o imóvel perfeito que atenda todas as necessidades da sua família.",
-      author: "REVAN Imobiliária",
-      date: "15 de Dezembro, 2024",
-      readTime: "5 min",
-      image: "/placeholder.svg",
-      category: "Dicas",
-    },
-    {
-      id: 2,
-      title: "Tendências do mercado imobiliário em 2024",
-      excerpt:
-        "Análise completa das principais tendências que estão moldando o mercado imobiliário brasileiro.",
-      author: "REVAN Imobiliária",
-      date: "12 de Dezembro, 2024",
-      readTime: "7 min",
-      image: "/placeholder.svg",
-      category: "Mercado",
-    },
-    {
-      id: 3,
-      title: "Financiamento imobiliário: guia completo",
-      excerpt:
-        "Tudo que você precisa saber sobre financiamento imobiliário, desde a documentação até a aprovação.",
-      author: "REVAN Imobiliária",
-      date: "10 de Dezembro, 2024",
-      readTime: "10 min",
-      image: "/placeholder.svg",
-      category: "Financiamento",
-    },
-    {
-      id: 4,
-      title: "Investir em imóveis: vale a pena?",
-      excerpt:
-        "Análise dos prós e contras do investimento imobiliário e como começar no mercado.",
-      author: "REVAN Imobiliária",
-      date: "8 de Dezembro, 2024",
-      readTime: "6 min",
-      image: "/placeholder.svg",
-      category: "Investimento",
-    },
-    {
-      id: 5,
-      title: "Documentação necessária para compra de imóvel",
-      excerpt:
-        "Lista completa de todos os documentos necessários para uma compra segura.",
-      author: "REVAN Imobiliária",
-      date: "5 de Dezembro, 2024",
-      readTime: "4 min",
-      image: "/placeholder.svg",
-      category: "Documentação",
-    },
-    {
-      id: 6,
-      title: "Como valorizar seu imóvel para venda",
-      excerpt:
-        "Dicas práticas para aumentar o valor do seu imóvel antes de colocá-lo à venda.",
-      author: "REVAN Imobiliária",
-      date: "3 de Dezembro, 2024",
-      readTime: "8 min",
-      image: "/placeholder.svg",
-      category: "Vendas",
-    },
-  ];
+  const [blogs, setBlogs] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const categories = [
     "Todos",
@@ -84,6 +23,29 @@ const Blog = () => {
     "Documentação",
     "Vendas",
   ];
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const posts = await getAllBlogPostsService();
+        setBlogs(posts);
+      } catch (error) {
+        console.error("Erro ao buscar posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  if (loading) {
+    return <div className="text-center py-20">Carregando posts...</div>;
+  }
+
+  if (!blogs.length) {
+    return <div></div>;
+  }
 
   return (
     <div className="min-h-screen">
@@ -117,63 +79,68 @@ const Blog = () => {
         </div>
 
         {/* Featured Post */}
-        <div className="mb-16">
-          <Card className="overflow-hidden">
-            <div className="grid md:grid-cols-2 gap-0">
-              <div className="aspect-video md:aspect-auto">
-                <img
-                  src="/placeholder.svg"
-                  alt={blogPosts[0].title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <CardContent className="p-8">
-                <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                  <span className="bg-wine text-white px-3 py-1 rounded-full text-xs">
-                    {blogPosts[0].category}
-                  </span>
-                  <div className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" />
-                    {blogPosts[0].date}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    {blogPosts[0].readTime}
-                  </div>
+        {blogs[0] && (
+          <div className="mb-16">
+            <Card className="overflow-hidden">
+              <div className="grid md:grid-cols-2 gap-0">
+                <div className="aspect-video md:aspect-auto">
+                  <img
+                    src={blogs[0].featuredImage || "/placeholder.svg"}
+                    alt={blogs[0].title}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  {blogPosts[0].title}
-                </h2>
-                <p className="text-gray-600 mb-6 leading-relaxed">
-                  {blogPosts[0].excerpt}
-                </p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-600">
-                      {blogPosts[0].author}
+                <CardContent className="p-8">
+                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                    <span className="bg-wine text-white px-3 py-1 rounded-full text-xs">
+                      {blogs[0].category}
                     </span>
+                    <div className="flex items-center gap-1">
+                      <Calendar className="w-4 h-4" />
+                      {new Date(blogs[0].publishDate).toLocaleDateString(
+                        "pt-BR",
+                        { day: "numeric", month: "long", year: "numeric" }
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Clock className="w-4 h-4" />
+                      {blogs[0].readTime ? `${blogs[0].readTime} min` : "-"}
+                    </div>
                   </div>
-                  <Button className="bg-wine hover:bg-wine-dark text-white">
-                    Ler mais
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </div>
-              </CardContent>
-            </div>
-          </Card>
-        </div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                    {blogs[0].title}
+                  </h2>
+                  <p className="text-gray-600 mb-6 leading-relaxed">
+                    {blogs[0].excerpt}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <User className="w-4 h-4 text-gray-500" />
+                      <span className="text-sm text-gray-600">
+                        {blogs[0].author}
+                      </span>
+                    </div>
+                    <Button className="bg-wine hover:bg-wine-dark text-white">
+                      Ler mais
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </div>
+            </Card>
+          </div>
+        )}
 
         {/* Blog Posts Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogPosts.slice(1).map((post) => (
+          {blogs.slice(1).map((post) => (
             <Card
               key={post.id}
               className="overflow-hidden hover:shadow-lg transition-shadow"
             >
               <div className="aspect-video">
                 <img
-                  src={post.image}
+                  src={post.featuredImage || "/placeholder.svg"}
                   alt={post.title}
                   className="w-full h-full object-cover"
                 />
@@ -185,7 +152,7 @@ const Blog = () => {
                   </span>
                   <div className="flex items-center gap-1">
                     <Clock className="w-3 h-3" />
-                    {post.readTime}
+                    {post.readTime ? `${post.readTime} min` : "-"}
                   </div>
                 </div>
                 <CardTitle className="text-lg hover:text-wine transition-colors cursor-pointer">
@@ -199,7 +166,11 @@ const Blog = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1 text-xs text-gray-500">
                     <Calendar className="w-3 h-3" />
-                    {post.date}
+                    {new Date(post.publishDate).toLocaleDateString("pt-BR", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
                   </div>
                   <Button
                     variant="ghost"
