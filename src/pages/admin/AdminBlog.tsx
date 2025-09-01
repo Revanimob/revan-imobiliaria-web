@@ -294,7 +294,7 @@ const AdminBlog = () => {
           </Card>
         </div>
 
-        {/* Posts Table */}
+        {/* Posts Table/Cards */}
         <Card>
           <CardHeader>
             <CardTitle className="text-lg md:text-xl">
@@ -302,15 +302,16 @@ const AdminBlog = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-2 md:p-6">
-            <div className="overflow-x-auto">
+            {/* Desktop/Tablet Table View */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
                     <th className="text-left p-3 text-sm font-medium">Título</th>
-                    <th className="text-left p-3 text-sm font-medium">Autor</th>
+                    <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">Autor</th>
                     <th className="text-left p-3 text-sm font-medium">Status</th>
-                    <th className="text-left p-3 text-sm font-medium">Categoria</th>
-                    <th className="text-left p-3 text-sm font-medium">Data</th>
+                    <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">Categoria</th>
+                    <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">Data</th>
                     <th className="text-left p-3 text-sm font-medium">Ações</th>
                   </tr>
                 </thead>
@@ -330,14 +331,14 @@ const AdminBlog = () => {
                           </p>
                         </div>
                       </td>
-                      <td className="p-3 text-sm">{post.author}</td>
+                      <td className="p-3 text-sm hidden lg:table-cell">{post.author}</td>
                       <td className="p-3">
                         <Badge className={getStatusBadgeColor(post.status)}>
                           {getStatusLabel(post.status)}
                         </Badge>
                       </td>
-                      <td className="p-3 text-sm">{post.category}</td>
-                      <td className="p-3 text-sm">
+                      <td className="p-3 text-sm hidden lg:table-cell">{post.category}</td>
+                      <td className="p-3 text-sm hidden lg:table-cell">
                         {new Date(post.publishDate).toLocaleDateString('pt-BR')}
                       </td>
                       <td className="p-3">
@@ -364,6 +365,56 @@ const AdminBlog = () => {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-4">
+              {currentItems.map((post) => (
+                <Card key={post.id} className="border">
+                  <CardContent className="p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex-1 min-w-0 mr-4">
+                        <h3 className="font-medium text-sm truncate">
+                          {post.title}
+                        </h3>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
+                          {post.excerpt}
+                        </p>
+                      </div>
+                      <Badge className={getStatusBadgeColor(post.status)}>
+                        {getStatusLabel(post.status)}
+                      </Badge>
+                    </div>
+                    
+                    <div className="flex justify-between items-center text-xs text-gray-500">
+                      <div>
+                        <span>{post.author}</span> • <span>{post.category}</span>
+                      </div>
+                      <span>{new Date(post.publishDate).toLocaleDateString('pt-BR')}</span>
+                    </div>
+                    
+                    <div className="flex gap-2 mt-3">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEdit(post)}
+                        className="flex-1"
+                      >
+                        <Edit2 className="h-4 w-4 mr-1" />
+                        Editar
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openDeleteDialog(post.id!)}
+                        className="text-red-600 hover:text-red-700 hover:border-red-600"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
 
             {/* Pagination */}

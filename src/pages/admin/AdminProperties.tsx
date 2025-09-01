@@ -471,7 +471,7 @@ const AdminProperties = () => {
                     <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">
                       Localização
                     </th>
-                    <th className="text-left p-3 text-sm font-medium">Área</th>
+                    <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">Área</th>
                     <th className="text-left p-3 text-sm font-medium">Ações</th>
                   </tr>
                 </thead>
@@ -509,7 +509,7 @@ const AdminProperties = () => {
                       <td className="p-3 text-gray-600 dark:text-gray-400 text-sm hidden lg:table-cell max-w-[150px] truncate">
                         {property.location}
                       </td>
-                      <td className="p-3 text-sm">{property.areaValue}m²</td>
+                      <td className="p-3 text-sm hidden lg:table-cell">{property.areaValue}m²</td>
                       <td className="p-3">
                         <div className="flex space-x-1">
                           <Button
@@ -1123,7 +1123,7 @@ const AdminProperties = () => {
                   />
                 </div>
 
-                <div className="md:col-span-2">
+                <div>
                   <Label htmlFor="Selo">Selo</Label>
                   <Input
                     id="badge"
@@ -1134,6 +1134,21 @@ const AdminProperties = () => {
                     placeholder="Em construção , finalizado ..."
                     required
                   />
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="isNew"
+                    checked={formData.isNew}
+                    onChange={(e) =>
+                      setFormData({ ...formData, isNew: e.target.checked })
+                    }
+                    className="w-4 h-4 text-wine border-gray-300 rounded focus:ring-wine focus:ring-2"
+                  />
+                  <Label htmlFor="isNew" className="text-sm font-medium">
+                    Marcar como "Novo"
+                  </Label>
                 </div>
 
                 <div className="md:col-span-2">
