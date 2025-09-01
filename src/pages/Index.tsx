@@ -8,6 +8,7 @@ import AboutUs from "@/components/AboutUs";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { PropertyProvider } from "@/contexts/PropertyContext";
+import Blog from "./Blog";
 
 const Index = () => {
   return (
@@ -18,7 +19,9 @@ const Index = () => {
           <HeroBanner />
           <SearchBar />
           <FeaturedProperties />
+          <Blog />
           <Services />
+
           {/* <AboutUs /> */}
         </main>
         <Footer />

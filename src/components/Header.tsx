@@ -43,8 +43,9 @@ const Header = () => {
             <img
               src={logo}
               alt="Logo Revan"
-              className="w-20 h-20 md:w-32 md:h-32 lg:w-48 lg:h-48 object-contain"
+              className="w-36 h-36 md:w-44 md:h-44 lg:w-52 lg:h-52 object-contain"
             />
+
             {/* <img
               src={logodois}
               alt="Logo Revan"

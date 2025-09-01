@@ -254,10 +254,12 @@ const AddProperty = () => {
                           priceValue: Number(values.value),
                         })
                       }
-                      thousandSeparator={false}
                       allowNegative={false}
                       allowLeadingZeros={false}
-                      placeholder="450000"
+                      thousandSeparator="."
+                      decimalSeparator=","
+                      prefix="R$ "
+                      placeholder="R$ 450.000"
                       required
                       className="mt-1 w-full border rounded px-3 py-2"
                     />
@@ -518,7 +520,7 @@ const AddProperty = () => {
                         setFormData({ ...formData, isNew: e.target.checked })
                       }
                     />
-                    <Label htmlFor="isNew">Imóvel novo?</Label>
+                    <Label htmlFor="isNew">É lançamento?</Label>
                   </div>
                 </div>
 

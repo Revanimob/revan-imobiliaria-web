@@ -17,25 +17,30 @@ import { toast } from "@/hooks/use-toast";
 import RevanSemFundo from "@/assets/RevanSemFundo.png";
 import badge from "@/assets/badge.png";
 import { useNavigate } from "react-router-dom";
+import { useProperty } from "@/contexts/PropertyContext";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const { filterByCategory, currentCategory } = useProperty();
+  const [open, setOpen] = useState(false); // controla o drawer
   const navigate = useNavigate();
   const quickLinks = [
-    { label: "Imóveis para Venda", href: "#" },
-    { label: "Imóveis para Locação", href: "#" },
-    { label: "Lançamentos", href: "#" },
-    { label: "Financiamento", href: "#" },
-    { label: "Avaliação Gratuita", href: "#" },
+    { label: "Compra", section: "imoveis", category: "compra" },
+    { label: "Aluguel", section: "imoveis", category: "aluguel" },
+    { label: "Lançamentos", section: "imoveis", category: "lancamentos" },
   ];
 
   const services = [
-    { label: "Compra e Venda", href: "#" },
-    { label: "Locação", href: "#" },
-    { label: "Administração Predial", href: "#" },
-    { label: "Consultoria", href: "#" },
-    { label: "Gestão de Investimentos", href: "#" },
+    { label: "Compra e Venda", section: "imoveis", category: "compra" },
+    { label: "Locação", section: "imoveis", category: "aluguel" },
+    {
+      label: "Administração Predial",
+      section: "servicos",
+      category: "servicos",
+    },
+    { label: "Consultoria", section: "servicos", category: "servicos" },
+    //{ label: "Avaliação Gratuita", section: "servicos", category: "servicos" },
   ];
 
   const regions = [
@@ -72,7 +77,17 @@ const Footer = () => {
       setLoading(false);
     }
   };
+  const scrollToSection = (sectionId: string, category: string) => {
+    filterByCategory(category);
+    setTimeout(() => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
 
+    setOpen(false); // fecha o drawer após clicar
+  };
   return (
     <footer className="bg-wine text-white">
       {/* Main Footer Content */}
@@ -137,12 +152,12 @@ const Footer = () => {
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={index}>
-                  <a
-                    href={link.href}
+                  <button
+                    onClick={() => scrollToSection(link.section, link.category)}
                     className="text-white opacity-90 hover:opacity-100 hover:underline transition-all duration-200 text-sm"
                   >
                     {link.label}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -154,12 +169,14 @@ const Footer = () => {
             <ul className="space-y-3">
               {services.map((service, index) => (
                 <li key={index}>
-                  <a
-                    href={service.href}
+                  <button
+                    onClick={() =>
+                      scrollToSection(service.section, service.category)
+                    }
                     className="text-white opacity-90 hover:opacity-100 hover:underline transition-all duration-200 text-sm"
                   >
                     {service.label}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>

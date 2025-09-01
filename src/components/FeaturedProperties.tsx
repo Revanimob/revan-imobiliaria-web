@@ -66,7 +66,36 @@ const FeaturedProperties = () => {
     const id = match?.[1];
     return id ? `https://drive.google.com/file/d/${id}/preview` : "";
   };
+  const getStatusVariant = (status: string) => {
+    switch (status) {
+      case "disponivel":
+        return "bg-green-600 text-white";
+      case "reservado":
+        return "bg-yellow-500 text-black";
+      case "vendido":
+        return "bg-red-600 text-white";
+      case "alugado":
+        return "bg-blue-500 text-white";
+      default:
+        return "bg-gray-400 text-black";
+    }
+  };
 
+  // Retorna o label com emoji (para consistência)
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case "disponivel":
+        return "✅ Disponível";
+      case "reservado":
+        return "⏳ Reservado";
+      case "vendido":
+        return "❌ Vendido";
+      case "alugado":
+        return "🔄 Alugado";
+      default:
+        return "Indefinido";
+    }
+  };
   return (
     <>
       <section id="imoveis" className="py-16 bg-beige-light">
@@ -129,11 +158,13 @@ const FeaturedProperties = () => {
                       className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                       onLoad={() => setIsIframeLoading(false)}
                     ></iframe> */}
+
                     <img
                       src={property.mainImage}
                       title={property.title}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-48 object-cover cursor-pointer group-hover:scale-105 transition-transform duration-300"
                       onLoad={() => setIsIframeLoading(false)}
+                      onClick={() => handleImageGallery(property.id)}
                     />
 
                     <div className="absolute top-3 left-3 flex gap-2">
@@ -143,6 +174,11 @@ const FeaturedProperties = () => {
                       >
                         {property.badge}
                       </Badge>
+
+                      <Badge className={getStatusVariant(property.status)}>
+                        {getStatusLabel(property.status)}
+                      </Badge>
+
                       {property.isNew && (
                         <Badge
                           variant="outline"
@@ -152,7 +188,8 @@ const FeaturedProperties = () => {
                         </Badge>
                       )}
                     </div>
-                    <div className="absolute top-3 right-3">
+
+                    {/* <div className="absolute top-3 right-3">
                       <Button
                         size="icon"
                         variant="ghost"
@@ -161,7 +198,7 @@ const FeaturedProperties = () => {
                       >
                         <ImageIcon className="w-4 h-4" />
                       </Button>
-                    </div>
+                    </div> */}
                   </div>
 
                   <CardContent className="p-4">

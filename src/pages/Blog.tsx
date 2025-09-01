@@ -1,81 +1,92 @@
-
-import React from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Calendar, User, ArrowRight, Clock } from 'lucide-react';
+import React from "react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Calendar, User, ArrowRight, Clock } from "lucide-react";
 
 const Blog = () => {
   const blogPosts = [
     {
       id: 1,
       title: "Como escolher o imóvel ideal para sua família",
-      excerpt: "Descubra as principais dicas para encontrar o imóvel perfeito que atenda todas as necessidades da sua família.",
+      excerpt:
+        "Descubra as principais dicas para encontrar o imóvel perfeito que atenda todas as necessidades da sua família.",
       author: "REVAN Imobiliária",
       date: "15 de Dezembro, 2024",
       readTime: "5 min",
       image: "/placeholder.svg",
-      category: "Dicas"
+      category: "Dicas",
     },
     {
       id: 2,
       title: "Tendências do mercado imobiliário em 2024",
-      excerpt: "Análise completa das principais tendências que estão moldando o mercado imobiliário brasileiro.",
+      excerpt:
+        "Análise completa das principais tendências que estão moldando o mercado imobiliário brasileiro.",
       author: "REVAN Imobiliária",
       date: "12 de Dezembro, 2024",
       readTime: "7 min",
       image: "/placeholder.svg",
-      category: "Mercado"
+      category: "Mercado",
     },
     {
       id: 3,
       title: "Financiamento imobiliário: guia completo",
-      excerpt: "Tudo que você precisa saber sobre financiamento imobiliário, desde a documentação até a aprovação.",
+      excerpt:
+        "Tudo que você precisa saber sobre financiamento imobiliário, desde a documentação até a aprovação.",
       author: "REVAN Imobiliária",
       date: "10 de Dezembro, 2024",
       readTime: "10 min",
       image: "/placeholder.svg",
-      category: "Financiamento"
+      category: "Financiamento",
     },
     {
       id: 4,
       title: "Investir em imóveis: vale a pena?",
-      excerpt: "Análise dos prós e contras do investimento imobiliário e como começar no mercado.",
+      excerpt:
+        "Análise dos prós e contras do investimento imobiliário e como começar no mercado.",
       author: "REVAN Imobiliária",
       date: "8 de Dezembro, 2024",
       readTime: "6 min",
       image: "/placeholder.svg",
-      category: "Investimento"
+      category: "Investimento",
     },
     {
       id: 5,
       title: "Documentação necessária para compra de imóvel",
-      excerpt: "Lista completa de todos os documentos necessários para uma compra segura.",
+      excerpt:
+        "Lista completa de todos os documentos necessários para uma compra segura.",
       author: "REVAN Imobiliária",
       date: "5 de Dezembro, 2024",
       readTime: "4 min",
       image: "/placeholder.svg",
-      category: "Documentação"
+      category: "Documentação",
     },
     {
       id: 6,
       title: "Como valorizar seu imóvel para venda",
-      excerpt: "Dicas práticas para aumentar o valor do seu imóvel antes de colocá-lo à venda.",
+      excerpt:
+        "Dicas práticas para aumentar o valor do seu imóvel antes de colocá-lo à venda.",
       author: "REVAN Imobiliária",
       date: "3 de Dezembro, 2024",
       readTime: "8 min",
       image: "/placeholder.svg",
-      category: "Vendas"
-    }
+      category: "Vendas",
+    },
   ];
 
-  const categories = ["Todos", "Dicas", "Mercado", "Financiamento", "Investimento", "Documentação", "Vendas"];
+  const categories = [
+    "Todos",
+    "Dicas",
+    "Mercado",
+    "Financiamento",
+    "Investimento",
+    "Documentação",
+    "Vendas",
+  ];
 
   return (
     <div className="min-h-screen">
-      <Header />
-      
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-wine to-wine-dark text-white py-20">
         <div className="container mx-auto px-4 text-center">
@@ -83,8 +94,8 @@ const Blog = () => {
             Blog REVAN Imobiliária
           </h1>
           <p className="text-xl text-white opacity-90 max-w-2xl mx-auto">
-            Fique por dentro das últimas novidades do mercado imobiliário, 
-            dicas valiosas e insights dos nossos especialistas.
+            Fique por dentro das últimas novidades do mercado imobiliário, dicas
+            valiosas e insights dos nossos especialistas.
           </p>
         </div>
       </section>
@@ -110,8 +121,8 @@ const Blog = () => {
           <Card className="overflow-hidden">
             <div className="grid md:grid-cols-2 gap-0">
               <div className="aspect-video md:aspect-auto">
-                <img 
-                  src="/placeholder.svg" 
+                <img
+                  src="/placeholder.svg"
                   alt={blogPosts[0].title}
                   className="w-full h-full object-cover"
                 />
@@ -139,7 +150,9 @@ const Blog = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <User className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-600">{blogPosts[0].author}</span>
+                    <span className="text-sm text-gray-600">
+                      {blogPosts[0].author}
+                    </span>
                   </div>
                   <Button className="bg-wine hover:bg-wine-dark text-white">
                     Ler mais
@@ -154,10 +167,13 @@ const Blog = () => {
         {/* Blog Posts Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {blogPosts.slice(1).map((post) => (
-            <Card key={post.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+            <Card
+              key={post.id}
+              className="overflow-hidden hover:shadow-lg transition-shadow"
+            >
               <div className="aspect-video">
-                <img 
-                  src={post.image} 
+                <img
+                  src={post.image}
                   alt={post.title}
                   className="w-full h-full object-cover"
                 />
@@ -185,8 +201,8 @@ const Blog = () => {
                     <Calendar className="w-3 h-3" />
                     {post.date}
                   </div>
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     size="sm"
                     className="text-wine hover:text-wine-dark"
                   >
@@ -201,16 +217,14 @@ const Blog = () => {
 
         {/* Load More */}
         <div className="text-center mt-12">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="border-wine text-wine hover:bg-wine hover:text-white px-8"
           >
             Carregar mais posts
           </Button>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };
