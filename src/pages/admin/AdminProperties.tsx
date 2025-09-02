@@ -913,14 +913,14 @@ const AdminProperties = () => {
 
         {/* Edit Property Modal */}
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogContent className="max-w-[95vw] sm:max-w-[90vw] md:max-w-2xl lg:max-w-4xl max-h-[95vh] overflow-y-auto p-3 sm:p-4 md:p-6">
+          <DialogContent className="max-w-[95vw] sm:max-w-[90vw] md:max-w-3xl lg:max-w-5xl max-h-[90vh] overflow-y-auto p-3 sm:p-4 md:p-6">
             <DialogHeader className="pb-2 md:pb-4">
               <DialogTitle className="text-base sm:text-lg md:text-xl">
                 {editingProperty ? "Editar Imóvel" : "Novo Imóvel"}
               </DialogTitle>
             </DialogHeader>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                 <div className="md:col-span-2">
                   <Label htmlFor="title">Título do Imóvel</Label>

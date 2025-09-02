@@ -121,38 +121,38 @@ const AddProperty = () => {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        <div className="flex items-center gap-4">
+      <div className="space-y-4 md:space-y-6 px-4 sm:px-6 md:px-8 lg:px-10 py-6 max-w-full overflow-x-hidden">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => navigate("/admin/properties")}
             className="shrink-0"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
           </Button>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold">
+            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold">
               Cadastrar Novo Imóvel
             </h1>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">
               Preencha os dados do imóvel
             </p>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row max-w-7xl gap-3 mx-auto items-start justify-center">
-          <Card className="flex-1">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Home className="w-5 h-5 text-wine" />
+        <div className="flex flex-col max-w-full mx-auto">
+          <Card className="w-full">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+                <Home className="w-4 h-4 md:w-5 md:h-5 text-wine" />
                 Informações do Imóvel
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <CardContent className="p-3 md:p-6">
+              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                   <div className="md:col-span-2">
-                    <Label htmlFor="title">Título do Imóvel *</Label>
+                    <Label htmlFor="title" className="text-sm md:text-base">Título do Imóvel *</Label>
                     <Input
                       id="title"
                       value={formData.title}
@@ -166,7 +166,7 @@ const AddProperty = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="type">Tipo de Imóvel *</Label>
+                    <Label htmlFor="type" className="text-sm md:text-base">Tipo de Imóvel *</Label>
                     <Select
                       value={formData.type}
                       onValueChange={(value: Property["type"]) =>
@@ -407,65 +407,65 @@ const AddProperty = () => {
                     />
                   </div>
 
-                  <div className="md:col-span-2">
-                    <Label>Upload de Imagens</Label>
-                    <div className="mt-2 space-y-4">
-                      {/* Imagem Principal */}
-                      <div>
-                        <Label className="text-sm font-medium">
-                          Imagem Principal *
-                        </Label>
-                        <div className="mt-1 flex items-center gap-3">
-                          <Input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleMainImageUpload}
-                            className="flex-1"
-                          />
-                          {formData.mainImage && (
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              onClick={() => removeImage("main")}
-                              className="shrink-0"
-                            >
-                              <X className="w-4 h-4" />
-                            </Button>
-                          )}
-                        </div>
+                <div className="md:col-span-2">
+                  <Label className="text-sm md:text-base">Upload de Imagens</Label>
+                  <div className="mt-2 space-y-3 md:space-y-4">
+                    {/* Imagem Principal */}
+                    <div>
+                      <Label className="text-xs md:text-sm font-medium">
+                        Imagem Principal *
+                      </Label>
+                      <div className="mt-1 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+                        <Input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleMainImageUpload}
+                          className="flex-1 text-xs md:text-sm"
+                        />
                         {formData.mainImage && (
-                          <div className="mt-2">
-                            <img
-                              src={formData.mainImage}
-                              alt="Preview principal"
-                              className="w-20 h-20 object-cover rounded border"
-                            />
-                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => removeImage("main")}
+                            className="shrink-0 h-8 w-8 p-0"
+                          >
+                            <X className="w-3 h-3 md:w-4 md:h-4" />
+                          </Button>
                         )}
                       </div>
+                      {formData.mainImage && (
+                        <div className="mt-2">
+                          <img
+                            src={formData.mainImage}
+                            alt="Preview principal"
+                            className="w-16 h-16 md:w-20 md:h-20 object-cover rounded border"
+                          />
+                        </div>
+                      )}
+                    </div>
 
-                      {/* Imagens Secundárias */}
-                      <div>
-                        <Label className="text-sm font-medium">
-                          Imagens Secundárias (máx. 3)
-                        </Label>
-                        <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-3">
-                          {[
-                            {
-                              image: formData.secondImage,
-                              type: "second" as const,
-                              label: "Segunda",
-                            },
-                            {
-                              image: formData.thirdImage,
-                              type: "third" as const,
-                              label: "Terceira",
-                            },
-                            {
-                              image: formData.fourthImage,
-                              type: "fourth" as const,
-                              label: "Quarta",
+                    {/* Imagens Secundárias */}
+                    <div>
+                      <Label className="text-xs md:text-sm font-medium">
+                        Imagens Secundárias (máx. 3)
+                      </Label>
+                      <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {[
+                          {
+                            image: formData.secondImage,
+                            type: "second" as const,
+                            label: "Segunda",
+                          },
+                          {
+                            image: formData.thirdImage,
+                            type: "third" as const,
+                            label: "Terceira",
+                          },
+                          {
+                            image: formData.fourthImage,
+                            type: "fourth" as const,
+                            label: "Quarta",
                             },
                           ].map(({ image, type, label }, index) => (
                             <div key={index} className="space-y-2">
