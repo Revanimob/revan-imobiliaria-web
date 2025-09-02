@@ -79,7 +79,7 @@ const HeaderOut = () => {
             <Button
               variant="outline"
               className="border-wine text-wine hover:bg-wine hover:text-white text-sm md:text-base"
-              onClick={() => handleNavigateSection("servicos")}
+              onClick={() => navigate("/")}
             >
               <Home className="w-4 h-4 mr-1 md:mr-2" />
               Home

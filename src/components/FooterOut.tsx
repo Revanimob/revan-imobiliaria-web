@@ -227,12 +227,12 @@ const FooterOut = () => {
                 ))}
               </div>
               <div className="mt-4">
-                <Button
+                <button
                   onClick={() => navigate("/login")}
-                  className="inline-block text-xs opacity-70 hover:opacity-90 underline transition-opacity duration-200"
+                  className="inline-block text-xs opacity-70 hover:opacity-90 underline transition-opacity duration-200 bg-transparent border-none cursor-pointer"
                 >
                   Acesso Administrativo
-                </Button>
+                </button>
               </div>
             </div>
           </div>

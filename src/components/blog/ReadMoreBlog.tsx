@@ -35,9 +35,9 @@ export default function ReadMoreBlog() {
   }
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <HeaderOut />
-      <main id="header" className="container mx-auto px-4 py-16">
+      <main className="container mx-auto px-4 py-16 flex-1">
         {/* Imagem */}
         <div className="mb-8">
           <img
@@ -77,6 +77,6 @@ export default function ReadMoreBlog() {
         </div>
       </main>
       <FooterOut />
-    </>
+    </div>
   );
 }
