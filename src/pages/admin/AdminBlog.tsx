@@ -524,15 +524,14 @@ const AdminBlog = () => {
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Todos">Todos</SelectItem>
-                      <SelectItem value="Dicas">Dicas</SelectItem>
-                      <SelectItem value="Mercado">Mercado</SelectItem>
-                      <SelectItem value="Mercado">Financiamento</SelectItem>
-                      <SelectItem value="Mercado">Investimento</SelectItem>
-                      <SelectItem value="Mercado">Documentação</SelectItem>
-                      <SelectItem value="Mercado">Vendas</SelectItem>
-                    </SelectContent>
+                     <SelectContent className="bg-background border shadow-lg z-50">
+                       <SelectItem value="Dicas">Dicas</SelectItem>
+                       <SelectItem value="Mercado">Mercado</SelectItem>
+                       <SelectItem value="Financiamento">Financiamento</SelectItem>
+                       <SelectItem value="Investimento">Investimento</SelectItem>
+                       <SelectItem value="Documentação">Documentação</SelectItem>
+                       <SelectItem value="Vendas">Vendas</SelectItem>
+                     </SelectContent>
                   </Select>
                 </div>
 

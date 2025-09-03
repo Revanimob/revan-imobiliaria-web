@@ -195,8 +195,8 @@ const Blog = () => {
                   <Button
                     className="bg-wine hover:bg-wine-dark text-white"
                     onClick={() =>
-                      navigate("/blog/read#header", {
-                        state: { blog: blogs[0] },
+                      navigate("/blog/read", {
+                        state: { blog: post },
                       })
                     }
                   >
