@@ -360,7 +360,7 @@ const AdminProperties = () => {
 
   return (
     <AdminLayout>
-      <div className="space-y-6 px-4 sm:px-6 md:px-8 lg:px-10 py-6 max-w-full overflow-x-hidden">
+      <div className="space-y-6 px-4 sm:px-6 md:px-8 lg:px-10 py-6 max-w-screen-xl mx-auto overflow-x-hidden">
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -471,7 +471,9 @@ const AdminProperties = () => {
                     <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">
                       Localização
                     </th>
-                    <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">Área</th>
+                    <th className="text-left p-3 text-sm font-medium hidden lg:table-cell">
+                      Área
+                    </th>
                     <th className="text-left p-3 text-sm font-medium">Ações</th>
                   </tr>
                 </thead>
@@ -509,7 +511,9 @@ const AdminProperties = () => {
                       <td className="p-3 text-gray-600 dark:text-gray-400 text-sm hidden lg:table-cell max-w-[150px] truncate">
                         {property.location}
                       </td>
-                      <td className="p-3 text-sm hidden lg:table-cell">{property.areaValue}m²</td>
+                      <td className="p-3 text-sm hidden lg:table-cell">
+                        {property.areaValue}m²
+                      </td>
                       <td className="p-3">
                         <div className="flex space-x-1">
                           <Button

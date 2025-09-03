@@ -19,13 +19,13 @@ const Blog = () => {
   const navigate = useNavigate();
 
   const categories = [
-    "Todos",
-    "Dicas",
-    "Mercado",
-    "Financiamento",
-    "Investimento",
-    "Documentação",
-    "Vendas",
+    // "Todos",
+    // "Dicas",
+    // "Mercado",
+    // "Financiamento",
+    // "Investimento",
+    // "Documentação",
+    // "Vendas",
   ];
 
   useEffect(() => {

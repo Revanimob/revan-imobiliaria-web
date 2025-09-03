@@ -24,13 +24,13 @@ const HeaderOut = () => {
   }, [location.pathname, targetSection]);
 
   const navigationTabs = [
-    { id: "compra", label: "Compra", section: "imoveis" },
-    { id: "aluguel", label: "Aluguel", section: "imoveis" },
-    {
-      id: "lancamentos",
-      label: "Lançamentos",
-      section: "imoveis",
-    },
+    // { id: "compra", label: "Compra", section: "imoveis" },
+    // { id: "aluguel", label: "Aluguel", section: "imoveis" },
+    // {
+    //   id: "lancamentos",
+    //   label: "Lançamentos",
+    //   section: "imoveis",
+    // },
   ];
 
   const handleNavigateSection = (sectionId: string) => {
