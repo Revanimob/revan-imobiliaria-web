@@ -152,7 +152,9 @@ const AddProperty = () => {
               <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                   <div className="md:col-span-2">
-                    <Label htmlFor="title" className="text-sm md:text-base">Título do Imóvel *</Label>
+                    <Label htmlFor="title" className="text-sm md:text-base">
+                      Título do Imóvel *
+                    </Label>
                     <Input
                       id="title"
                       value={formData.title}
@@ -166,7 +168,9 @@ const AddProperty = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="type" className="text-sm md:text-base">Tipo de Imóvel *</Label>
+                    <Label htmlFor="type" className="text-sm md:text-base">
+                      Tipo de Imóvel *
+                    </Label>
                     <Select
                       value={formData.type}
                       onValueChange={(value: Property["type"]) =>
@@ -229,15 +233,13 @@ const AddProperty = () => {
 
                   <div>
                     <Label htmlFor="price">Preço (R$)</Label>
-                    <NumericFormat
+                    <Input
+                      id="price"
                       value={formData.price}
-                      onValueChange={(values) =>
-                        setFormData({ ...formData, price: values.value })
+                      onChange={(e) =>
+                        setFormData({ ...formData, price: e.target.value })
                       }
-                      thousandSeparator="."
-                      decimalSeparator=","
-                      prefix="R$ "
-                      placeholder="R$ 450.000"
+                      placeholder="Ex: R$ 350.000"
                       required
                       className="mt-1 w-full border rounded px-3 py-2"
                     />
@@ -385,8 +387,12 @@ const AddProperty = () => {
                         <SelectValue placeholder="Selecione" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="true">✅ Sim, é lançamento</SelectItem>
-                        <SelectItem value="false">❌ Não é lançamento</SelectItem>
+                        <SelectItem value="true">
+                          ✅ Sim, é lançamento
+                        </SelectItem>
+                        <SelectItem value="false">
+                          ❌ Não é lançamento
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -407,65 +413,67 @@ const AddProperty = () => {
                     />
                   </div>
 
-                <div className="md:col-span-2">
-                  <Label className="text-sm md:text-base">Upload de Imagens</Label>
-                  <div className="mt-2 space-y-3 md:space-y-4">
-                    {/* Imagem Principal */}
-                    <div>
-                      <Label className="text-xs md:text-sm font-medium">
-                        Imagem Principal *
-                      </Label>
-                      <div className="mt-1 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
-                        <Input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleMainImageUpload}
-                          className="flex-1 text-xs md:text-sm"
-                        />
+                  <div className="md:col-span-2">
+                    <Label className="text-sm md:text-base">
+                      Upload de Imagens
+                    </Label>
+                    <div className="mt-2 space-y-3 md:space-y-4">
+                      {/* Imagem Principal */}
+                      <div>
+                        <Label className="text-xs md:text-sm font-medium">
+                          Imagem Principal *
+                        </Label>
+                        <div className="mt-1 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleMainImageUpload}
+                            className="flex-1 text-xs md:text-sm"
+                          />
+                          {formData.mainImage && (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => removeImage("main")}
+                              className="shrink-0 h-8 w-8 p-0"
+                            >
+                              <X className="w-3 h-3 md:w-4 md:h-4" />
+                            </Button>
+                          )}
+                        </div>
                         {formData.mainImage && (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => removeImage("main")}
-                            className="shrink-0 h-8 w-8 p-0"
-                          >
-                            <X className="w-3 h-3 md:w-4 md:h-4" />
-                          </Button>
+                          <div className="mt-2">
+                            <img
+                              src={formData.mainImage}
+                              alt="Preview principal"
+                              className="w-16 h-16 md:w-20 md:h-20 object-cover rounded border"
+                            />
+                          </div>
                         )}
                       </div>
-                      {formData.mainImage && (
-                        <div className="mt-2">
-                          <img
-                            src={formData.mainImage}
-                            alt="Preview principal"
-                            className="w-16 h-16 md:w-20 md:h-20 object-cover rounded border"
-                          />
-                        </div>
-                      )}
-                    </div>
 
-                    {/* Imagens Secundárias */}
-                    <div>
-                      <Label className="text-xs md:text-sm font-medium">
-                        Imagens Secundárias (máx. 3)
-                      </Label>
-                      <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {[
-                          {
-                            image: formData.secondImage,
-                            type: "second" as const,
-                            label: "Segunda",
-                          },
-                          {
-                            image: formData.thirdImage,
-                            type: "third" as const,
-                            label: "Terceira",
-                          },
-                          {
-                            image: formData.fourthImage,
-                            type: "fourth" as const,
-                            label: "Quarta",
+                      {/* Imagens Secundárias */}
+                      <div>
+                        <Label className="text-xs md:text-sm font-medium">
+                          Imagens Secundárias (máx. 3)
+                        </Label>
+                        <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                          {[
+                            {
+                              image: formData.secondImage,
+                              type: "second" as const,
+                              label: "Segunda",
+                            },
+                            {
+                              image: formData.thirdImage,
+                              type: "third" as const,
+                              label: "Terceira",
+                            },
+                            {
+                              image: formData.fourthImage,
+                              type: "fourth" as const,
+                              label: "Quarta",
                             },
                           ].map(({ image, type, label }, index) => (
                             <div key={index} className="space-y-2">
